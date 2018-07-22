@@ -1,0 +1,194 @@
+#root {
+  max-width: 950px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+body {
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  color: #595959;
+  margin: 0;
+  font-weight: normal;
+}
+
+h1 {
+  font-family: 'Helvetica Neue', 'Open Sans', sans-serif;
+  margin-top: 2rem;
+  padding-bottom: 1rem;
+  font-size: 3rem;
+  font-weight: 200;
+  border-bottom: 4px double #ededed;
+}
+
+.list {
+  margin: 2rem;
+}
+
+table {
+  border-spacing: 0;
+  width: 100%;
+}
+
+th {
+  font-weight: normal;
+  font-size: 1.3rem;
+/*   font-weight: 200; */
+  text-align: center;
+}
+
+/* Project name column header */
+th:nth-child(1) {
+  text-align: left;
+}
+/* Project names */
+td:nth-child(1) {  
+  text-align: left;
+  font-weight: bold;
+}
+
+th, td {
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid lightgrey;
+}
+
+.build {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.build-status {
+  margin-right: 0.5rem;
+}
+
+.build-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.status-icon {
+  display: inline-block;
+  font-size: 2.5rem;
+  color: #1c66bf; /* status unknown = blue */
+}
+.status-SUCCESS { color: #40b55f; }
+.status-RUNNING { color: #40b55f; }
+.status-FAILURE { color: #f26c5c; }
+
+.status-latest {
+  opacity: 1.0;
+}
+.status-older {
+  opacity: 0.3;
+}
+
+.version {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.time {
+  font-size: 0.7rem;
+}
+
+
+/* Search box. Source: https://shipow.github.io/searchbox */
+
+.search {
+  display: flex;
+  justify-content: center;
+}
+
+.search-form {
+  display: inline-block;
+  position: relative;
+  width: 300px;
+  height: 40px;
+  white-space: nowrap;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.search-input {
+  display: inline-block;
+  transition: box-shadow .4s ease, background .4s ease;
+  border: 0;
+  border-radius: 19px;
+  box-shadow: inset 0 0 0 1px #D9D9D9;
+  padding-right: 33px;
+  padding-left: 41px;
+  width: 100%;
+  height: 100%;
+  font-size: inherit;
+  appearance: none;
+}
+
+.search-input:hover {
+  box-shadow: inset 0 0 0 1px silver;
+}
+
+.search-input:focus, .search-input:active {
+  outline: 0;
+  box-shadow: inset 0 0 0 1px #AAAAAA;
+  background: #FFFFFF;
+}
+
+.search-input::placeholder {
+  color: #AAAAAA;
+}
+
+.search-submit {
+  position: absolute;
+  left: 14px;
+  margin: 0;
+  border: 0;
+  border-radius: 18px 0 0 18px;
+  background-color: rgba(255, 255, 255, 0);
+  width: 41px;
+  height: 100%;
+  user-select: none;
+}
+
+.search-submit::before {
+  display: inline-block;
+  margin-right: -4px;
+  height: 100%;
+  vertical-align: middle;
+  content: '';
+}
+
+.search-submit svg {
+  width: 19px;
+  height: 19px;
+  vertical-align: middle;
+  fill: #666666;
+}
+
+.search-reset {
+  display: none;
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  margin: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  user-select: none;
+  fill: rgba(0, 0, 0, 0.5);
+}
+
+.search-reset svg {
+  display: block;
+  margin: 4px;
+  width: 15px;
+  height: 15px;
+}
+
+.search-input:valid ~ .search-reset {
+  display: block;
+}

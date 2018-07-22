@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import './App.css'
 
 class App extends React.Component {
@@ -231,25 +236,23 @@ function isToday(date) {
 }
 
 function StatusIcon(props) {
-  let classes = `status-icon status-${props.status} ${statusIconClass(props.status)}`
+  let iconType = statusIconClass(props.status)
+  let rotate = props.status === "RUNNING" ? "fa-spin" : ""
+  let latest = props.latest ? "status-latest" : "status-older"
+  let classes = `status-icon status-${props.status} ${rotate} ${latest}`
 
-  // todo bug: React doesn't detect class changes  of inner span
-  return (
-    <span className={props.latest ? "status-latest" : "status-older"}>
-      <span className={classes}/>
-    </span>
-  )
+  return <FontAwesomeIcon icon={iconType} className={classes}/>
 }
 
 function statusIconClass(status) {
   if (status === "SUCCESS") {
-    return "fas fa-check-circle";
+    return faCheckCircle
   } else if (status === "FAILURE") {
-    return "fas fa-exclamation-circle";
+    return faExclamationCircle
   } else if (status === "RUNNING") {
-    return "fas fa-circle-notch fa-spin";
+    return faCircleNotch // fa-spin";
   } else {
-    return "fas fa-question-circle";
+    return faQuestionCircle
   }
 }
 

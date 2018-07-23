@@ -78,10 +78,6 @@ function objectWith(object, key, value) {
   return object
 }
 
-ReactDOM.render(
-  <App/>,
-  document.getElementById("root")
-)
 
 function fetchReleasesPerApp(fetch, parse) {
   return fetch()

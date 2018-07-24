@@ -5,6 +5,7 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
+import Collections from './Collections';
 import './App.css'
 
 class App extends React.Component {
@@ -82,7 +83,7 @@ function objectWith(object, key, value) {
 function fetchReleasesPerApp(fetch, parse) {
   return fetch()
     .then(data => parse(data))
-    .then(deploys => groupBy(deploys, deploy => deploy.name))
+    .then(deploys => Collections.groupBy(deploys, deploy => deploy.name))
     .then(grouped => markLatestAppRelease(grouped))
 }
 
@@ -253,91 +254,10 @@ function statusIconClass(status) {
 }
 
 /*
-groupByWhenEmptyTest()
-groupByWithOneItemTest()
-groupByWithTwoDifferentItemsTest()
-groupByWithSameKeyTest()
-groupByWithMixedItemsTest()
 compareVersionTest()
 maxVersionTest()
 teamCityConversionTest()
 */
-
-function groupByWhenEmptyTest() {
-  assertEqual(groupBy([], item => item.type), { });
-}
-
-function groupByWithOneItemTest() {
-  let planets = [{ type: "rocky" }]
-  
-  let results = groupBy(planets, item => item.type)
-  
-  assertEqual(results, { 'rocky': [{ type: "rocky" }] });
-}
-
-function groupByWithTwoDifferentItemsTest() {
-  let planets = [
-    { id: 1, type: "rocky" },
-    { id: 2, type: "rocky" }
-  ]
-  
-  let results = groupBy(planets, item => item.type)
-  
-  assertEqual(results, { 'rocky': [
-    { id: 1, type: "rocky" },
-    { id: 2, type: "rocky" }]
-  });
-}
-
-function groupByWithSameKeyTest() {
-  let planets = [
-    { id: 1, type: "rocky" },
-    { id: 3, type: "gaseous" }
-  ]
-  
-  let results = groupBy(planets, item => item.type)
-  
-  assertEqual(results, {
-    'rocky': [
-      { id: 1, type: "rocky" }
-    ],
-    'gaseous': [
-      { id: 3, type: "gaseous" }
-    ]
-  });
-}
-
-function groupByWithMixedItemsTest() {
-  let planets = [
-    { id: 1, type: "rocky" },
-    { id: 2, type: "rocky" },
-    { id: 3, type: "gaseous" }
-  ]
-  
-  let results = groupBy(planets, item => item.type)
-  
-  assertEqual(results, {
-    'rocky': [
-      { id: 1, type: "rocky" },
-      { id: 2, type: "rocky" },
-    ],
-    'gaseous': [
-      { id: 3, type: "gaseous" }
-    ]
-  });
-}
-
-function groupBy(array, byKey) {
-  let reducer = (acc, current) => {
-    let key = byKey(current)
-    if (!acc[key]) {
-      acc[key] = []
-    }
-    acc[key].push(current)
-    return acc
-  }
-  return array.reduce(reducer, { })
-}
 
 
 function fetchTeamCityDeploys() {

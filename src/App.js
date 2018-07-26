@@ -6,6 +6,7 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import Collections from './Collections';
+import Versions from './Versions';
 import './App.css'
 
 class App extends React.Component {
@@ -92,7 +93,7 @@ function markLatestAppRelease(releasesPerApp) {
   for (let app of apps) {
     let releases = releasesPerApp[app]
     let versions = releases.map(release => release.version)
-    let latestVersion = maxVersion(versions)
+    let latestVersion = Versions.maxVersion(versions)
     
     markLatestVersion(app, releases, latestVersion)
   }
@@ -254,8 +255,6 @@ function statusIconClass(status) {
 }
 
 /*
-compareVersionTest()
-maxVersionTest()
 teamCityConversionTest()
 */
 
@@ -329,75 +328,6 @@ function parseTeamCityDateTime(text) {
   let tz = text.substr(15)
   let iso = `${year}-${month}-${day}T${hour}:${min}:${sec}${tz}`
   return new Date(iso)
-}
-
-
-
-
-/* Use maxVersion to sort a list of likely-seen versions for concise tests */
-function compareVersionTest() {
-  let versions = [
-    '1',
-    '2',
-    '1.0',
-    '1.1',
-    '1.0.0',
-    '1.0.1',
-    '1.0.2',
-    '1.1.0',
-    '2.0.0',
-    '1.0.1.4159',
-    '1.0.1.4160',
-    '1.9.0',
-    '1.10.0',
-    '2.34.5',
-    '2.3.34',
-    '2.3.34+123',
-    '2.3.34+23'
-  ]
-  
-  let result = versions.sort(compareVersion)
-
-  assertEqual(result, [
-    '1',
-    '1.0',
-    '1.0.0',
-    '1.0.1',
-    '1.0.1.4159',
-    '1.0.1.4160',
-    '1.0.2',
-    '1.1',
-    '1.1.0',
-    '1.9.0',
-    '1.10.0',
-    '2',
-    '2.0.0',
-    '2.3.34',
-    '2.3.34+23',
-    '2.3.34+123',
-    '2.34.5'
-  ])
-}
-
-function compareVersion(a, b) {
-  // Hat tip: https://stackoverflow.com/a/47159772
-  let ver1 = a.split(/[\.\+]/).map(s => s.padStart(10, "0")).join('.')
-  let ver2 = b.split(/[\.\+]/).map(s => s.padStart(10, "0")).join('.')
-  return ver1 > ver2
-}
-
-
-function maxVersionTest() {
-  let versions = ['1.1', '1.0.1', '1.0.1.4159', '1.1.0+123']
-  
-  let result = maxVersion(versions)
-
-  assertEqual(result, '1.1.0+123')
-}
-
-function maxVersion(versions) {
-  return versions.reduce(
-    (acc, current) => compareVersion(acc, current) ? acc : current)
 }
 
 

@@ -2,8 +2,8 @@ import TeamCityConverter from "./TeamCityConverter"
 
 class TeamCitySource {
 
-  converter(data) {
-    let converter = new TeamCityConverter
+  static converter(data) {
+    let converter = new TeamCityConverter()
     return converter.convert(data)
   }
 

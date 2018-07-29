@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
@@ -9,15 +8,15 @@ import Collections from './Collections';
 import Versions from './Versions';
 import './App.css'
 import InMemorySource from "./inmemory/InMemorySource"
-import TeamCitySource from "./teamcity/TeamCitySource"
+// import TeamCitySource from "./teamcity/TeamCitySource"
 
 class App extends React.Component {
 
   constructor() {
     super();
 
-    this.source = new InMemorySource
-    // this.source = new TeamCitySource
+    this.source = new InMemorySource()
+    // this.source = new TeamCitySource()
 
     this.state = {
       environments: [
@@ -41,7 +40,7 @@ class App extends React.Component {
   }
   
   load() {
-    let promise = fetchReleasesPerApp(this.source.fetch, this.source.converter)
+    let promise = fetchReleasesPerApp(this.source.fetch, InMemorySource.converter)
     
     promise.then(releasesPerApp => {
       let filteredReleasesPerApp = filterApps(this.state.filter, releasesPerApp)
@@ -73,6 +72,8 @@ function filterApps(text, unfilteredReleasesPerApp) {
   let searchText = text.toLowerCase()
   let apps = Object.keys(unfilteredReleasesPerApp)
   let appsFiltered = apps.filter(app => app.toLowerCase().indexOf(searchText) !== -1)
+
+  // noinspection UnnecessaryLocalVariableJS
   let filteredReleasesPerApp = appsFiltered.reduce(
     (acc, app) => objectWith(acc, app, unfilteredReleasesPerApp[app]),
     { });
@@ -115,19 +116,14 @@ function Page(props) {
   return (
     <div>
       <h1>Releases</h1>
-      <Search2 filter={props.filter}/>
+      <Search filter={props.filter}/>
       <Releases environments={props.state.environments} releasesPerApp={props.state.releasesPerApp}/>
     </div>
   )
 }
 
 function Search(props) {
-  return (
-    <input type="text" onChange={event => props.filter(event.target.value)}/>
-  )
-}
-
-function Search2(props) {
+  // noinspection JSUnusedLocalSymbols
   return (
     <div className="search">
       <svg xmlns="http://www.w3.org/2000/svg" style={{display: "none"}}>
@@ -235,7 +231,7 @@ function formatDateTime(isoDateTime) {
 }
 
 function isToday(date) {
-  return date.toDateString() == new Date().toDateString();
+  return date.toDateString() === new Date().toDateString();
 }
 
 function StatusIcon(props) {
@@ -258,15 +254,5 @@ function statusIconClass(status) {
     return faQuestionCircle
   }
 }
-
-function assertEqual(actual, expected) {
-  let equal = JSON.stringify(actual) === JSON.stringify(expected)
-  if (equal) {
-    console.log(assertEqual.caller.name + ": Passed")
-  } else {
-    console.log(assertEqual.caller.name + ": FAILED! Expecting " + JSON.stringify(expected) + " but got " + JSON.stringify(actual))
-  }
-}
-
 
 export default App;

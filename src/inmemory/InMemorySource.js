@@ -1,8 +1,6 @@
-import TeamCityConverter from "../teamcity/TeamCityConverter"
-
 class InMemorySource {
 
-  converter(data) {
+  static converter(data) {
     return data
   }
 

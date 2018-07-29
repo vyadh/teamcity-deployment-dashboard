@@ -8,6 +8,7 @@ import DateTimes from './util/DateTimes';
 import InMemorySource from './inmemory/InMemorySource'
 // import TeamCitySource from './teamcity/TeamCitySource'
 import ReleasesPerApp from './ReleasesPerApp'
+import SearchApps from './SearchApps'
 import './App.css'
 
 class App extends React.Component {
@@ -43,8 +44,8 @@ class App extends React.Component {
     let promise = ReleasesPerApp.fetch(this.source.fetch, InMemorySource.converter)
     
     promise.then(releasesPerApp => {
-      let filteredReleasesPerApp = filterApps(this.state.filter, releasesPerApp)
-      
+      let filteredReleasesPerApp = SearchApps.filter(this.state.filter, releasesPerApp)
+
       this.setState({
         unfilteredReleasesPerApp: releasesPerApp,
         releasesPerApp: filteredReleasesPerApp
@@ -53,7 +54,7 @@ class App extends React.Component {
   }
   
   filter(value) {
-    let filteredReleasesPerApp = filterApps(value, this.state.unfilteredReleasesPerApp)
+    let filteredReleasesPerApp = SearchApps.filter(value, this.state.unfilteredReleasesPerApp)
     
     this.setState({
       filter: value, // Needed for interval refreshes
@@ -64,26 +65,6 @@ class App extends React.Component {
   render() {
     return <Page state={this.state} filter={value => this.filter(value)}/>
   }
-}
-
-
-//todo test
-function filterApps(text, unfilteredReleasesPerApp) {
-  let searchText = text.toLowerCase()
-  let apps = Object.keys(unfilteredReleasesPerApp)
-  let appsFiltered = apps.filter(app => app.toLowerCase().indexOf(searchText) !== -1)
-
-  // noinspection UnnecessaryLocalVariableJS
-  let filteredReleasesPerApp = appsFiltered.reduce(
-    (acc, app) => objectWith(acc, app, unfilteredReleasesPerApp[app]),
-    { });
-  return filteredReleasesPerApp
-}
-
-//todo test
-function objectWith(object, key, value) {
-  object[key] = value
-  return object
 }
 
 function Page(props) {

@@ -6,6 +6,7 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import Collections from './Collections';
 import Versions from './Versions';
+import DateTimes from './DateTimes';
 import './App.css'
 import InMemorySource from "./inmemory/InMemorySource"
 // import TeamCitySource from "./teamcity/TeamCitySource"
@@ -224,24 +225,10 @@ function Build(props) {
       </div>
       <div className="build-info">
         <span className="version">{props.release.version}</span>
-        <span className="time">{formatDateTime(props.release.time)}</span>
+        <span className="time">{DateTimes.format(props.release.time)}</span>
       </div>
     </div>
   )
-}
-
-function formatDateTime(isoDateTime) {
-  let date = new Date(isoDateTime);
-  if (isToday(date)) {
-    return date.toLocaleTimeString();
-  } else {
-    return date.toLocaleString(
-      "en-gb", {day: "numeric", month: "long", year: "numeric"});
-  }
-}
-
-function isToday(date) {
-  return date.toDateString() === new Date().toDateString();
 }
 
 function StatusIcon(props) {

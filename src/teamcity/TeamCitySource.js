@@ -1,4 +1,11 @@
+import TeamCityConverter from "./TeamCityConverter"
+
 class TeamCitySource {
+
+  converter(data) {
+    let converter = new TeamCityConverter
+    return converter.convert(data)
+  }
 
   fetch() {
     let url = "http://localhost:8080/guestAuth/app/rest/latest/buildTypes?locator=type:deployment&fields=buildType(id,name,type,builds($locator(canceled:false,count:1),build(number,status,finishDate,properties(property(name,value)))))"

@@ -12,9 +12,13 @@ import InMemorySource from "./inmemory/InMemorySource"
 import TeamCitySource from "./teamcity/TeamCitySource"
 
 class App extends React.Component {
+
   constructor() {
     super();
-    
+
+    this.source = new InMemorySource
+    // this.source = new TeamCitySource
+
     this.state = {
       environments: [
         "DEV",
@@ -37,10 +41,7 @@ class App extends React.Component {
   }
   
   load() {
-    let source = new InMemorySource()
-    // let source = new TeamCitySource()
-    let promise = fetchReleasesPerApp(source.fetch, data => data)
-    // let promise = fetchReleasesPerApp(source, convertTeamCityFormat)
+    let promise = fetchReleasesPerApp(this.source.fetch, this.source.converter)
     
     promise.then(releasesPerApp => {
       let filteredReleasesPerApp = filterApps(this.state.filter, releasesPerApp)

@@ -1,4 +1,10 @@
+import TeamCityConverter from "../teamcity/TeamCityConverter"
+
 class InMemorySource {
+
+  converter(data) {
+    return data
+  }
 
   fetch() {
     return new Promise((resolve, reject) => {

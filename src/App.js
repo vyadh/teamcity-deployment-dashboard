@@ -4,9 +4,9 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
-import Collections from './Collections';
+import Collections from './util/Collections';
+import DateTimes from './util/DateTimes';
 import Versions from './Versions';
-import DateTimes from './DateTimes';
 import './App.css'
 import InMemorySource from "./inmemory/InMemorySource"
 // import TeamCitySource from "./teamcity/TeamCitySource"

@@ -4,12 +4,11 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
-import Collections from './util/Collections';
 import DateTimes from './util/DateTimes';
-import Versions from './Versions';
+import InMemorySource from './inmemory/InMemorySource'
+// import TeamCitySource from './teamcity/TeamCitySource'
+import ReleasesPerApp from './ReleasesPerApp'
 import './App.css'
-import InMemorySource from "./inmemory/InMemorySource"
-// import TeamCitySource from "./teamcity/TeamCitySource"
 
 class App extends React.Component {
 
@@ -41,7 +40,7 @@ class App extends React.Component {
   }
   
   load() {
-    let promise = fetchReleasesPerApp(this.source.fetch, InMemorySource.converter)
+    let promise = ReleasesPerApp.fetch(this.source.fetch, InMemorySource.converter)
     
     promise.then(releasesPerApp => {
       let filteredReleasesPerApp = filterApps(this.state.filter, releasesPerApp)
@@ -85,32 +84,6 @@ function filterApps(text, unfilteredReleasesPerApp) {
 function objectWith(object, key, value) {
   object[key] = value
   return object
-}
-
-
-function fetchReleasesPerApp(fetch, parse) {
-  return fetch()
-    .then(data => parse(data))
-    .then(deploys => Collections.groupBy(deploys, deploy => deploy.name))
-    .then(grouped => markLatestAppRelease(grouped))
-}
-
-function markLatestAppRelease(releasesPerApp) {
-  let apps = Object.keys(releasesPerApp)
-  for (let app of apps) {
-    let releases = releasesPerApp[app]
-    let versions = releases.map(release => release.version)
-    let latestVersion = Versions.maxVersion(versions)
-    
-    markLatestVersion(app, releases, latestVersion)
-  }
-  return releasesPerApp
-}
-
-function markLatestVersion(app, releases, latestVersion) {
-  for (let release of releases) {
-    release.latest = release.version === latestVersion
-  }
 }
 
 function Page(props) {

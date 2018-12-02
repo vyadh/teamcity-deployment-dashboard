@@ -5,27 +5,19 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import DateTimes from './util/DateTimes';
-import InMemorySource from './inmemory/InMemorySource'
-import TeamCitySource from './teamcity/TeamCitySource'
 import ReleasesPerApp from './ReleasesPerApp'
 import SearchApps from './SearchApps'
 import './App.css'
 
 class App extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
-    this.source = new InMemorySource()
-    // this.source = new TeamCitySource()
+    this.source = props.configuration.source
 
     this.state = {
-      environments: [
-        "DEV",
-        "TST",
-        "UAT",
-        "PRD"
-      ],
+      environments: props.configuration.environments,
       filter: "",
       unfilteredReleasesPerApp: [],
       releasesPerApp: []
@@ -41,7 +33,7 @@ class App extends React.Component {
   }
   
   load() {
-    let promise = ReleasesPerApp.fetch(this.source.fetch, this.source.converter())
+    let promise = ReleasesPerApp.fetch(this.source)
 
     promise.then(releasesPerApp => {
       let filteredReleasesPerApp = SearchApps.filter(this.state.filter, releasesPerApp)

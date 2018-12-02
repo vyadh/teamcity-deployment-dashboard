@@ -3,9 +3,9 @@ import Versions from './Versions'
 
 export default class ReleasesPerApp {
 
-  static fetch(fetch, parse) {
-    return fetch()
-        .then(data => parse(data))
+  static fetch(source) {
+    return source.fetch()
+        .then(data => source.parse(data))
         .then(deploys => Collections.groupBy(deploys, deploy => deploy.name))
         .then(grouped => this.markLatestAppRelease(grouped))
   }

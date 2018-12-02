@@ -1,7 +1,7 @@
 class InMemorySource {
 
-  converter() {
-    return (data) => data
+  parse(data) {
+    return data
   }
 
   fetch() {

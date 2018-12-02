@@ -6,18 +6,20 @@ import TeamCityConverter from "./TeamCityConverter"
  */
 class TeamCitySource {
 
-  converter() {
+  constructor(baseUrl) {
+    this.baseUrl = baseUrl
+  }
+
+  parse(data) {
     let converter = new TeamCityConverter()
-    return (data) => converter.convert(data)
+    return converter.convert(data)
   }
 
   fetch() {
     console.log("Fetching deployments from TeamCity...")
 
     let query = "locator=type:deployment&fields=buildType(id,name,type,builds($locator(canceled:false,count:1),build(number,status,finishDate,properties(property(name,value)))))"
-    // let url = "http://localhost:8080/guestAuth/app/rest/latest/buildTypes?" + query
-    // let url = "http://localhost:8080/httpAuth/app/rest/latest/buildTypes?" + query
-    let url = "http://localhost:8080/app/rest/latest/buildTypes?" + query
+    let url = this.baseUrl + "/app/rest/latest/buildTypes?" + query
 
     return fetch(url, {
           credentials: 'include',

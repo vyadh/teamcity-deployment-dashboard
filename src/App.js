@@ -62,7 +62,7 @@ class App extends React.Component {
 function Page(props) {
   return (
     <div>
-      <h1>Releases</h1>
+      <h1>Deployments</h1>
       <Search filter={props.filter}/>
       <Releases environments={props.state.environments} releasesPerApp={props.state.releasesPerApp}/>
     </div>

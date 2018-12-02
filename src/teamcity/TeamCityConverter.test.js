@@ -1,5 +1,14 @@
 import TeamCityConverter from './TeamCityConverter'
 
+it('handled undefined input caused by upstream error', () => {
+  let builds = undefined
+
+  let converter = new TeamCityConverter
+  let results = converter.convert(builds)
+
+  expect(results).toEqual([])
+})
+
 it('teamCityConversionTest', () => {
   let builds = {
     buildType: [

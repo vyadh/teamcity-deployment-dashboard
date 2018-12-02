@@ -5,6 +5,10 @@ class TeamCityConverter {
   }
 
   static convertTeamCityFormat(json) {
+    if (json === undefined) {
+      return []
+    }
+
     let result = []
 
     for (let buildType of json.buildType) {

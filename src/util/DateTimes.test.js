@@ -1,7 +1,7 @@
 import DateTimes from './DateTimes';
 
 it('time is today', () => {
-  expect(DateTimes.isToday(new Date('2018-07-29T08:30:00'))).toBe(true)
+  expect(DateTimes.isToday(new Date())).toBe(true)
 })
 
 it('time is not today', () => {

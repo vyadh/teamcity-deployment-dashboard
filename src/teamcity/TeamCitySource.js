@@ -6,9 +6,9 @@ import TeamCityConverter from "./TeamCityConverter"
  */
 class TeamCitySource {
 
-  static converter(data) {
+  converter() {
     let converter = new TeamCityConverter()
-    return converter.convert(data)
+    return (data) => converter.convert(data)
   }
 
   fetch() {

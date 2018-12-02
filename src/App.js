@@ -6,7 +6,7 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import DateTimes from './util/DateTimes';
 import InMemorySource from './inmemory/InMemorySource'
-// import TeamCitySource from './teamcity/TeamCitySource'
+import TeamCitySource from './teamcity/TeamCitySource'
 import ReleasesPerApp from './ReleasesPerApp'
 import SearchApps from './SearchApps'
 import './App.css'
@@ -41,8 +41,8 @@ class App extends React.Component {
   }
   
   load() {
-    let promise = ReleasesPerApp.fetch(this.source.fetch, InMemorySource.converter)
-    
+    let promise = ReleasesPerApp.fetch(this.source.fetch, this.source.converter())
+
     promise.then(releasesPerApp => {
       let filteredReleasesPerApp = SearchApps.filter(this.state.filter, releasesPerApp)
 

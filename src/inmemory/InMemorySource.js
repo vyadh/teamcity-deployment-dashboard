@@ -1,7 +1,7 @@
 class InMemorySource {
 
-  static converter(data) {
-    return data
+  converter() {
+    return (data) => data
   }
 
   fetch() {
@@ -9,7 +9,7 @@ class InMemorySource {
       resolve(InMemorySource.fetchSync())
     })
   }
-  
+
   static fetchSync() {
     return [
       {

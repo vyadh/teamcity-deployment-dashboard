@@ -5,11 +5,9 @@ class TeamCityConverter {
   }
 
   static convertTeamCityFormat(json) {
-    let buildTypes = json.buildType
-    
     let result = []
-    
-    for (let buildType of buildTypes) {
+
+    for (let buildType of json.buildType) {
       if (buildType.type === 'deployment') {
         let builds = buildType.builds.build
         if (builds.length === 0) {
@@ -17,8 +15,8 @@ class TeamCityConverter {
         }
         let build = builds[0]
         let dateTime = TeamCityConverter.parseTeamCityDateTime(build.finishDate)
-        var env = undefined
-        var project = undefined
+        let env = undefined
+        let project = undefined
         for (let property of build.properties.property) {
           if (property.name === 'PROJECT') project = property.value
           else if (property.name === 'ENVIRONMENT') env = property.value

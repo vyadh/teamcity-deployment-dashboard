@@ -4,6 +4,12 @@ TeamCity Deployment Dashboard
 A web app to query the TeamCity REST API for deployment builds and show what has been deployed in what environment.
 
 
+Example
+-------
+
+<img src="screenshot.png" width="734"/>
+
+
 Getting Started
 ---------------
 

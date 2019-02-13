@@ -1,6 +1,6 @@
 class TeamCityConverter {
 
-  static convert(json) {
+  convert(json) {
     return TeamCityConverter.convertTeamCityFormat(json)
   }
 

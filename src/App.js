@@ -5,7 +5,7 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import DateTimes from './util/DateTimes';
-import ReleasesPerApp from './ReleasesPerApp'
+import * as ReleasesPerApp from './ReleasesPerApp'
 import SearchApps from './SearchApps'
 import './App.css'
 

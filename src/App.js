@@ -13,11 +13,12 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
+    this.configuration = props.configuration
 
-    this.source = props.configuration.source
+    this.source = this.configuration.source
 
     this.state = {
-      environments: props.configuration.environments,
+      environments: this.configuration.environments,
       filter: "",
       unfilteredReleasesPerApp: [],
       releasesPerApp: []
@@ -59,31 +60,30 @@ class App extends React.Component {
   }
 }
 
-function Page(props) {
+const Page = ({state, filter}) => {
   return (
     <div>
       <h1>Deployments</h1>
-      <Search filter={props.filter}/>
-      <Releases environments={props.state.environments} releasesPerApp={props.state.releasesPerApp}/>
+      <Search filter={filter}/>
+      <Releases environments={state.environments} releasesPerApp={state.releasesPerApp}/>
     </div>
   )
 }
 
-function Search(props) {
-  // noinspection JSUnusedLocalSymbols
+const Search = ({filter}) => {
   return (
     <div className="search">
       <SearchIcons/>
 
       <form noValidate="noValidate" className="search-form">
         <input type="search" placeholder="Search..." required="required" className="search-input"
-               onChange={event => props.filter(event.target.value)}/>
+               onChange={event => filter(event.target.value)}/>
         <span className="search-submit">
           <svg role="img" aria-label="Search">
             <use xlinkHref="#search-icon-magnifier"/>
           </svg>
         </span>
-        <button type="reset" className="search-reset" onClick={() => props.filter("")}>
+        <button type="reset" className="search-reset" onClick={() => filter("")}>
           <svg role="img" aria-label="Reset">
             <use xlinkHref="#search-icon-cross"/>
           </svg>
@@ -93,7 +93,7 @@ function Search(props) {
   )
 }
 
-function SearchIcons() {
+const SearchIcons = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" style={{display: "none"}}>
       <symbol xmlns="http://www.w3.org/2000/svg" id="search-icon-magnifier" viewBox="0 0 40 41">
@@ -110,22 +110,21 @@ function SearchIcons() {
   )
 }
 
-function Releases(props) {
-  let releasesPerApp = props.releasesPerApp
+const Releases = ({environments, releasesPerApp}) => {
   let apps = Object.keys(releasesPerApp).sort()
 
   return (
     <div className="list">
       <table>
         <thead>
-          <ReleaseHeader environments={props.environments}/>
+          <ReleaseHeader environments={environments}/>
         </thead>
         <tbody>
           {apps.map(app =>
             <ReleaseRow 
               key={app} 
               app={app} 
-              environments={props.environments}
+              environments={environments}
               releases={releasesPerApp[app]}/>
           )}
         </tbody>
@@ -134,59 +133,53 @@ function Releases(props) {
   )
 }
 
-function ReleaseHeader(props) {
-  return (
+const ReleaseHeader = ({environments}) => (
     <tr>
       <th>Project</th>
-      {props.environments.map(env => <th key={env}>{env}</th>)}
+      {environments.map(env => <th key={env}>{env}</th>)}
     </tr>
-  )
-}
+)
 
-function ReleaseRow(props) {
-  return (
+const ReleaseRow = ({app, environments, releases}) => (
     <tr>
-      <td>{props.app}</td>
-      {props.environments.map(env =>
-        <Release key={env} environment={env} releases={props.releases}/>)}
+      <td>{app}</td>
+      {environments.map(env =>
+          <Release key={env} environment={env} releases={releases}/>)}
     </tr>
-  )
-}
+)
 
-function Release(props) {
-  let found = props.releases.find(release => release.environment === props.environment)
-  
+const Release = ({environment, releases}) => {
+  let found = releases.find(release => release.environment === environment)
+
   if (found === undefined) {
-    return <td key={props.environment}/>
+    return <td key={environment}/>
   } else {
-    return <td key={props.environment}><Build release={found}/></td>
+    return <td key={environment}><Build release={found}/></td>
   }
 }
 
-function Build(props) {
-  return (
+const Build = ({release}) => (
     <div className="build">
       <div className="build-status">
-        <StatusIcon status={props.release.status} latest={props.release.latest}/>
+        <StatusIcon status={release.status} latest={release.latest}/>
       </div>
       <div className="build-info">
-        <span className="version">{props.release.version}</span>
-        <span className="time">{DateTimes.format(props.release.time)}</span>
+        <span className="version">{release.version}</span>
+        <span className="time">{DateTimes.format(release.time)}</span>
       </div>
     </div>
-  )
-}
+)
 
-function StatusIcon(props) {
-  let iconType = statusIconClass(props.status)
-  let rotate = props.status === "RUNNING" ? "fa-spin" : ""
-  let latest = props.latest ? "status-latest" : "status-older"
-  let classes = `status-icon status-${props.status} ${rotate} ${latest}`
+const StatusIcon = ({status, latest}) => {
+  let iconType = statusIconClass(status)
+  let rotateClass = status === "RUNNING" ? "fa-spin" : ""
+  let latestClass = latest ? "status-latest" : "status-older"
+  let classes = `status-icon status-${status} ${rotateClass} ${latestClass}`
 
   return <FontAwesomeIcon icon={iconType} className={classes}/>
 }
 
-function statusIconClass(status) {
+const statusIconClass = status => {
   if (status === "SUCCESS") {
     return faCheckCircle
   } else if (status === "FAILURE") {

@@ -1,10 +1,11 @@
 import TeamCitySource from "./teamcity/TeamCitySource"
+import InMemorySource from "./inmemory/InMemorySource"
 
 const configuration = {
 
   // Alternatively InMemorySource for testing
-  source: new TeamCitySource("http://localhost:8080"),
-  // source: new InMemorySource(),
+  // source: new TeamCitySource("http://localhost:8080"),
+  source: new InMemorySource(),
 
   // Environments to display, as specified in the 'environment' property in builds
   environments: [

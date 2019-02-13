@@ -83,7 +83,7 @@ function Search(props) {
             <use xlinkHref="#search-icon-magnifier"/>
           </svg>
         </span>
-        <button type="reset" className="search-reset" onClick={event => props.filter("")}>
+        <button type="reset" className="search-reset" onClick={() => props.filter("")}>
           <svg role="img" aria-label="Reset">
             <use xlinkHref="#search-icon-cross"/>
           </svg>

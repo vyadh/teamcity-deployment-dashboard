@@ -1,11 +1,13 @@
 class InMemorySource {
 
+  // (no it's can't)
+  // noinspection JSMethodCanBeStatic
   parse(data) {
     return data
   }
 
   fetch() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       resolve(InMemorySource.fetchSync())
     })
   }

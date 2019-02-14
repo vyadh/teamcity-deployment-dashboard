@@ -82,7 +82,7 @@ it('releases are grouped by name, and the latest versions are marked as such', (
   )
 })
 
-function fetch(data) {
+const fetch = data => {
   let fetch = () => new Promise(resolve => resolve(data))
   let parse = data => data
   return ReleasesPerApp.fetch({fetch, parse})

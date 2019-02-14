@@ -1,17 +1,15 @@
 import SearchApps from './SearchApps'
 
-function data() {
-  return {
-    Mercury: [],
-    Venus: [],
-    Earth: [],
-    Mars: [],
-    Jupiter: [],
-    Saturn: [],
-    Uranus: [],
-    Neptune: []
-  }
-}
+const data = () => ({
+  Mercury: [],
+  Venus: [],
+  Earth: [],
+  Mars: [],
+  Jupiter: [],
+  Saturn: [],
+  Uranus: [],
+  Neptune: []
+})
 
 it('empty filter does nothing', () => {
   expect(SearchApps.filter('', data()))

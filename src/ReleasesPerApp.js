@@ -18,7 +18,7 @@ export const markLatestAppRelease = releasesPerApp => {
   return releasesPerApp
 }
 
-export function markLatestVersion(app, releases, latestVersion) {
+export const markLatestVersion = (app, releases, latestVersion) => {
   for (let release of releases) {
     release.latest = release.version === latestVersion
   }

@@ -1,10 +1,9 @@
-import TeamCityConverter from './TeamCityConverter'
+import {convert} from './teamCityConverter'
 
 it('handled undefined input caused by upstream error', () => {
   let builds = undefined
 
-  let converter = new TeamCityConverter
-  let results = converter.convert(builds)
+  let results = convert(builds)
 
   expect(results).toEqual([])
 })
@@ -92,9 +91,8 @@ it('teamCityConversionTest', () => {
       }
     ]
   }
-  
-  let converter = new TeamCityConverter
-  let results = converter.convert(builds)
+
+  let results = convert(builds)
   
   expect(results).toEqual([
     {

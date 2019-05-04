@@ -1,4 +1,4 @@
-import TeamCityConverter from "./TeamCityConverter"
+import {convert} from "./teamCityConverter"
 
 /*
  * Requires setting TeamCity internal CORS property 'rest.cors.origins'. For example:
@@ -23,13 +23,13 @@ const fetchRest = baseUrl => {
   let url = baseUrl + "/app/rest/latest/buildTypes?" + query
 
   return fetch(url, {
-    credentials: 'include',
-    headers: {
-      'Accept': 'application/json'
-    }
-  })
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
       .then(extractJson)
-      .then(parse)
+      .then(convert)
       // .then(data => { console.log(data); return data })
       .catch(error => console.log(error))
 }
@@ -40,9 +40,4 @@ const extractJson = response => {
   } else {
     throw new Error('Could not fetch from URL')
   }
-}
-
-const parse = data => {
-  let converter = new TeamCityConverter()
-  return converter.convert(data)
 }

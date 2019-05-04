@@ -10,15 +10,16 @@ class TeamCitySource {
     this.baseUrl = baseUrl
   }
 
-  parse(data) {
-    let converter = new TeamCityConverter()
-    return converter.convert(data)
-  }
-
   fetch() {
     console.log("Fetching deployments from TeamCity...")
 
-    let query = "locator=type:deployment&fields=buildType(id,name,type,builds($locator(canceled:false,count:1),build(number,status,finishDate,properties(property(name,value)))))"
+    let query = "locator=type:deployment&" +
+        "fields=buildType(" +
+          "id,name,type,builds(" +
+            "$locator(canceled:false,count:1)," +
+            "build(number,status,finishDate,properties(property(name,value)))" +
+        "))"
+
     let url = this.baseUrl + "/app/rest/latest/buildTypes?" + query
 
     return fetch(url, {
@@ -27,15 +28,23 @@ class TeamCitySource {
             'Accept': 'application/json'
           }
         })
-        .then(response => {
-          if (response.ok) {
-            return response.json()
-          } else {
-            throw new Error('Could not fetch from URL')
-          }
-        })
+        .then(this.extractJson)
+        .then(this.parse)
         // .then(data => { console.log(data); return data })
         .catch(error => console.log(error))
+  }
+
+  extractJson(response) {
+    if (response.ok) {
+      return response.json()
+    } else {
+      throw new Error('Could not fetch from URL')
+    }
+  }
+
+  parse(data) {
+    let converter = new TeamCityConverter()
+    return converter.convert(data)
   }
 
 }

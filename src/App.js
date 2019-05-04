@@ -1,71 +1,49 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import * as dateTimes from './util/dateTimes'
-import * as releasesPerApp from './releasesPerApp'
+import * as releases from './releasesPerApp'
 import './App.css'
 import {filterApps} from "./searchApps"
 
-class App extends React.Component {
+const App = ({configuration}) => {
 
-  constructor(props) {
-    super(props);
-    this.configuration = props.configuration
+  let environments = configuration.environments
+  let source = configuration.source
 
-    this.source = this.configuration.source
+  let [filter, setFilter] = useState("")
+  let [unfilteredReleasesPerApp, setUnfilteredReleasesPerApp] = useState([])
+  let [releasesPerApp, setReleasesPerApp] = useState([])
 
-    this.state = {
-      environments: this.configuration.environments,
-      filter: "",
-      unfilteredReleasesPerApp: [],
-      releasesPerApp: []
-    }
-  }
-  
-  componentDidMount() {
-    this.load()
-    
+  useEffect(() => {
+    releases
+        .fetch(source)
+        .then(setUnfilteredReleasesPerApp)
+
     //let id = setInterval(() => this.load(), 2000)
     // Allow debugging just one change
     // setInterval(() => clearInterval(id), 6000)
-  }
-  
-  load() {
-    let promise = releasesPerApp.fetch(this.source)
+  }, [source])
 
-    promise.then(releasesPerApp => {
-      let filteredReleasesPerApp = filterApps(this.state.filter, releasesPerApp)
+  useEffect(() => {
+    setReleasesPerApp(filterApps(filter, unfilteredReleasesPerApp))
+  }, [filter, unfilteredReleasesPerApp])
 
-      this.setState({
-        unfilteredReleasesPerApp: releasesPerApp,
-        releasesPerApp: filteredReleasesPerApp
-      })
-    })
-  }
-  
-  filter(value) {
-    let filteredReleasesPerApp = filterApps(value, this.state.unfilteredReleasesPerApp)
-    
-    this.setState({
-      filter: value, // Needed for interval refreshes
-      releasesPerApp: filteredReleasesPerApp
-    })
-  }
-
-  render() {
-    return <Page state={this.state} filter={value => this.filter(value)}/>
-  }
+  return <Page
+      environments={environments}
+      releasesPerApp={releasesPerApp}
+      filter={setFilter}/>
 }
 
-const Page = ({state, filter}) => {
+const Page = ({environments, releasesPerApp, filter}) => {
   return (
     <div>
       <h1>Deployments</h1>
       <Search filter={filter}/>
-      <Releases environments={state.environments} releasesPerApp={state.releasesPerApp}/>
+      <Releases environments={environments} releasesPerApp={releasesPerApp}/>
     </div>
   )
 }

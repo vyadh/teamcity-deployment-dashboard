@@ -1,19 +1,19 @@
-import Collections from './Collections';
+import {groupBy} from "./collections"
 
 it('groupByWhenEmptyTest', () => {
-  expect(Collections.groupBy([], item => item.type))
+  expect(groupBy([], item => item.type))
     .toEqual({ });
 })
 
 it('groupByWhenEmptyTest', () => {
-  expect(Collections.groupBy([], item => item.type))
+  expect(groupBy([], item => item.type))
     .toEqual({ });
 })
 
 it('groupByWithOneItemTest', () => {
   let planets = [{ type: "rocky" }]
   
-  let results = Collections.groupBy(planets, item => item.type)
+  let results = groupBy(planets, item => item.type)
   
   expect(results).toEqual({ 'rocky': [{ type: "rocky" }] });
 })
@@ -24,7 +24,7 @@ it('groupByWithTwoDifferentItemsTest', () => {
     { id: 2, type: "rocky" }
   ]
   
-  let results = Collections.groupBy(planets, item => item.type)
+  let results = groupBy(planets, item => item.type)
   
   expect(results).toEqual(
     { 'rocky': [
@@ -40,7 +40,7 @@ it('groupByWithSameKeyTest', () => {
     { id: 3, type: "gaseous" }
   ]
   
-  let results = Collections.groupBy(planets, item => item.type)
+  let results = groupBy(planets, item => item.type)
   
   expect(results).toEqual({
     'rocky': [
@@ -59,7 +59,7 @@ it('groupByWithMixedItemsTest', () => {
     { id: 3, type: "gaseous" }
   ]
   
-  let results = Collections.groupBy(planets, item => item.type)
+  let results = groupBy(planets, item => item.type)
 
   expect(results).toEqual({
     'rocky': [

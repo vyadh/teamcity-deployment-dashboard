@@ -1,8 +1,8 @@
-import Collections from './util/Collections'
 import Versions from './Versions'
+import {groupBy} from "./util/collections"
 
 export const fetch = source => source.fetch()
-    .then(deploys => Collections.groupBy(deploys, deploy => deploy.name))
+    .then(deploys => groupBy(deploys, deploy => deploy.name))
     .then(grouped => markLatestAppRelease(grouped))
 
 export const markLatestAppRelease = releasesPerApp => {

@@ -4,7 +4,7 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
-import DateTimes from './util/DateTimes';
+import * as dateTimes from './util/dateTimes'
 import * as ReleasesPerApp from './ReleasesPerApp'
 import SearchApps from './SearchApps'
 import './App.css'
@@ -165,7 +165,7 @@ const Build = ({release}) => (
       </div>
       <div className="build-info">
         <span className="version">{release.version}</span>
-        <span className="time">{DateTimes.format(release.time)}</span>
+        <span className="time">{dateTimes.format(release.time)}</span>
       </div>
     </div>
 )

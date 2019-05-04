@@ -1,5 +1,5 @@
 // import {createTeamCitySource} from "./teamcity/teamCitySource"
-// import {createMemorySource} from "./memory/memorySource"
+import {createMemorySource} from "./memory/memorySource"
 
 const configuration = {
 

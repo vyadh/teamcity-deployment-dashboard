@@ -5,9 +5,9 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import * as dateTimes from './util/dateTimes'
-import * as ReleasesPerApp from './ReleasesPerApp'
-import SearchApps from './SearchApps'
+import * as releasesPerApp from './releasesPerApp'
 import './App.css'
+import {filterApps} from "./searchApps"
 
 class App extends React.Component {
 
@@ -34,10 +34,10 @@ class App extends React.Component {
   }
   
   load() {
-    let promise = ReleasesPerApp.fetch(this.source)
+    let promise = releasesPerApp.fetch(this.source)
 
     promise.then(releasesPerApp => {
-      let filteredReleasesPerApp = SearchApps.filter(this.state.filter, releasesPerApp)
+      let filteredReleasesPerApp = filterApps(this.state.filter, releasesPerApp)
 
       this.setState({
         unfilteredReleasesPerApp: releasesPerApp,
@@ -47,7 +47,7 @@ class App extends React.Component {
   }
   
   filter(value) {
-    let filteredReleasesPerApp = SearchApps.filter(value, this.state.unfilteredReleasesPerApp)
+    let filteredReleasesPerApp = filterApps(value, this.state.unfilteredReleasesPerApp)
     
     this.setState({
       filter: value, // Needed for interval refreshes

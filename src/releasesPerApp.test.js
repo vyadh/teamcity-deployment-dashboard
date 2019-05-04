@@ -1,4 +1,4 @@
-import * as ReleasesPerApp from './ReleasesPerApp'
+import * as releasesPerApp from './releasesPerApp'
 
 it('releases are grouped by name, and the latest versions are marked as such', () => {
   let data = [
@@ -85,5 +85,5 @@ it('releases are grouped by name, and the latest versions are marked as such', (
 const fetch = data => {
   let fetch = () => new Promise(resolve => resolve(data))
   let parse = data => data
-  return ReleasesPerApp.fetch({fetch, parse})
+  return releasesPerApp.fetch({fetch, parse})
 }

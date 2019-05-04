@@ -1,5 +1,5 @@
-import Versions from './Versions'
 import {groupBy} from "./util/collections"
+import {maxVersion} from "./util/versions"
 
 export const fetch = source => source.fetch()
     .then(deploys => groupBy(deploys, deploy => deploy.name))
@@ -10,7 +10,7 @@ export const markLatestAppRelease = releasesPerApp => {
   for (let app of apps) {
     let releases = releasesPerApp[app]
     let versions = releases.map(release => release.version)
-    let latestVersion = Versions.maxVersion(versions)
+    let latestVersion = maxVersion(versions)
 
     markLatestVersion(app, releases, latestVersion)
   }

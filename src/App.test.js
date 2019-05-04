@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import InMemorySource from "./inmemory/InMemorySource"
+import {createMemorySource} from "./memory/memorySource"
 
 const config = {
-  source: new InMemorySource(),
+  source: createMemorySource(),
   environments: [
     "DEV",
     "TST",

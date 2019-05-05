@@ -2,6 +2,8 @@
 export const createMemorySource = () => {
   return {
     fetch: () => {
+      console.log("Fetching deployments...")
+
       return new Promise(resolve => {
         resolve(fetchSync())
       })
@@ -152,11 +154,16 @@ const randomDeployment = name => {
   let bugfix = [ver(3), ver(3), ver(3), ver(3)].sort().reverse()
   let failure = () => ver(15) < 2
 
-  return [0, 1, 2, 3].map(i => ({
-    name: name,
-    version: major + "." + minor + "." + bugfix[i],
-    environment: envs[i],
-    time: "2018-06-16T09:54:00",
-    status: failure() ? "FAILURE" : "SUCCESS"
-  }))
+  return [0, 1, 2, 3].map(i => {
+    let version = major + "." + minor + "." + bugfix[i]
+
+    return {
+      name: name,
+      version: version,
+      environment: envs[i],
+      time: "2018-06-16T09:54:00",
+      status: failure() ? "FAILURE" : "SUCCESS",
+      link: `http://localhost/${name}/${version}/${envs[i]}`
+    }
+  })
 }

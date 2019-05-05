@@ -135,15 +135,17 @@ const Release = ({environment, releases}) => {
 }
 
 const Build = ({release}) => (
-    <div className="build">
-      <div className="build-status">
-        <StatusIcon status={release.status} latest={release.latest}/>
+    <a href={release.link}>
+      <div className="build">
+        <div className="build-status">
+          <StatusIcon status={release.status} latest={release.latest}/>
+        </div>
+        <div className="build-info">
+          <span className="version">{release.version}</span>
+          <span className="time">{dateTimes.format(release.time)}</span>
+        </div>
       </div>
-      <div className="build-info">
-        <span className="version">{release.version}</span>
-        <span className="time">{dateTimes.format(release.time)}</span>
-      </div>
-    </div>
+    </a>
 )
 
 const StatusIcon = ({status, latest}) => {

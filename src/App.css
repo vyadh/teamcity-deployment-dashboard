@@ -1,3 +1,8 @@
+
+:root {
+  --main-text-colour: #595959;
+}
+
 #root {
   max-width: 950px;
   width: 100%;
@@ -7,7 +12,7 @@
 
 body {
   font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  color: #595959;
+  color: var(--main-text-colour);
   margin: 0;
   font-weight: normal;
 }
@@ -19,6 +24,14 @@ h1 {
   font-size: 3rem;
   font-weight: 200;
   border-bottom: 4px double #ededed;
+}
+
+a {
+  text-decoration: none;
+  color: var(--main-text-colour)
+}
+a:visited {
+  color: var(--main-text-colour)
 }
 
 .list {

@@ -14,38 +14,36 @@ const App = ({configuration}) => {
   let environments = configuration.environments
   let source = configuration.source
 
-  let [filter, setFilter] = useState("")
-  let [unfilteredReleasesPerApp, setUnfilteredReleasesPerApp] = useState([])
   let [releasesPerApp, setReleasesPerApp] = useState([])
 
   useEffect(() => {
     releases
         .fetch(source)
-        .then(setUnfilteredReleasesPerApp)
+        .then(setReleasesPerApp)
 
     //let id = setInterval(() => this.load(), 2000)
     // Allow debugging just one change
     // setInterval(() => clearInterval(id), 6000)
   }, [source])
 
-  useEffect(() => {
-    setReleasesPerApp(filterApps(filter, unfilteredReleasesPerApp))
-  }, [filter, unfilteredReleasesPerApp])
-
-  return <Page
-      environments={environments}
-      releasesPerApp={releasesPerApp}
-      filter={setFilter}/>
+  return (
+      <div>
+        <h1>Deployments</h1>
+        <Page
+          environments={environments}
+          unfilteredReleasesPerApp={releasesPerApp}/>
+      </div>
+  )
 }
 
-const Page = ({environments, releasesPerApp, filter}) => {
-  return (
-    <div>
-      <h1>Deployments</h1>
-      <Search filter={filter}/>
-      <Releases environments={environments} releasesPerApp={releasesPerApp}/>
-    </div>
-  )
+const Page = ({environments, unfilteredReleasesPerApp}) => {
+  let [filter, setFilter] = useState("")
+  let releasesPerApp = filterApps(filter, unfilteredReleasesPerApp)
+
+  return <>
+    <Search filter={setFilter}/>
+    <Releases environments={environments} releasesPerApp={releasesPerApp}/>
+  </>
 }
 
 const Search = ({filter}) => {

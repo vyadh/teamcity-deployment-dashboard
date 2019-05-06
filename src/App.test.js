@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import {createMemorySource} from "./memory/memorySource"
+import {createMemorySource} from "./sources/memory/memorySource"
 
 const config = {
   source: createMemorySource(),

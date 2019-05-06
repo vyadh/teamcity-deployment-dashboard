@@ -1,4 +1,4 @@
-import {convert} from './teamCityConverter'
+import {convert} from './teamCityJsonConverter'
 
 it('handled undefined input caused by upstream error', () => {
   let builds = undefined

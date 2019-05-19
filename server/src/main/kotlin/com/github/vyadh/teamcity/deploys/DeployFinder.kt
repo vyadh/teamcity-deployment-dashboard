@@ -32,9 +32,9 @@ class DeployFinder(
 
   internal fun toDeploy(build: SBuild, status: String): Deploy {
     return Deploy(
-          param(build, projectKey),
+          param(build, projectKey) { build.buildType?.projectName ?: "n/a" },
           build.buildNumber,
-          param(build, environmentKey),
+          param(build, environmentKey) { "n/a" },
           timeOf(build),
           status,
           links.getViewResultsUrl(build)
@@ -47,8 +47,8 @@ class DeployFinder(
             type.getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) == "DEPLOYMENT"
     }
 
-    private fun param(build: SBuild, key: String?): String {
-      return build.buildOwnParameters.getOrDefault(key, "n/a")
+    private fun param(build: SBuild, key: String?, default: () -> String): String {
+      return build.buildOwnParameters.getOrElse(key, default)
     }
 
     private fun timeOf(build: SBuild): ZonedDateTime {

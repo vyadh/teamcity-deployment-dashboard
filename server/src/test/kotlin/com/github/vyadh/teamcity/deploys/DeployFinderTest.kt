@@ -134,16 +134,20 @@ internal class DeployFinderTest {
   }
 
   @Test
-  internal fun toDeployWhenProjectAndStatusNotDefined() {
+  internal fun toDeployWhenProjectAndEnvironmentParametersNotDefined() {
+    val type = mock<SBuildType> {
+      on { projectName } doReturn "Actual Project Name"
+    }
     val build = mock<SBuild> {
       on { buildOwnParameters } doReturn mapOf()
+      on { buildType } doReturn type
       on { buildNumber } doReturn "1.0"
       on { finishDate } doReturn Date()
     }
 
     val result = finder.toDeploy(build, "ERROR")
 
-    assertThat(result.project).isEqualTo("n/a")
+    assertThat(result.project).isEqualTo("Actual Project Name")
     assertThat(result.environment).isEqualTo("n/a")
   }
 

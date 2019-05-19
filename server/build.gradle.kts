@@ -23,6 +23,7 @@ dependencies {
   testCompile("org.junit.jupiter:junit-jupiter-api:5.4.2")
   testCompile("org.junit.jupiter:junit-jupiter-params:5.4.2")
   testRuntime("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+  testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0")
 }
 
 teamcity {

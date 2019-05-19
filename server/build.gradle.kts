@@ -15,6 +15,8 @@ repositories {
 }
 
 dependencies {
+  implementation(kotlin("stdlib-jdk8"))
+
   compileOnly("org.jetbrains.teamcity.internal:server:${rootProject.extra["teamcityVersion"]}")
 
   testCompile("org.assertj:assertj-core:3.12.2")
@@ -46,11 +48,6 @@ fun Project.teamcity(configuration: TeamCityPluginExtension.() -> Unit) {
   configure(configuration)
 }
 
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-  jvmTarget = "1.8"
-}
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-  jvmTarget = "1.8"
+tasks.withType<KotlinCompile> {
+  kotlinOptions.jvmTarget = "1.8"
 }

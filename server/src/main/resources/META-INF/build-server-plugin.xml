@@ -5,6 +5,6 @@
        default-autowire="constructor">
 
   <bean class="com.github.vyadh.teamcity.deploys.DeploysProjectTab"/>
-  <bean class="com.github.vyadh.teamcity.deploys.DeploysProjectData"/>
+  <bean class="com.github.vyadh.teamcity.deploys.DeploysDataController"/>
 
 </beans>

@@ -13,6 +13,8 @@ Example
 Getting Started
 ---------------
 
+Getting just the frontend talking to the TeamCity REST API:
+
 1. Download and install latest release into any web server and note the deployment location
 2. Update `configuration.js` with the TeamCity base URL
 3. Update `configuration.js` with the environment names in the order they should be shown
@@ -21,6 +23,8 @@ Getting Started
   * Permit access from dashboard: `rest.cors.origins=http://<deployment host/port>`
 6. Ensure you are logged in to TeamCity
 7. Visit deployment location in the same browser, your credentials will be used to make the REST requests
+
+Using the TeamCity plugin version, just download and install.
 
 
 Deployment Visibility
@@ -38,16 +42,10 @@ In this app, builds will only be shown if the following are true:
 Implementation
 --------------
 
-This project is written in JavaScript using React.
-
-The other purpose of this dashboard is to allow me to learn React and modern JavaScript, so the implementation is not
-likely to be a good example of those technologies. Prop-drilling rather Context/Redux, old-style function syntax, etc.
+This project is written in JavaScript using React, with Kotlin for the TeamCity plugin backend.
 
 
 Possible Future Features
 ------------------------
 
 * Make required build properties configurable.
-* Make projects and deployments clickable to easily take to relevant TeamCity pages.
-* TeamCity plugin that embeds the dashboard into TeamCity itself, such as a project tab showing
-  all deployments at that hierarchy level and below

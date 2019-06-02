@@ -1,13 +1,12 @@
-import {createMemorySource} from "./sources/memory/memorySource"
-// import {createTeamCityRestSource} from "./sources/teamcityRest/teamCityRestSource"
-// import {createTeamCityPluginSource} from "./sources/teamcityPlugin/teamCityPluginSource"
+import {createTeamCityPluginSource} from "./sources/teamcityPlugin/teamCityPluginSource"
 
 const configuration = {
 
-  // Alternatively InMemorySource for testing
-  source: createMemorySource(),
-  // source: createTeamCityRestSource("http://localhost:8111"),
-  // source: createTeamCityPluginSource(),
+  // Running options (with appropriate imports):
+  //   testing: createMemorySource()
+  //   running outside of TeamCity: createTeamCityRestSource("http://localhost:8111")
+  //   running as a TeamCity plugin: createTeamCityPluginSource()
+  source: createTeamCityPluginSource(),
 
   // Environments to display, as specified in the 'environment' property in builds
   environments: [

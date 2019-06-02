@@ -1,1 +1,1 @@
-<p>Project tab deploy HTML</p>
+<%@include file="index.html"%>

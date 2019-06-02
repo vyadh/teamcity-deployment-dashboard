@@ -31,7 +31,7 @@ teamcity {
 
   server {
     descriptor {
-      name = "Deployment Dashboard"
+      name = "deployment-dashboard"
       displayName = "Deployment Dashboard"
       version = rootProject.version as String?
       vendorName = "Kieron Wilkinson"

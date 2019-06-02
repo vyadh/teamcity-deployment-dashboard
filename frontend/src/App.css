@@ -3,21 +3,22 @@
   --main-text-colour: #595959;
 }
 
-#root {
+#deploys-body {
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  color: var(--main-text-colour);
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+
+#deploys {
   max-width: 950px;
   width: 100%;
   margin: 0 auto;
   padding: 0 2rem;
 }
 
-body {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  color: var(--main-text-colour);
-  margin: 0;
-  font-weight: normal;
-}
-
-h1 {
+#deploys h1 {
   font-family: 'Helvetica Neue', 'Open Sans', sans-serif;
   margin-top: 2rem;
   padding-bottom: 1rem;
@@ -26,24 +27,24 @@ h1 {
   border-bottom: 4px double #ededed;
 }
 
-a {
+#deploys a {
   text-decoration: none;
   color: var(--main-text-colour)
 }
-a:visited {
+#deploys a:visited {
   color: var(--main-text-colour)
 }
 
-.list {
+#deploys .list {
   margin: 2rem;
 }
 
-table {
+#deploys table {
   border-spacing: 0;
   width: 100%;
 }
 
-th {
+#deploys th {
   font-weight: normal;
   font-size: 1.3rem;
 /*   font-weight: 200; */
@@ -51,71 +52,71 @@ th {
 }
 
 /* Project name column header */
-th:nth-child(1) {
+#deploys th:nth-child(1) {
   text-align: left;
 }
 /* Project names */
-td:nth-child(1) {  
+#deploys td:nth-child(1) {
   text-align: left;
   font-weight: bold;
 }
 
-th, td {
+#deploys th, td {
   justify-content: space-between;
   padding: 1rem;
   border-bottom: 1px solid lightgrey;
 }
 
-.build {
+#deploys .build {
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
 
-.build-status {
+#deploys .build-status {
   margin-right: 0.5rem;
 }
 
-.build-info {
+#deploys .build-info {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.status-icon {
+#deploys .status-icon {
   display: inline-block;
   font-size: 2.5rem;
   color: #1c66bf; /* status unknown = blue */
 }
-.status-SUCCESS { color: #40b55f; }
-.status-RUNNING { color: #40b55f; }
-.status-FAILURE { color: #f26c5c; }
+#deploys .status-SUCCESS { color: #40b55f; }
+#deploys .status-RUNNING { color: #40b55f; }
+#deploys .status-FAILURE { color: #f26c5c; }
 
-.status-latest {
+#deploys .status-latest {
   opacity: 1.0;
 }
-.status-older {
+#deploys .status-older {
   opacity: 0.3;
 }
 
-.version {
+#deploys .version {
   font-weight: bold;
   font-size: 1rem;
 }
 
-.time {
+#deploys .time {
   font-size: 0.7rem;
 }
 
 
 /* Search box. Source: https://shipow.github.io/searchbox */
 
-.search {
+#deploys .search {
   display: flex;
   justify-content: center;
 }
 
-.search-form {
+#deploys .search-form {
   display: inline-block;
   position: relative;
   width: 300px;
@@ -125,7 +126,7 @@ th, td {
   font-size: 16px;
 }
 
-.search-input {
+#deploys .search-input {
   display: inline-block;
   transition: box-shadow .4s ease, background .4s ease;
   border: 0;
@@ -138,21 +139,21 @@ th, td {
   font-size: inherit;
 }
 
-.search-input:hover {
+#deploys .search-input:hover {
   box-shadow: inset 0 0 0 1px silver;
 }
 
-.search-input:focus, .search-input:active {
+#deploys .search-input:focus, .search-input:active {
   outline: 0;
   box-shadow: inset 0 0 0 1px #AAAAAA;
   background: #FFFFFF;
 }
 
-.search-input::placeholder {
+#deploys .search-input::placeholder {
   color: #AAAAAA;
 }
 
-.search-submit {
+#deploys .search-submit {
   position: absolute;
   left: 14px;
   margin: 0;
@@ -164,7 +165,7 @@ th, td {
   user-select: none;
 }
 
-.search-submit::before {
+#deploys .search-submit::before {
   display: inline-block;
   margin-right: -4px;
   height: 100%;
@@ -172,14 +173,14 @@ th, td {
   content: '';
 }
 
-.search-submit svg {
+#deploys .search-submit svg {
   width: 19px;
   height: 19px;
   vertical-align: middle;
   fill: #666666;
 }
 
-.search-reset {
+#deploys .search-reset {
   display: none;
   position: absolute;
   top: 9px;
@@ -194,22 +195,22 @@ th, td {
   fill: rgba(0, 0, 0, 0.5);
 }
 
-.search-reset svg {
+#deploys .search-reset svg {
   display: block;
   margin: 4px;
   width: 15px;
   height: 15px;
 }
 
-.search-input:valid ~ .search-reset {
+#deploys .search-input:valid ~ .search-reset {
   display: block;
 }
 
 
 /* Ensure Chrome and IE doesn't add their own textbox crosses */
-input[type=text]::-ms-clear { display: none; width : 0; height: 0; }
-input[type=text]::-ms-reveal { display: none; width : 0; height: 0; }
-input[type="search"]::-webkit-search-decoration,
-  input[type="search"]::-webkit-search-cancel-button,
-  input[type="search"]::-webkit-search-results-button,
-  input[type="search"]::-webkit-search-results-decoration { display: none; }
+#deploys input[type=text]::-ms-clear { display: none; width : 0; height: 0; }
+#deploys input[type=text]::-ms-reveal { display: none; width : 0; height: 0; }
+#deploys input[type="search"]::-webkit-search-decoration,
+#deploys input[type="search"]::-webkit-search-cancel-button,
+#deploys input[type="search"]::-webkit-search-results-button,
+#deploys input[type="search"]::-webkit-search-results-decoration { display: none; }

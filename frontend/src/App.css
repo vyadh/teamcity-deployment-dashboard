@@ -99,12 +99,12 @@
   opacity: 0.3;
 }
 
-#deploys .version {
+#deploys .build-version {
   font-weight: bold;
   font-size: 1rem;
 }
 
-#deploys .time {
+#deploys .build-time {
   font-size: 0.7rem;
 }
 

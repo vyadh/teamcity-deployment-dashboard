@@ -141,8 +141,8 @@ const Build = ({release}) => (
           <StatusIcon status={release.status} latest={release.latest}/>
         </div>
         <div className="build-info">
-          <span className="version">{release.version}</span>
-          <span className="time">{dateTimes.format(release.time)}</span>
+          <span className="build-version">{release.version}</span>
+          <span className="build-time">{dateTimes.format(release.time)}</span>
         </div>
       </div>
     </a>

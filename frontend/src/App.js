@@ -28,13 +28,16 @@ const App = ({configuration}) => {
 
   return (
       <div>
-        <h1>Deployments</h1>
+        <Title configuration={configuration}/>
         <Page
           environments={environments}
           unfilteredReleasesPerApp={releasesPerApp}/>
       </div>
   )
 }
+
+const Title = ({configuration}) =>
+  <h1 className={configuration.embedded ? "invisible" : "visible"}>Deployments</h1>
 
 const Page = ({environments, unfilteredReleasesPerApp}) => {
   let [filter, setFilter] = useState("")

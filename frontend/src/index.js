@@ -9,4 +9,6 @@ ReactDOM.render(
     <App configuration={configuration}/>,
     document.getElementById('deploys'));
 
-registerServiceWorker();
+if (!configuration.embedded) {
+  registerServiceWorker();
+}

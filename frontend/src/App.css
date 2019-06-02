@@ -27,6 +27,10 @@
   border-bottom: 4px double #ededed;
 }
 
+#deploys .invisible {
+  display: none;
+}
+
 #deploys a {
   text-decoration: none;
   color: var(--main-text-colour)

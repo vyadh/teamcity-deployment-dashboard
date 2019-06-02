@@ -10,6 +10,9 @@ const configuration = {
   source: createTeamCityPluginSource(),
   // source: createMemorySource(),
 
+  // Indicates whether the app is embedded into TeamCity where some things are turned off
+  embedded: true,
+
   // Environments to display, as specified in the 'environment' property in builds
   environments: [
     "DEV",

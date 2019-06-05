@@ -13,6 +13,9 @@ const configuration = {
   // Indicates whether the app is embedded into TeamCity where some things are turned off
   embedded: true,
 
+  // Periodic refresh time in milliseconds or null if no refresh
+  refreshPeriodMillis: null,
+
   // Environments to display, as specified in the 'environment' property in builds
   environments: [
     "DEV",

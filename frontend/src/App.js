@@ -14,18 +14,22 @@ const App = ({configuration}) => {
 
   let environments = configuration.environments
   let source = configuration.source
-
   let [releasesPerApp, setReleasesPerApp] = useState([])
 
-  useEffect(() => {
-    releases
-        .fetch(source)
-        .then(setReleasesPerApp)
+  let load = () => releases
+      .fetch(source)
+      .then(setReleasesPerApp)
 
-    //let id = setInterval(() => this.load(), 2000)
-    // Allow debugging just one change
-    // setInterval(() => clearInterval(id), 6000)
+  useEffect(() => {
+    load()
   }, [source])
+
+  useEffect(() => {
+    if (configuration.refreshPeriodMillis) {
+      let id = setInterval(() => load(), configuration.refreshPeriodMillis)
+      return () => clearInterval(id)
+    }
+  })
 
   return (
       <div>

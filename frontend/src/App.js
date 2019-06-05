@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
@@ -28,7 +28,7 @@ const App = ({configuration}) => {
 
   return (
       <div>
-        <Title configuration={configuration}/>
+        <Title embedded={configuration.embedded}/>
         <Page
           environments={environments}
           unfilteredReleasesPerApp={releasesPerApp}/>
@@ -36,12 +36,14 @@ const App = ({configuration}) => {
   )
 }
 
-const Title = ({configuration}) =>
-  <h1 className={configuration.embedded ? "invisible" : "visible"}>Deployments</h1>
+const Title = ({embedded}) =>
+  <h1 className={embedded ? "invisible" : "visible"}>Deployments</h1>
 
 const Page = ({environments, unfilteredReleasesPerApp}) => {
   let [filter, setFilter] = useState("")
-  let releasesPerApp = filterApps(filter, unfilteredReleasesPerApp)
+  let releasesPerApp = useMemo(
+      () => filterApps(filter, unfilteredReleasesPerApp),
+      [filter, unfilteredReleasesPerApp])
 
   return <>
     <Search filter={setFilter}/>
@@ -90,8 +92,6 @@ const SearchIcons = () => {
 }
 
 const Releases = ({environments, releasesPerApp}) => {
-  let apps = Object.keys(releasesPerApp).sort()
-
   return (
     <div className="list">
       <table>
@@ -99,13 +99,7 @@ const Releases = ({environments, releasesPerApp}) => {
           <ReleaseHeader environments={environments}/>
         </thead>
         <tbody>
-          {apps.map(app =>
-            <ReleaseRow 
-              key={app} 
-              app={app} 
-              environments={environments}
-              releases={releasesPerApp[app]}/>
-          )}
+          <ReleaseRows environments={environments} releasesPerApp={releasesPerApp}/>
         </tbody>
       </table>
     </div>
@@ -118,6 +112,18 @@ const ReleaseHeader = ({environments}) => (
       {environments.map(env => <th key={env}>{env}</th>)}
     </tr>
 )
+
+const ReleaseRows = ({environments, releasesPerApp}) => {
+  let apps = useMemo(() => Object.keys(releasesPerApp).sort(), [releasesPerApp])
+
+  return apps.map(app =>
+      <ReleaseRow
+          key={app}
+          app={app}
+          environments={environments}
+          releases={releasesPerApp[app]}/>
+  )
+}
 
 const ReleaseRow = ({app, environments, releases}) => (
     <tr>

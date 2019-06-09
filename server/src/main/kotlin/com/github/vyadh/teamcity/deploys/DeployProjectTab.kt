@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest
 
 class DeployProjectTab(pagePlaces: PagePlaces, projectManager: ProjectManager) :
         ProjectTab(
-              "deployment-dashboard",
+              DeployPlugin.id,
               "Deployments",
               pagePlaces,
               projectManager,
@@ -26,6 +26,8 @@ class DeployProjectTab(pagePlaces: PagePlaces, projectManager: ProjectManager) :
         request: HttpServletRequest,
         project: SProject,
         user: SUser?) {
+
+    // todo deploy config data
   }
 
 }

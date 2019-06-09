@@ -38,8 +38,9 @@ teamcity {
       vendorUrl = "https://github.com/vyadh"
       description = "Deployment Dashboard for TeamCity"
       email = "kieron.wilkinson@gmail.com"
-      useSeparateClassloader = true
       minimumBuild = "58245"
+      useSeparateClassloader = true
+      allowRuntimeReload = true
     }
   }
 }

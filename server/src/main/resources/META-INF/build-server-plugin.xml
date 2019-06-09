@@ -6,5 +6,7 @@
 
   <bean class="com.github.vyadh.teamcity.deploys.DeployProjectTab"/>
   <bean class="com.github.vyadh.teamcity.deploys.DeployDataController"/>
+  <bean class="com.github.vyadh.teamcity.deploys.DeployEditProjectTab"/>
+  <bean class="com.github.vyadh.teamcity.deploys.DeployEditProjectController"/>
 
 </beans>

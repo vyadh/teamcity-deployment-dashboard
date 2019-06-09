@@ -1,6 +1,11 @@
 <%@ page contentType="application/json;charset=UTF-8" language="java" session="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 {
+  "environments": [
+    <c:forEach items="${environments}" var="environment" varStatus="loop">
+    "<c:out value="${environment}"/>"<c:if test="${!loop.last}">,</c:if>
+    </c:forEach>
+  ],
   "deploys": [
     <c:forEach items="${deploys}" var="deploy" varStatus="loop">
     {

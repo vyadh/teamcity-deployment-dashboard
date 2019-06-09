@@ -38,4 +38,10 @@ data class DeployConfig(
     )
   }
 
+  fun environmentsAsList(): List<String> {
+    val items = environments.split(',')
+    return if (items.size == 1 && items[0].isEmpty()) emptyList()
+           else items
+  }
+
 }

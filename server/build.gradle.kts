@@ -36,7 +36,7 @@ teamcity {
       version = rootProject.version as String?
       vendorName = "Kieron Wilkinson"
       vendorUrl = "https://github.com/vyadh"
-      description = "Deployment Dashboard for TeamCity"
+      description = "Dashboard visualising deployments into different environments"
       email = "kieron.wilkinson@gmail.com"
       minimumBuild = "58245"
       useSeparateClassloader = true

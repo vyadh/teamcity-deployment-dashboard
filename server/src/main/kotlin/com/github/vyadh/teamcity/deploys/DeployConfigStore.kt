@@ -11,7 +11,6 @@ class DeployConfigStore {
 
   fun find(project: SProject): DeployConfig? {
     return project.getAvailableFeaturesOfType(type).stream()
-          .filter { it.type == type }
           .map { DeployConfig.fromMap(it.parameters) }
           .filter { it.isEnabled() }
           .findFirst()

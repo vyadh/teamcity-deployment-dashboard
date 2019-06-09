@@ -19,11 +19,12 @@ internal class DeployDataControllerTest {
 
   private val webManager = mock<WebControllerManager> { }
   private val links = links("http://host/builds/id/123")
+  private val noEnvironments = ""
 
   @Test
   internal fun doHandleRespondsAsJson() {
     val projectManager = mock<ProjectManager> { }
-    val controller = DeployDataController(webManager, projectManager, pluginDescriptor(), links)
+    val controller = controllerWith(projectManager)
     val response = mock<HttpServletResponse> { }
 
     controller.doHandle(anyRequest(), response)
@@ -32,26 +33,40 @@ internal class DeployDataControllerTest {
   }
 
   @Test
-  internal fun doHandleReturnsEmptyDeploysWhenProjectNotFound() {
+  internal fun doHandleReturnsEmptyCollectionsWhenProjectNotFound() {
     val projectManager = projectManagerReturning(null)
-    val controller = DeployDataController(webManager, projectManager, pluginDescriptor(), links)
+    val controller = controllerWith(projectManager)
 
     val result = controller.doHandle(anyRequest(), anyResponse())
 
-    val deploys = modelMap(result)["deploys"] ?: error("no deploys entry found")
+    val environments = environments(result) ?: error("no environments entry found")
+    assertThat(environments).isEmpty()
+
+    val deploys = deploys(result) ?: error("no deploys entry found")
     assertThat(deploys).isEmpty()
   }
 
   @Test
   internal fun doHandlePopulatesDeploys() {
-    val project = projectWith(buildTypeWith(buildNamed("SomeProject")))
+    val project = projectWith(buildTypeWith(buildNamed("SomeProject")), noEnvironments)
     val projectManager = projectManagerReturning(project)
-    val controller = DeployDataController(webManager, projectManager, pluginDescriptor(), links)
+    val controller = controllerWith(projectManager)
 
     val result = controller.doHandle(anyRequest(), anyResponse())
 
-    val deploy = modelMap(result)["deploys"]?.first()!!
+    val deploy = deploys(result)?.first()!!
     assertThat(deploy.project).isEqualTo("SomeProject")
+  }
+
+  @Test
+  internal fun doHandlePopulatesEnvironments() {
+    val project = projectWith(buildTypeWith(buildNamed("SomeProject")), "DEV,PRD")
+    val projectManager = projectManagerReturning(project)
+    val controller = controllerWith(projectManager)
+
+    val result = environments(controller.doHandle(anyRequest(), anyResponse()))
+
+    assertThat(result).containsExactlyInAnyOrder("DEV", "PRD")
   }
 
   @Test
@@ -72,6 +87,10 @@ internal class DeployDataControllerTest {
     assertThat(result).isEqualTo("")
   }
 
+
+  private fun controllerWith(projectManager: ProjectManager): DeployDataController {
+    return DeployDataController(projectManager, pluginDescriptor(), webManager, links)
+  }
 
   private fun pluginDescriptor(): PluginDescriptor = mock {
     on { getPluginResourcesPath(anyString()) } doReturn "path"
@@ -94,8 +113,14 @@ internal class DeployDataControllerTest {
     on { findProjectByExternalId(anyString()) } doReturn project
   }
 
-  private fun projectWith(buildType: SBuildType): SProject = mock {
-    on { buildTypes } doReturn listOf(buildType)
+  private fun projectWith(buildType: SBuildType, environments: String): SProject {
+    val feature = mock<SProjectFeatureDescriptor> {
+      on { parameters } doReturn DeployConfig("true", "id", "env", environments).toMap()
+    }
+    return mock {
+      on { buildTypes } doReturn listOf(buildType)
+      on { getAvailableFeaturesOfType(DeployConfigStore.type) } doReturn listOf(feature)
+    }
   }
 
   private fun buildTypeWith(build: SFinishedBuild): SBuildType = mock {
@@ -112,6 +137,13 @@ internal class DeployDataControllerTest {
   }
 
   @Suppress("UNCHECKED_CAST")
-  private fun modelMap(result: ModelAndView?) = result?.model as Map<String, List<Deploy>>
+  private fun deploys(result: ModelAndView?): List<Deploy>? {
+    return result?.model?.get("deploys") as List<Deploy>?
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  private fun environments(result: ModelAndView?): List<String>? {
+    return result?.model?.get("environments") as List<String>?
+  }
 
 }

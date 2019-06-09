@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
        default-autowire="constructor">
 
-  <bean class="com.github.vyadh.teamcity.deploys.DeploysProjectTab"/>
-  <bean class="com.github.vyadh.teamcity.deploys.DeploysDataController"/>
+  <bean class="com.github.vyadh.teamcity.deploys.DeployProjectTab"/>
+  <bean class="com.github.vyadh.teamcity.deploys.DeployDataController"/>
 
 </beans>

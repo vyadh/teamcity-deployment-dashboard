@@ -7,7 +7,7 @@ import jetbrains.buildServer.web.openapi.PagePlaces
 import jetbrains.buildServer.web.openapi.project.ProjectTab
 import javax.servlet.http.HttpServletRequest
 
-class DeploysProjectTab(pagePlaces: PagePlaces, projectManager: ProjectManager) :
+class DeployProjectTab(pagePlaces: PagePlaces, projectManager: ProjectManager) :
         ProjectTab(
               "deployment-dashboard",
               "Deployments",

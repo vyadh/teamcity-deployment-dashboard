@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class DeploysDataController(
+class DeployDataController(
       webManager: WebControllerManager,
       private val projectManager: ProjectManager,
       private val pluginDescriptor: PluginDescriptor,

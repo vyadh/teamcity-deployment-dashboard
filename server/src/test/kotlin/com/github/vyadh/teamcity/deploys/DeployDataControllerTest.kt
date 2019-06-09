@@ -15,7 +15,7 @@ import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-internal class DeploysDataControllerTest {
+internal class DeployDataControllerTest {
 
   private val webManager = mock<WebControllerManager> { }
   private val links = links("http://host/builds/id/123")
@@ -23,7 +23,7 @@ internal class DeploysDataControllerTest {
   @Test
   internal fun doHandleRespondsAsJson() {
     val projectManager = mock<ProjectManager> { }
-    val controller = DeploysDataController(webManager, projectManager, pluginDescriptor(), links)
+    val controller = DeployDataController(webManager, projectManager, pluginDescriptor(), links)
     val response = mock<HttpServletResponse> { }
 
     controller.doHandle(anyRequest(), response)
@@ -34,7 +34,7 @@ internal class DeploysDataControllerTest {
   @Test
   internal fun doHandleReturnsEmptyDeploysWhenProjectNotFound() {
     val projectManager = projectManagerReturning(null)
-    val controller = DeploysDataController(webManager, projectManager, pluginDescriptor(), links)
+    val controller = DeployDataController(webManager, projectManager, pluginDescriptor(), links)
 
     val result = controller.doHandle(anyRequest(), anyResponse())
 
@@ -46,7 +46,7 @@ internal class DeploysDataControllerTest {
   internal fun doHandlePopulatesDeploys() {
     val project = projectWith(buildTypeWith(buildNamed("SomeProject")))
     val projectManager = projectManagerReturning(project)
-    val controller = DeploysDataController(webManager, projectManager, pluginDescriptor(), links)
+    val controller = DeployDataController(webManager, projectManager, pluginDescriptor(), links)
 
     val result = controller.doHandle(anyRequest(), anyResponse())
 
@@ -58,7 +58,7 @@ internal class DeploysDataControllerTest {
   internal fun projectIdIsDerivedFromURL() {
     val request = requestWithURI("http://host/app/deploys/SomeProjectId")
 
-    val result = DeploysDataController.projectId(request)
+    val result = DeployDataController.projectId(request)
 
     assertThat(result).isEqualTo("SomeProjectId")
   }
@@ -67,7 +67,7 @@ internal class DeploysDataControllerTest {
   internal fun projectIdIsEmptyWhenLastCharacterIsSlash() {
     val request = requestWithURI("http://host/app/deploys/")
 
-    val result = DeploysDataController.projectId(request)
+    val result = DeployDataController.projectId(request)
 
     assertThat(result).isEqualTo("")
   }

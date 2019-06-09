@@ -1,4 +1,7 @@
 <%@ include file="/include.jsp"%>
+<%@ taglib prefix="bs" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 
 <c:url value="/admin/deploys-edit-project.html" var="actionUrl" />
 
@@ -6,7 +9,7 @@
     ${teamcityPluginResourcesPath}js/deploys-edit-project-config.js
 </bs:linkScript>
 
-<!-- todo replace property names object references -->
+<!-- todo show saving success and failure messages (rather than reload in js) -->
 
 <form
       id="deployDashboardForm"
@@ -14,11 +17,12 @@
       action="${actionUrl}"
       onsubmit="return saveDeploymentDashboardConfig(this, '${actionUrl}')">
 
-	<div class="editDeploySettingsPage">
+  <div class="editDeploySettingsPage">
 
     <h2 class="noBorder">Deployment Dashboard</h2>
     <div class="grayNote">
-      Describes how to interpret the project '${projectExternalId}' and sub-projects to generate the deployment dashboard.
+      Describes how to interpret the project '${projectExternalId}' and sub-projects to generate the
+      deployment dashboard.
     </div>
 
     <br/>
@@ -32,34 +36,34 @@
       <label for="dashboardEnabled">Enable Dashboard</label>
     </p>
 
-		<table id="deployDashboardConfig" class="runnerFormTable" ${dashboardEnabled ? '' : 'hidden'}>
-			<tr>
-				<td><label for="projectKey">Project Property:</label></td>
-				<td>
-				  <forms:textField maxlength="80" name="projectKey" value="${projectKey}"/>
-					<span class="smallNote">Property name for the project, or blank to use the actual project name.</span>
+    <table id="deployDashboardConfig" class="runnerFormTable" ${dashboardEnabled ? '' : 'hidden'}>
+      <tr>
+        <td><label for="projectKey">Project Property:</label></td>
+        <td>
+          <forms:textField maxlength="80" name="projectKey" value="${projectKey}"/>
+          <span class="smallNote">Property name for the project, or blank to use the actual project name.</span>
         </td>
-			</tr>
-			<tr>
-				<td><label for="environmentKey">Environment Property:</label></td>
-				<td>
-				  <forms:textField maxlength="80" name="environmentKey" value="${environmentKey}"/>
-					<span class="smallNote">Property name for the environment the build configuration is for.</span>
+      </tr>
+      <tr>
+        <td><label for="environmentKey">Environment Property:</label></td>
+        <td>
+          <forms:textField maxlength="80" name="environmentKey" value="${environmentKey}"/>
+          <span class="smallNote">Property name for the environment the build configuration is for.</span>
         </td>
-			</tr>
-			<tr>
-				<td><label for="environments">Environments:</label></td>
-				<td>
-				  <forms:textField maxlength="200" name="environments" value="${environments}"/>
-					<span class="smallNote">Comma separated and ordered list of environments to deploy to.</span>
+      </tr>
+      <tr>
+        <td><label for="environments">Environments:</label></td>
+        <td>
+          <forms:textField maxlength="200" name="environments" value="${environments}"/>
+          <span class="smallNote">Comma separated and ordered list of environments to deploy to.</span>
         </td>
-			</tr>
-		</table>
+      </tr>
+    </table>
 
     <div class="saveButtonsBlock">
-			<forms:submit label="Save" />
+      <forms:submit label="Save" />
         <input type="hidden" id="projectExternalId" name="projectExternalId" value="${projectExternalId}"/>
-			<forms:saving />
-		</div>
-	</div>
+      <forms:saving />
+    </div>
+  </div>
 </form>

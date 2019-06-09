@@ -1,4 +1,4 @@
-import * as releasesPerApp from './releasesPerApp'
+import * as releases from './releasesPerApp'
 
 it('releases are grouped by name, and the latest versions are marked as such', () => {
   let data = [
@@ -34,9 +34,9 @@ it('releases are grouped by name, and the latest versions are marked as such', (
     }
   ]
 
-  let promise = fetch(data)
+  let deploysPerApp = releases.groupPerApp(data)
 
-  expect(promise).resolves.toEqual(
+  expect(deploysPerApp).toEqual(
     {
       Mercury: [
         {
@@ -81,9 +81,3 @@ it('releases are grouped by name, and the latest versions are marked as such', (
     }
   )
 })
-
-const fetch = data => {
-  let fetch = () => new Promise(resolve => resolve(data))
-  let parse = data => data
-  return releasesPerApp.fetch({fetch, parse})
-}

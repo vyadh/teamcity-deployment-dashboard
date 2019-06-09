@@ -1,9 +1,10 @@
 import {groupBy} from "./util/collections"
 import {maxVersion} from "./util/versions"
 
-export const fetch = source => source.fetch()
-    .then(deploys => groupBy(deploys, deploy => deploy.name))
-    .then(grouped => markLatestAppRelease(grouped))
+export const groupPerApp = deploys => {
+  let grouped = groupBy(deploys, deploy => deploy.name)
+  return markLatestAppRelease(grouped)
+}
 
 export const markLatestAppRelease = releasesPerApp => {
   let apps = Object.keys(releasesPerApp)

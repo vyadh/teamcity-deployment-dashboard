@@ -12,13 +12,16 @@ import {filterApps} from "./searchApps"
 
 const App = ({configuration}) => {
 
-  let environments = configuration.environments
   let source = configuration.source
+  let [environments, setEnvironments] = useState([])
   let [releasesPerApp, setReleasesPerApp] = useState([])
 
-  let load = () => releases
-      .fetch(source)
-      .then(setReleasesPerApp)
+  let load = () => source.fetch().then(data => {
+    let {environments, deploys} = data
+
+    setEnvironments(environments)
+    setReleasesPerApp(releases.groupPerApp(deploys))
+  })
 
   useEffect(() => {
     load()

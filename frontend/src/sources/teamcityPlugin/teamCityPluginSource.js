@@ -1,11 +1,11 @@
 
 export const createTeamCityPluginSource = () => {
   return {
-    fetch: () => get("/app/deploys/")
+    fetch: () => fetchData("/app/deploys/")
   }
 }
 
-const get = urlPrefix => {
+const fetchData = urlPrefix => {
   let id = projectId(window.location.search)
   let url = `${urlPrefix}/${id}`
 
@@ -17,7 +17,6 @@ const get = urlPrefix => {
         }
       })
       .then(extractJson)
-      .then(json => json.deploys)
 }
 
 export const projectId = (search) => {

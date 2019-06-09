@@ -5,13 +5,22 @@ export const createMemorySource = () => {
       console.log("Fetching deployments...")
 
       return new Promise(resolve => {
-        resolve(fetchSync())
+        resolve(data())
       })
     }
   }
 }
 
-const fetchSync = () => {
+const data = () => {
+  return {
+    environments: environments,
+    deploys: deploys()
+  }
+}
+
+const environments = ["DEV", "TST", "UAT", "PRD"]
+
+const deploys = () => {
   return [
     {
       name: "Mercury",

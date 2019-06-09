@@ -6,11 +6,20 @@ import {convert} from "./teamCityJsonConverter"
  */
 export const createTeamCityRestSource = baseUrl => {
   return {
-    fetch: () => fetchRest(baseUrl)
+    fetch: () => fetchDeploys(baseUrl).then(toData)
   }
 }
 
-const fetchRest = baseUrl => {
+const toData = deploys => {
+  return {
+    environments: environments,
+    deploys: deploys
+  }
+}
+
+const environments = ["DEV", "TST", "UAT", "PRD"]
+
+const fetchDeploys = baseUrl => {
   console.log("Fetching deployments from TeamCity...")
 
   let query = "locator=type:deployment&" +

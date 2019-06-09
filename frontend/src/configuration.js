@@ -14,15 +14,7 @@ const configuration = {
   embedded: true,
 
   // Periodic refresh time in milliseconds or null if no refresh
-  refreshPeriodMillis: null,
-
-  // Environments to display, as specified in the 'environment' property in builds
-  environments: [
-    "DEV",
-    "TST",
-    "UAT",
-    "PRD"
-  ]
+  refreshPeriodMillis: null
 
 }
 

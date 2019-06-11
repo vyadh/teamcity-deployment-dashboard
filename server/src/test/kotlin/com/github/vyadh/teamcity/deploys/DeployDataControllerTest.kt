@@ -48,7 +48,7 @@ internal class DeployDataControllerTest {
 
   @Test
   internal fun doHandlePopulatesDeploys() {
-    val project = projectWith(buildTypeWith(buildNamed("SomeProject")), noEnvironments)
+    val project = projectWith(buildTypeWith(build("SomeProject", "DEV")), noEnvironments)
     val projectManager = projectManagerReturning(project)
     val controller = controllerWith(projectManager)
 
@@ -56,11 +56,12 @@ internal class DeployDataControllerTest {
 
     val deploy = deploys(result)?.first()!!
     assertThat(deploy.project).isEqualTo("SomeProject")
+    assertThat(deploy.environment).isEqualTo("DEV")
   }
 
   @Test
   internal fun doHandlePopulatesEnvironments() {
-    val project = projectWith(buildTypeWith(buildNamed("SomeProject")), "DEV,PRD")
+    val project = projectWith(buildTypeWith(build("SomeProject", "ANY")), "DEV,PRD")
     val projectManager = projectManagerReturning(project)
     val controller = controllerWith(projectManager)
 
@@ -89,7 +90,7 @@ internal class DeployDataControllerTest {
 
 
   private fun controllerWith(projectManager: ProjectManager): DeployDataController {
-    return DeployDataController(projectManager, pluginDescriptor(), webManager, links)
+    return DeployDataController(projectManager, pluginDescriptor(), links, webManager)
   }
 
   private fun pluginDescriptor(): PluginDescriptor = mock {
@@ -115,7 +116,8 @@ internal class DeployDataControllerTest {
 
   private fun projectWith(buildType: SBuildType, environments: String): SProject {
     val feature = mock<SProjectFeatureDescriptor> {
-      on { parameters } doReturn DeployConfig("true", "id", "env", environments).toMap()
+      on { parameters } doReturn DeployConfig(
+            "true", "PROJECT", "ENVIRONMENT", environments).toMap()
     }
     return mock {
       on { buildTypes } doReturn listOf(buildType)
@@ -130,8 +132,8 @@ internal class DeployDataControllerTest {
   }
 
   @Suppress("SameParameterValue")
-  private fun buildNamed(name: String): SFinishedBuild = mock {
-    on { buildOwnParameters } doReturn mapOf(Pair("PROJECT", name), Pair("ENVIRONMENT", "PRD"))
+  private fun build(name: String, env: String): SFinishedBuild = mock {
+    on { buildOwnParameters } doReturn mapOf(Pair("PROJECT", name), Pair("ENVIRONMENT", env))
     on { buildNumber } doReturn "1.0"
     on { finishDate } doReturn Date()
   }

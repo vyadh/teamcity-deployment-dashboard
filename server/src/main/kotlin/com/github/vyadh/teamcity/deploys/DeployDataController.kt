@@ -13,13 +13,11 @@ import javax.servlet.http.HttpServletResponse
 class DeployDataController(
       private val projectManager: ProjectManager,
       private val pluginDescriptor: PluginDescriptor,
-      webManager: WebControllerManager,
-      links: WebLinks
+      private val links: WebLinks,
+      webManager: WebControllerManager
 ) : BaseController() {
 
-  private val store = DeployConfigStore()
-  // todo from config
-  private val finder = DeployFinder(links, "PROJECT", "ENVIRONMENT")
+  private val configStore = DeployConfigStore()
 
   init {
     webManager.registerController("/app/deploys/**", this)
@@ -31,33 +29,47 @@ class DeployDataController(
 
     response.setContentType("application/json")
 
-    val project = project(request)
-    val deploys = findDeploys(project)
-    val environments = findEnvironments(project)
     val path = pluginDescriptor.getPluginResourcesPath("deploys-project-data.jsp")
+    val project = project(request) ?: return ModelAndView(path, emptyModel())
 
-    val map = mapOf(
-          Pair("environments", environments),
-          Pair("deploys", deploys)
-    )
+    val config = configStore.find(project)
+    val environments = findEnvironments(config)
+    val deploys = findDeploys(project, createFinder(config))
+    val model = populatedModel(environments, deploys)
 
-    return ModelAndView(path, map)
-  }
-
-  private fun findEnvironments(project: SProject?): List<String> {
-    if (project == null) return emptyList()
-    val config = store.find(project) ?: return emptyList()
-    return config.environmentsAsList()
-  }
-
-  private fun findDeploys(project: SProject?): List<Deploy> {
-    return if (project == null) emptyList()
-           else finder.search(project)
+    return ModelAndView(path, model)
   }
 
   private fun project(request: HttpServletRequest): SProject? {
     val id = projectId(request)
     return projectManager.findProjectByExternalId(id)
+  }
+
+  private fun emptyModel(): Map<String, List<String>> {
+    return mapOf(
+          Pair("environments", emptyList()),
+          Pair("deploys", emptyList())
+    )
+  }
+
+  private fun populatedModel(environments: List<String>, deploys: List<Deploy>): Map<String, List<Any>> {
+    return mapOf(
+          Pair("environments", environments),
+          Pair("deploys", deploys)
+    )
+  }
+
+  private fun createFinder(config: DeployConfig?): DeployFinder? {
+    return if (config == null) null
+    else DeployFinder(links, config.projectKey, config.environmentKey)
+  }
+
+  private fun findEnvironments(config: DeployConfig?): List<String> {
+    return config?.environmentsAsList() ?: emptyList()
+  }
+
+  private fun findDeploys(project: SProject, finder: DeployFinder?): List<Deploy> {
+    return finder?.search(project) ?: emptyList()
   }
 
   companion object {

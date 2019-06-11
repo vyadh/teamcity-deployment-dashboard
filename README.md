@@ -66,7 +66,8 @@ This project is written in JavaScript using React for the frontend and Kotlin fo
 Possible Future Features
 ------------------------
 
-* Finish making project and environment query work from configured values.
-* Finish only show deployment tab if configuration is enabled at this or parent.
-* Support different project and env values when showing the dashboard at a higher level.
+* Finish: test use of project id rather than param if project key blank
+* Finish: only show deployment tab if configuration is enabled at this or parent.
+* Finish: make app/ controller link same as plugin id
+* Improve config saving via success and failure messages
 * Show real-time progress by having the frontend subscribe to build changes via server-sent events.

@@ -8,7 +8,7 @@ import java.util.*
 
 class DeployFinder(
       private val links: WebLinks,
-      private val projectKey: String?,
+      private val projectKey: String,
       private val environmentKey: String) {
 
   fun search(project: SProject): List<Deploy> {
@@ -32,9 +32,9 @@ class DeployFinder(
 
   internal fun toDeploy(build: SBuild, status: String): Deploy {
     return Deploy(
-          param(build, projectKey) { build.buildType?.projectName ?: "n/a" },
+          param(build, projectKey) { build.buildType?.projectName ?: "[unknown]" },
           build.buildNumber,
-          param(build, environmentKey) { "n/a" },
+          param(build, environmentKey) { build.buildType?.name ?: "[unknown]" },
           timeOf(build),
           status,
           links.getViewResultsUrl(build)
@@ -47,8 +47,9 @@ class DeployFinder(
             type.getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) == "DEPLOYMENT"
     }
 
-    private fun param(build: SBuild, key: String?, default: () -> String): String {
-      return build.buildOwnParameters.getOrElse(key, default)
+    private fun param(build: SBuild, key: String, default: () -> String): String {
+      return if (key.isBlank()) default()
+      else build.buildOwnParameters.getOrElse(key, { "[missing]" })
     }
 
     private fun timeOf(build: SBuild): ZonedDateTime {

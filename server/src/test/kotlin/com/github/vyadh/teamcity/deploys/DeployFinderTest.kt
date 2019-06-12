@@ -134,21 +134,33 @@ internal class DeployFinderTest {
   }
 
   @Test
-  internal fun toDeployWhenProjectAndEnvironmentParametersNotDefined() {
-    val type = mock<SBuildType> {
-      on { projectName } doReturn "Actual Project Name"
-    }
-    val build = mock<SBuild> {
-      on { buildOwnParameters } doReturn mapOf()
-      on { buildType } doReturn type
-      on { buildNumber } doReturn "1.0"
-      on { finishDate } doReturn Date()
-    }
+  internal fun toDeployWhenProjectParameterBlank() {
+    val build = buildWith("Project", "Build", emptyMap())
+    val finder = DeployFinder(links, "", envKey)
 
-    val result = finder.toDeploy(build, "ERROR")
+    val result = finder.toDeploy(build, "SUCCESS")
 
-    assertThat(result.project).isEqualTo("Actual Project Name")
-    assertThat(result.environment).isEqualTo("n/a")
+    assertThat(result.project).isEqualTo("Project")
+  }
+
+  @Test
+  internal fun toDeployWhenEnvironmentParameterBlank() {
+    val build = buildWith("Project", "Build", emptyMap())
+    val finder = DeployFinder(links, projectKey, "")
+
+    val result = finder.toDeploy(build, "SUCCESS")
+
+    assertThat(result.environment).isEqualTo("Build")
+  }
+
+  @Test
+  internal fun toDeployWhenProjectOrEnvironmentParameterNotFound() {
+    val build = buildWith("Project", "Build", emptyMap())
+
+    val result = finder.toDeploy(build, "SUCCESS")
+
+    assertThat(result.project).isEqualTo("[missing]")
+    assertThat(result.environment).isEqualTo("[missing]")
   }
 
   @Test
@@ -185,6 +197,25 @@ internal class DeployFinderTest {
   private fun buildTypeWith(build: SRunningBuild): SBuildType = mock {
     on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "DEPLOYMENT"
     on { runningBuilds } doReturn listOf(build)
+  }
+
+  private fun buildTypeWith(build: String, project: String): SBuildType = mock {
+    on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "DEPLOYMENT"
+    on { name } doReturn build
+    on { projectName } doReturn project
+  }
+
+  private fun buildWith(project: String, build: String, params: Map<String, String>): SBuild {
+    return buildWith(buildTypeWith(build, project), params)
+  }
+
+  private fun buildWith(type: SBuildType, params: Map<String, String>): SBuild {
+    return mock {
+      on { buildOwnParameters } doReturn params
+      on { buildType } doReturn type
+      on { buildNumber } doReturn "1.0"
+      on { finishDate } doReturn Date()
+    }
   }
 
 }

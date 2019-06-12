@@ -41,21 +41,27 @@
         <td><label for="projectKey">Project Property:</label></td>
         <td>
           <forms:textField maxlength="80" name="projectKey" value="${projectKey}"/>
-          <span class="smallNote">Property name for the project, or blank to use the actual project name.</span>
+          <span class="smallNote">Property name for the project, or leave blank to use the actual project name.</span>
         </td>
       </tr>
       <tr>
         <td><label for="environmentKey">Environment Property:</label></td>
         <td>
           <forms:textField maxlength="80" name="environmentKey" value="${environmentKey}"/>
-          <span class="smallNote">Property name for the environment the build configuration is for.</span>
+          <span class="smallNote">
+            Property name for the environment where the build was deployed, or blank to use the
+            name of the build configuration.
+          </span>
         </td>
       </tr>
       <tr>
         <td><label for="environments">Environments:</label></td>
         <td>
           <forms:textField maxlength="200" name="environments" value="${environments}"/>
-          <span class="smallNote">Comma separated and ordered list of environments to deploy to.</span>
+          <span class="smallNote">
+            Comma separated and ordered list of environments being deploy to.
+            Deployment builds not in this list will not be shown.
+          </span>
         </td>
       </tr>
     </table>

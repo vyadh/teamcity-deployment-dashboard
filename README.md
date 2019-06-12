@@ -66,7 +66,6 @@ This project is written in JavaScript using React for the frontend and Kotlin fo
 Possible Future Features
 ------------------------
 
-* Finish: test use of project id rather than param if project key blank
 * Finish: only show deployment tab if configuration is enabled at this or parent.
 * Improve config saving via success and failure messages
 * Show real-time progress by having the frontend subscribe to build changes via server-sent events.

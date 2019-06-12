@@ -51,7 +51,7 @@ Deployment Visibility
 Builds in TeamCity will be performed for many reasons and not all of them will be relevant to show on the dashboard. This plugin will only show builds if the following are true:
 
 1. Has a build configuration type set to `Deployment` and therefore has a 'Deploy' button rather than 'Run'
- * See: TeamCity / Project Configuration / Build configuration type
+   * See: TeamCity / Project Configuration / Build configuration type
 2. Has a configuration parameter matching the project key when not blank.
 3. Has a configuration parameters that matches the environment key.
 4. The environed is contained in the list of configured environments.
@@ -68,6 +68,5 @@ Possible Future Features
 
 * Finish: test use of project id rather than param if project key blank
 * Finish: only show deployment tab if configuration is enabled at this or parent.
-* Finish: make app/ controller link same as plugin id
 * Improve config saving via success and failure messages
 * Show real-time progress by having the frontend subscribe to build changes via server-sent events.

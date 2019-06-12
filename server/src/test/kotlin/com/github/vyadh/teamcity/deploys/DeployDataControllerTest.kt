@@ -72,7 +72,7 @@ internal class DeployDataControllerTest {
 
   @Test
   internal fun projectIdIsDerivedFromURL() {
-    val request = requestWithURI("http://host/app/deploys/SomeProjectId")
+    val request = requestWithURI("http://host/app/deployment-dashboard/SomeProjectId")
 
     val result = DeployDataController.projectId(request)
 
@@ -81,7 +81,7 @@ internal class DeployDataControllerTest {
 
   @Test
   internal fun projectIdIsEmptyWhenLastCharacterIsSlash() {
-    val request = requestWithURI("http://host/app/deploys/")
+    val request = requestWithURI("http://host/app/deployment-dashboard/")
 
     val result = DeployDataController.projectId(request)
 
@@ -97,7 +97,7 @@ internal class DeployDataControllerTest {
     on { getPluginResourcesPath(anyString()) } doReturn "path"
   }
 
-  private fun anyRequest() = requestWithURI("http://host/app/deploys/id")
+  private fun anyRequest() = requestWithURI("http://host/app/deployment-dashboard/id")
 
   private fun anyResponse() = mock<HttpServletResponse> { }
 

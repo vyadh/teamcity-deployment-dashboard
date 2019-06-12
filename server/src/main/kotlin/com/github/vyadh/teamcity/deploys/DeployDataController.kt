@@ -20,7 +20,7 @@ class DeployDataController(
   private val configStore = DeployConfigStore()
 
   init {
-    webManager.registerController("/app/deploys/**", this)
+    webManager.registerController("/app/deployment-dashboard/**", this)
   }
 
   public override fun doHandle(

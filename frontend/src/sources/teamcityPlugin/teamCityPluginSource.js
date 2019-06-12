@@ -1,7 +1,7 @@
 
 export const createTeamCityPluginSource = () => {
   return {
-    fetch: () => fetchData("/app/deploys/")
+    fetch: () => fetchData("/app/deployment-dashboard/")
   }
 }
 

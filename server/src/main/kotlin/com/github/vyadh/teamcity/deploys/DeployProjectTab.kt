@@ -19,10 +19,15 @@ class DeployProjectTab(pagePlaces: PagePlaces, projectManager: ProjectManager) :
     const val title = "Deployments"
   }
 
+  private val configStore = DeployConfigStore()
+
   override fun isAvailable(request: HttpServletRequest): Boolean {
-    val project = getProject(request)
-    // todo at least one deployment type config
-    return project != null && super.isAvailable(request)
+    return super.isAvailable(request) && isTabShowing(getProject(request))
+  }
+
+  internal fun isTabShowing(project: SProject?): Boolean {
+    if (project == null) return false
+    return configStore.find(project).isEnabled()
   }
 
   override fun fillModel(

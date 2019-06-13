@@ -94,8 +94,6 @@ Possible Future Features
 ------------------------
 
 * Finish: only show deployments if they have project key property
-* Finish: only show deployment tab if configuration is enabled at this or parent.
-* Finish: Add logging
 * Finish: New screenshots above
 * Add config saving notification via success and failure messages
 * Show real-time progress by having the frontend subscribe to build changes via server-sent events.

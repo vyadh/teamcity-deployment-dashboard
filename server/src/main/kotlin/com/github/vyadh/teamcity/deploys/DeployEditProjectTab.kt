@@ -9,9 +9,12 @@ class DeployEditProjectTab(pagePlaces: PagePlaces, pluginDescriptor: PluginDescr
       EditProjectTab(
             pagePlaces,
             DeployPlugin.id,
-            pluginDescriptor.getPluginResourcesPath(
-                  "deploys-edit-project-tab.jsp"),
+            pluginDescriptor.getPluginResourcesPath(jspPath),
             DeployPlugin.title) {
+
+  companion object {
+    const val jspPath = "deploys-edit-project-tab.jsp"
+  }
 
   private val configStore = DeployConfigStore()
 
@@ -21,8 +24,10 @@ class DeployEditProjectTab(pagePlaces: PagePlaces, pluginDescriptor: PluginDescr
     val project = getProject(request) ?: return
     model[DeployConfigKeys.projectExternalId] = project.externalId
 
-    val config = configStore.find(project) ?: return
-    model.putAll(config.toMap())
+    val config = configStore.find(project)
+    if (config.isEnabled()) {
+      model.putAll(config.toMap())
+    }
   }
 
 }

@@ -19,7 +19,7 @@ internal class DeployConfigStoreStoreTest {
   fun addFeatureWhenMissing() {
     val project = projectWith(emptyList())
 
-    store.store(config, project)
+    store.store(project, config)
 
     verify(project).addFeature(type, config.toMap())
     verify(project).persist()
@@ -30,7 +30,7 @@ internal class DeployConfigStoreStoreTest {
     val project = projectWith(emptyList())
     val disabled = DeployConfig.disabled
 
-    store.store(disabled, project)
+    store.store(project, disabled)
 
     verify(project, times(0)).addFeature(type, disabled.toMap())
     verify(project, times(0)).persist()
@@ -41,7 +41,7 @@ internal class DeployConfigStoreStoreTest {
     val project = projectWith(listOf(feature("id", type, config.toMap())))
     val altConfig = config.copy(environments = "dev,uat,prod")
 
-    store.store(altConfig, project)
+    store.store(project, altConfig)
 
     verify(project).updateFeature("id", type, altConfig.toMap())
     verify(project).persist()
@@ -51,7 +51,7 @@ internal class DeployConfigStoreStoreTest {
   internal fun removeFeatureIfDisabled() {
     val project = projectWith(listOf(feature("id", type, config.toMap())))
 
-    store.store(DeployConfig.disabled, project)
+    store.store(project, DeployConfig.disabled)
 
     verify(project).removeFeature("id")
     verify(project).persist()

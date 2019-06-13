@@ -9,15 +9,15 @@ class DeployConfigStore {
     const val type = "deployment-dashboard-config"
   }
 
-  fun find(project: SProject): DeployConfig? {
+  fun find(project: SProject): DeployConfig {
     return project.getAvailableFeaturesOfType(type).stream()
           .map { DeployConfig.fromMap(it.parameters) }
           .filter { it.isEnabled() }
           .findFirst()
-          .orElse(null)
+          .orElse(DeployConfig.disabled)
   }
 
-  fun store(config: DeployConfig, project: SProject) {
+  fun store(project: SProject, config: DeployConfig) {
     val features = project.getOwnFeaturesOfType(type)
 
     val shouldAdd = features.isEmpty() && config.isEnabled()

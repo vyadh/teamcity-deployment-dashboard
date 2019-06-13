@@ -18,9 +18,11 @@ class DeployDataController(
 ) : BaseController() {
 
   private val configStore = DeployConfigStore()
+  private val appPath = "/app/deployment-dashboard/**"
+  private val jspPath = "deploys-project-data.jsp"
 
   init {
-    webManager.registerController("/app/deployment-dashboard/**", this)
+    webManager.registerController(appPath, this)
   }
 
   public override fun doHandle(
@@ -29,12 +31,14 @@ class DeployDataController(
 
     response.setContentType("application/json")
 
-    val path = pluginDescriptor.getPluginResourcesPath("deploys-project-data.jsp")
+    val path = pluginDescriptor.getPluginResourcesPath(jspPath)
     val project = project(request) ?: return ModelAndView(path, emptyModel())
 
     val config = configStore.find(project)
-    val environments = findEnvironments(config)
-    val deploys = findDeploys(project, createFinder(config))
+    if (!config.isEnabled()) return ModelAndView(path, emptyModel())
+
+    val environments = config.environmentsAsList()
+    val deploys = createFinder(config).search(project)
     val model = populatedModel(environments, deploys)
 
     return ModelAndView(path, model)
@@ -59,17 +63,8 @@ class DeployDataController(
     )
   }
 
-  private fun createFinder(config: DeployConfig?): DeployFinder? {
-    return if (config == null) null
-    else DeployFinder(links, config.projectKey, config.environmentKey)
-  }
-
-  private fun findEnvironments(config: DeployConfig?): List<String> {
-    return config?.environmentsAsList() ?: emptyList()
-  }
-
-  private fun findDeploys(project: SProject, finder: DeployFinder?): List<Deploy> {
-    return finder?.search(project) ?: emptyList()
+  private fun createFinder(config: DeployConfig): DeployFinder {
+    return DeployFinder(links, config.projectKey, config.environmentKey)
   }
 
   companion object {

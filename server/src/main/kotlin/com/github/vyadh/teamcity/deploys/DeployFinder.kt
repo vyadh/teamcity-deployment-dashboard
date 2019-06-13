@@ -26,15 +26,15 @@ class DeployFinder(
       return if (build == null) emptyList()
              else listOf(toDeploy(build, toStatus(build)))
     } else {
-      listOf(toDeploy(runningBuilds[0], "RUNNING"))
+      listOf(toDeploy(runningBuilds[0], runningStatus))
     }
   }
 
   internal fun toDeploy(build: SBuild, status: String): Deploy {
     return Deploy(
-          param(build, projectKey) { build.buildType?.projectName ?: "[unknown]" },
+          param(build, projectKey) { build.buildType?.projectName ?: unknown },
           build.buildNumber,
-          param(build, environmentKey) { build.buildType?.name ?: "[unknown]" },
+          param(build, environmentKey) { build.buildType?.name ?: unknown },
           timeOf(build),
           status,
           links.getViewResultsUrl(build)
@@ -42,6 +42,9 @@ class DeployFinder(
   }
 
   companion object {
+    const val missing = "[missing]"
+    const val unknown = "[unknown]"
+
     private fun isDeployment(type: SBuildType?): Boolean {
       return type != null &&
             type.getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) == "DEPLOYMENT"
@@ -49,7 +52,7 @@ class DeployFinder(
 
     private fun param(build: SBuild, key: String, default: () -> String): String {
       return if (key.isBlank()) default()
-      else build.buildOwnParameters.getOrElse(key, { "[missing]" })
+      else build.buildOwnParameters.getOrElse(key, { missing })
     }
 
     private fun timeOf(build: SBuild): ZonedDateTime {
@@ -68,6 +71,9 @@ class DeployFinder(
       val status = build.buildStatus ?: Status.UNKNOWN
       return status.text
     }
+
+    /** We currently classify running as just another status. */
+    const val runningStatus = "RUNNING"
   }
 
 }

@@ -17,7 +17,7 @@ internal class DeployConfigStoreFindTest {
 
     val result = store.find(project)
 
-    assertThat(result).isNull()
+    assertThat(result.isEnabled()).isFalse()
   }
 
   @Test
@@ -26,7 +26,7 @@ internal class DeployConfigStoreFindTest {
 
     val result = store.find(project)
 
-    assertThat(result).isNull()
+    assertThat(result.isEnabled()).isFalse()
   }
 
   @Test
@@ -41,7 +41,7 @@ internal class DeployConfigStoreFindTest {
 
     val result = store.find(project)
 
-    assertThat(result?.toMap()).isEqualTo(params)
+    assertThat(result.toMap()).isEqualTo(params)
   }
 
   @Test
@@ -59,7 +59,7 @@ internal class DeployConfigStoreFindTest {
 
     val result = store.find(project)
 
-    assertThat(result?.toMap()).isEqualTo(params)
+    assertThat(result.toMap()).isEqualTo(params)
   }
 
 

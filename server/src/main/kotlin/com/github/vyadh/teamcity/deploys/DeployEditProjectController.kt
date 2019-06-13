@@ -15,9 +15,10 @@ class DeployEditProjectController(
 ) : BaseController(sBuildServer) {
 
   private val configStore = DeployConfigStore()
+  private val controllerPath = "/admin/deploys-edit-project.html"
 
   init {
-    webControllerManager.registerController("/admin/deploys-edit-project.html", this)
+    webControllerManager.registerController(controllerPath, this)
   }
 
   override fun doHandle(
@@ -34,7 +35,7 @@ class DeployEditProjectController(
     val project = projectManager.findProjectByExternalId(projectExternalId)
 
     if (project != null) {
-      configStore.store(config, project)
+      configStore.store(project, config)
     }
 
     return null

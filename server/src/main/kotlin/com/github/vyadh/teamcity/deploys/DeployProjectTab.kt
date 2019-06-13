@@ -8,12 +8,12 @@ import jetbrains.buildServer.web.openapi.project.ProjectTab
 import javax.servlet.http.HttpServletRequest
 
 class DeployProjectTab(pagePlaces: PagePlaces, projectManager: ProjectManager) :
-        ProjectTab(
-              DeployPlugin.id,
-              "Deployments",
-              pagePlaces,
-              projectManager,
-              "deploys-project-tab.jsp") {
+        ProjectTab(DeployPlugin.id, title, pagePlaces, projectManager, jspPath) {
+
+  companion object {
+    const val jspPath = "deploys-project-tab.jsp"
+    const val title = "Deployments"
+  }
 
   override fun isAvailable(request: HttpServletRequest): Boolean {
     val project = getProject(request)
@@ -27,7 +27,7 @@ class DeployProjectTab(pagePlaces: PagePlaces, projectManager: ProjectManager) :
         project: SProject,
         user: SUser?) {
 
-    // todo deploy config data
+    // No need to supply data here as React frontend independently requests deploy data
   }
 
 }

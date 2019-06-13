@@ -1,5 +1,10 @@
 package com.github.vyadh.teamcity.deploys
 
+/**
+ * Deployment configuration and associated conversion functions, stringly-typed for simplicity.
+ *
+ * @see DeployFinder for more information on project and environment keys.
+ */
 data class DeployConfig(
       val dashboardEnabled: String,
       val projectKey: String,

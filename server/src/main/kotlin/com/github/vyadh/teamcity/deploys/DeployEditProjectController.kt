@@ -8,6 +8,9 @@ import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+/**
+ * Responsible for saving the configuration
+ */
 class DeployEditProjectController(
       sBuildServer: SBuildServer,
       webControllerManager: WebControllerManager,

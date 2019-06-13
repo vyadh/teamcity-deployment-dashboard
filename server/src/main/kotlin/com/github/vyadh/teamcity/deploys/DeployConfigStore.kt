@@ -3,6 +3,10 @@ package com.github.vyadh.teamcity.deploys
 import jetbrains.buildServer.serverSide.SProject
 import jetbrains.buildServer.serverSide.SProjectFeatureDescriptor
 
+/**
+ * Config storage functions that allows finding project hierarchy dependent
+ * configuration, or storing configuration on projects (as project features).
+ */
 class DeployConfigStore {
 
   companion object {

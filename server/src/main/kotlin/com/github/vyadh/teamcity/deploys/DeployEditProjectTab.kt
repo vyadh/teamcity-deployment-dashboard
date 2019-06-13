@@ -5,6 +5,10 @@ import jetbrains.buildServer.web.openapi.PagePlaces
 import jetbrains.buildServer.web.openapi.PluginDescriptor
 import javax.servlet.http.HttpServletRequest
 
+/**
+ * Project admin tab that looks up the config for the current project and
+ * provides it to the specified JSP.
+ */
 class DeployEditProjectTab(pagePlaces: PagePlaces, pluginDescriptor: PluginDescriptor) :
       EditProjectTab(
             pagePlaces,

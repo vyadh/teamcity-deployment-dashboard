@@ -7,6 +7,10 @@ import jetbrains.buildServer.web.openapi.PagePlaces
 import jetbrains.buildServer.web.openapi.project.ProjectTab
 import javax.servlet.http.HttpServletRequest
 
+/**
+ * Deployments tab for project-level views to show actual dashboard.
+ * Only responsibility is when the tab is shown and to hand off to the React frontend.
+ */
 class DeployProjectTab(pagePlaces: PagePlaces, projectManager: ProjectManager) :
         ProjectTab(DeployPlugin.id, title, pagePlaces, projectManager, jspPath) {
 

@@ -10,6 +10,11 @@ import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+/**
+ * Controller to query data needed for the React frontend as a JSON payload.
+ * Looks up deployment builds based on configuration and the specified project
+ * (specified by the frontend as part of the URL).
+ */
 class DeployDataController(
       private val projectManager: ProjectManager,
       private val pluginDescriptor: PluginDescriptor,

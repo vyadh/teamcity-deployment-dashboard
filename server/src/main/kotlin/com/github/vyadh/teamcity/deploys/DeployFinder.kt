@@ -6,6 +6,15 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
 
+/**
+ * Queries deployment information from the project hierarchy based on the supplied
+ * configuration.
+ *
+ * @param projectKey configuration property name to lookup the project name or blank
+ * if the project name itself should be used.
+ * @param environmentKey configuration property name to lookup the environment name
+ * or blank if the build type name should be used.
+ */
 class DeployFinder(
       private val links: WebLinks,
       private val projectKey: String,

@@ -9,8 +9,6 @@
     ${teamcityPluginResourcesPath}js/deploys-edit-project-config.js
 </bs:linkScript>
 
-<!-- todo show saving success and failure messages (rather than reload in js) -->
-
 <form
       id="deployDashboardForm"
       method="post"
@@ -21,7 +19,8 @@
 
     <h2 class="noBorder">Deployment Dashboard</h2>
     <div class="grayNote">
-      Describes how to interpret the project '${projectExternalId}' and sub-projects to generate the
+      Defines what configuration properties are used from builds to get project and environment
+      information for project '${projectExternalId}' and sub-projects in order to generate the
       deployment dashboard.
     </div>
 

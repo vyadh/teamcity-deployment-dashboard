@@ -39,7 +39,7 @@ class DeployDataController(
     val path = pluginDescriptor.getPluginResourcesPath(jspPath)
     val project = project(request) ?: return ModelAndView(path, emptyModel())
 
-    val config = configStore.find(project)
+    val config = configStore.findAvailable(project)
     if (!config.isEnabled()) return ModelAndView(path, emptyModel())
 
     val environments = config.environmentsAsList()

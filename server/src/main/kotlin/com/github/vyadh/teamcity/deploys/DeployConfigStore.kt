@@ -13,8 +13,18 @@ class DeployConfigStore {
     const val type = "deployment-dashboard-config"
   }
 
-  fun find(project: SProject): DeployConfig {
-    return project.getAvailableFeaturesOfType(type).stream()
+  /** The config found at this level or first one up the hierarchy. */
+  fun findAvailable(project: SProject): DeployConfig {
+    return find(project.getAvailableFeaturesOfType(type))
+  }
+
+  /** The config found at this level only. */
+  fun findOwn(project: SProject): DeployConfig {
+    return find(project.getOwnFeaturesOfType(type))
+  }
+
+  private fun find(features: Collection<SProjectFeatureDescriptor>): DeployConfig {
+    return features.stream()
           .map { DeployConfig.fromMap(it.parameters) }
           .filter { it.isEnabled() }
           .findFirst()

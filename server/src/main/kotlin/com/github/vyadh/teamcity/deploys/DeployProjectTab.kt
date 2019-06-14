@@ -27,7 +27,7 @@ class DeployProjectTab(pagePlaces: PagePlaces, projectManager: ProjectManager) :
 
   internal fun isTabShowing(project: SProject?): Boolean {
     if (project == null) return false
-    return configStore.find(project).isEnabled()
+    return configStore.findAvailable(project).isEnabled()
   }
 
   override fun fillModel(

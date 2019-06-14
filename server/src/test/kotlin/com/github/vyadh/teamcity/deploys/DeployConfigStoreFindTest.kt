@@ -12,25 +12,25 @@ internal class DeployConfigStoreFindTest {
   private val store = DeployConfigStore()
 
   @Test
-  fun findWhenZeroFeatureFound() {
+  fun findAvailableWhenZeroFeatureFound() {
     val project = projectWith(emptyList())
 
-    val result = store.find(project)
+    val result = store.findAvailable(project)
 
     assertThat(result.isEnabled()).isFalse()
   }
 
   @Test
-  fun findWhenNoMatchingFeatureFound() {
+  fun findAvailableWhenNoMatchingFeatureFound() {
     val project = projectWith(listOf(feature("other-type", emptyMap())))
 
-    val result = store.find(project)
+    val result = store.findAvailable(project)
 
     assertThat(result.isEnabled()).isFalse()
   }
 
   @Test
-  fun findWhenFeatureFound() {
+  fun findAvailableWhenFeatureFound() {
     val params = mapOf(
           Pair(DeployConfigKeys.dashboardEnabled, "true"),
           Pair(DeployConfigKeys.projectKey, "project"),
@@ -39,13 +39,13 @@ internal class DeployConfigStoreFindTest {
     )
     val project = projectWith(listOf(feature(type, params)))
 
-    val result = store.find(project)
+    val result = store.findAvailable(project)
 
     assertThat(result.toMap()).isEqualTo(params)
   }
 
   @Test
-  internal fun findUsingParentWhenOwnFeatureDisabled() {
+  internal fun findAvailableUsingParentWhenOwnFeatureDisabled() {
     val params = mapOf(
           Pair(DeployConfigKeys.dashboardEnabled, "true"),
           Pair(DeployConfigKeys.projectKey, "project"),
@@ -57,7 +57,40 @@ internal class DeployConfigStoreFindTest {
           feature(type, params)
     ))
 
-    val result = store.find(project)
+    val result = store.findAvailable(project)
+
+    assertThat(result.toMap()).isEqualTo(params)
+  }
+
+  @Test
+  internal fun findOwnDoesNotInheritFromParent() {
+    val params = mapOf(
+          Pair(DeployConfigKeys.dashboardEnabled, "true"),
+          Pair(DeployConfigKeys.projectKey, "project"),
+          Pair(DeployConfigKeys.environmentKey, "env"),
+          Pair(DeployConfigKeys.environments, "dev,prod")
+    )
+    val project = projectWithOwn(listOf(
+          feature(type, DeployConfig.disabled.toMap()),
+          feature(type, params)
+    ))
+
+    val result = store.findAvailable(project)
+
+    assertThat(result.isEnabled()).isFalse()
+  }
+
+  @Test
+  internal fun findOwnDoesSeesOwnConfig() {
+    val params = mapOf(
+          Pair(DeployConfigKeys.dashboardEnabled, "true"),
+          Pair(DeployConfigKeys.projectKey, "project"),
+          Pair(DeployConfigKeys.environmentKey, "env"),
+          Pair(DeployConfigKeys.environments, "dev,prod")
+    )
+    val project = projectWithOwn(listOf(feature(type, params)))
+
+    val result = store.findOwn(project)
 
     assertThat(result.toMap()).isEqualTo(params)
   }
@@ -66,6 +99,12 @@ internal class DeployConfigStoreFindTest {
   private fun projectWith(features: Collection<SProjectFeatureDescriptor>): SProject {
     return mock {
       on { getAvailableFeaturesOfType(type) } doReturn features
+    }
+  }
+
+  private fun projectWithOwn(features: Collection<SProjectFeatureDescriptor>): SProject {
+    return mock {
+      on { getOwnFeaturesOfType(type) } doReturn features
     }
   }
 

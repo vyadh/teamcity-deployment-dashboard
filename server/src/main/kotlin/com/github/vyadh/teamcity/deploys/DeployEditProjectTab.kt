@@ -28,7 +28,7 @@ class DeployEditProjectTab(pagePlaces: PagePlaces, pluginDescriptor: PluginDescr
     val project = getProject(request) ?: return
     model[DeployConfigKeys.projectExternalId] = project.externalId
 
-    val config = configStore.find(project)
+    val config = configStore.findOwn(project)
     if (config.isEnabled()) {
       model.putAll(config.toMap())
     }

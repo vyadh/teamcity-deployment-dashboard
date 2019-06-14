@@ -23,7 +23,7 @@ version string).
 Example
 -------
 
-<img src="screenshot.png" width="734"/>
+<img src="screenshot.png" width="954"/>
 
 
 Getting Started
@@ -46,6 +46,8 @@ Configuration
 -------------
 
 Enabling the plugin in the configuration will show three settings.
+
+<img src="screenshot-config.png" width="918"/>
 
 1. Project key: This is used to customise the project name shown in the dashboard and can be used
 in the case where the name of the immediate project is not appropriate. If it is appropriate, leave 
@@ -121,11 +123,6 @@ holding the configuration and querying the build data.
 Possible Future Features
 ------------------------
 
-* Finish: Resize behaviour, allow smaller width between environments
-* Finish: New screenshots above
-
-* Add config saving notification via success and failure messages
-* Link to projects from the project name
 * Allow using environment/system variables as well as configuration properties to interpret
-  project/environment from builds
-* Show real-time progress by having the frontend subscribe to build changes via server-sent events
+  project/environment from builds.
+* Show real-time progress by having the frontend subscribe to build changes via server-sent events.

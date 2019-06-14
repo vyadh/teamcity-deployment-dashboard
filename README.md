@@ -122,7 +122,6 @@ Possible Future Features
 ------------------------
 
 * Finish: Resize behaviour, allow smaller width between environments
-* Finish: Vertical centering of images/time/version
 * Finish: New screenshots above
 
 * Add config saving notification via success and failure messages

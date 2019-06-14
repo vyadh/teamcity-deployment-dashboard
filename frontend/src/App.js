@@ -64,10 +64,10 @@ const Releases = ({environments, releasesPerApp}) => {
       <div className="list">
         <table>
           <thead>
-          <ReleaseHeader environments={environments}/>
+            <ReleaseHeader environments={environments}/>
           </thead>
           <tbody>
-          <ReleaseRows environments={environments} releasesPerApp={releasesPerApp}/>
+            <ReleaseRows environments={environments} releasesPerApp={releasesPerApp}/>
           </tbody>
         </table>
       </div>

@@ -28,40 +28,52 @@ class DeployFinder(
   }
 
   private fun toDeploy(type: SBuildType): List<Deploy> {
+    val deploy = toDeployOrNull(type)
+    return if (deploy == null) emptyList() else listOf(deploy)
+  }
+
+  private fun toDeployOrNull(type: SBuildType): Deploy? {
     val runningBuilds = type.runningBuilds
 
     return if (runningBuilds.isEmpty()) {
       val build = type.lastChangesFinished
-      return if (build == null) emptyList()
-             else listOf(toDeploy(build, toStatus(build)))
+      if (build == null) null
+      else toDeploy(build, toStatus(build))
     } else {
-      listOf(toDeploy(runningBuilds[0], runningStatus))
+      toDeploy(runningBuilds[0], runningStatus)
     }
   }
 
-  internal fun toDeploy(build: SBuild, status: String): Deploy {
+  internal fun toDeploy(build: SBuild, status: String): Deploy? {
+    val projectName = projectName(build) ?: return null
+
     return Deploy(
-          param(build, projectKey) { build.buildType?.projectName ?: unknown },
+          projectName,
           build.buildNumber,
-          param(build, environmentKey) { build.buildType?.name ?: unknown },
+          environmentName(build),
           timeOf(build),
           status,
           links.getViewResultsUrl(build)
     )
   }
 
+  private fun projectName(build: SBuild) =
+        param(build, projectKey) { build.buildType?.projectName }
+
+  private fun environmentName(build: SBuild) =
+        param(build, environmentKey) { build.buildType?.name } ?: missing
+
   companion object {
     const val missing = "[missing]"
-    const val unknown = "[unknown]"
 
     private fun isDeployment(type: SBuildType?): Boolean {
       return type != null &&
             type.getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) == "DEPLOYMENT"
     }
 
-    private fun param(build: SBuild, key: String, default: () -> String): String {
+    private fun param(build: SBuild, key: String, default: () -> String?): String? {
       return if (key.isBlank()) default()
-      else build.buildOwnParameters.getOrElse(key, { missing })
+             else build.buildOwnParameters[key]
     }
 
     private fun timeOf(build: SBuild): ZonedDateTime {

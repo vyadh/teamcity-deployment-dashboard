@@ -104,12 +104,12 @@ internal class DeployFinderTest {
 
     val result = deployFinder.toDeploy(build, "WARNING")
 
-    assertThat(result.project).isEqualTo("Dash")
-    assertThat(result.environment).isEqualTo("DEV")
-    assertThat(result.version).isEqualTo("1.1.0")
-    assertThat(result.time).isEqualTo(finished)
-    assertThat(result.status).isEqualTo("WARNING")
-    assertThat(result.link).isEqualTo("http://host/build/1")
+    assertThat(result?.project).isEqualTo("Dash")
+    assertThat(result?.environment).isEqualTo("DEV")
+    assertThat(result?.version).isEqualTo("1.1.0")
+    assertThat(result?.time).isEqualTo(finished)
+    assertThat(result?.status).isEqualTo("WARNING")
+    assertThat(result?.link).isEqualTo("http://host/build/1")
   }
 
   @Test
@@ -125,42 +125,52 @@ internal class DeployFinderTest {
 
     val result = deployFinder.toDeploy(build, "RUNNING")
 
-    assertThat(result.project).isEqualTo("Dash")
-    assertThat(result.environment).isEqualTo("DEV")
-    assertThat(result.version).isEqualTo("1.1.0")
-    assertThat(result.time).isEqualTo(started)
-    assertThat(result.status).isEqualTo("RUNNING")
-    assertThat(result.link).isEqualTo("http://host/build/2")
+    assertThat(result?.project).isEqualTo("Dash")
+    assertThat(result?.environment).isEqualTo("DEV")
+    assertThat(result?.version).isEqualTo("1.1.0")
+    assertThat(result?.time).isEqualTo(started)
+    assertThat(result?.status).isEqualTo("RUNNING")
+    assertThat(result?.link).isEqualTo("http://host/build/2")
   }
 
   @Test
-  internal fun toDeployWhenProjectParameterBlank() {
+  internal fun toDeployWhenProjectParameterNameBlank() {
     val build = buildWith("Project", "Build", emptyMap())
     val finder = DeployFinder(links, "", envKey)
 
     val result = finder.toDeploy(build, "SUCCESS")
 
-    assertThat(result.project).isEqualTo("Project")
+    assertThat(result?.project).isEqualTo("Project")
   }
 
   @Test
-  internal fun toDeployWhenEnvironmentParameterBlank() {
-    val build = buildWith("Project", "Build", emptyMap())
+  internal fun toDeployWhenEnvironmentParameterNameBlank() {
+    val build = buildWith("Project", "Build",
+          mapOf(Pair(projectKey, "Project Alt")))
     val finder = DeployFinder(links, projectKey, "")
 
     val result = finder.toDeploy(build, "SUCCESS")
 
-    assertThat(result.environment).isEqualTo("Build")
+    assertThat(result?.environment).isEqualTo("Build")
   }
 
   @Test
-  internal fun toDeployWhenProjectOrEnvironmentParameterNotFound() {
+  internal fun toDeployReturnsNullWhenProjectParameterNotFound() {
     val build = buildWith("Project", "Build", emptyMap())
 
     val result = finder.toDeploy(build, "SUCCESS")
 
-    assertThat(result.project).isEqualTo("[missing]")
-    assertThat(result.environment).isEqualTo("[missing]")
+    assertThat(result?.project).isNull()
+  }
+
+  @Test
+  internal fun toDeployShowsAsMissingWhenEnvironmentParameterNotFound() {
+    val build = buildWith("Project", "Build",
+          mapOf(Pair(projectKey, "Ruminous")))
+
+    val result = finder.toDeploy(build, "SUCCESS")
+
+    assertThat(result?.environment).isEqualTo("[missing]")
   }
 
   @Test

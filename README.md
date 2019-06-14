@@ -93,8 +93,8 @@ This project is written in JavaScript using React for the frontend and Kotlin fo
 Possible Future Features
 ------------------------
 
-* Finish: only show deployments if they have project key property
 * Finish: New screenshots above
+* Resize behaviour, allow smaller width between environments
 * Add config saving notification via success and failure messages
-* Show real-time progress by having the frontend subscribe to build changes via server-sent events.
-* Top level statistics on builds passed/failed, would need historical data rather than last build per environment.
+* Link to projects from the project name
+* Show real-time progress by having the frontend subscribe to build changes via server-sent events

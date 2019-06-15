@@ -1,0 +1,12 @@
+.gradle
+.idea
+.idea.gradle
+.idea.web
+.gitconfig
+data
+downloads
+servers
+build
+frontend/build
+frontend/node_modules
+*.iml

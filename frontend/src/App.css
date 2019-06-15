@@ -51,8 +51,7 @@
 #deploys th {
   font-weight: normal;
   font-size: 1.3rem;
-/*   font-weight: 200; */
-  text-align: center;
+  text-align: left;
 }
 
 /* Project name column header */

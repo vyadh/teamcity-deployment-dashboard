@@ -69,9 +69,7 @@ with an environment so it can be placed in the relevant part of the dashboard.
 
 The most natural way to do this for TeamCity is to split deployments into environments by using 
 separate build configuration for each one so they can be represented on a pipeline (or build chain 
-in TeamCity parlance). For example:
-
-(todo, example build chain)
+in TeamCity parlance).
 
 The plugin can then classify the build deployments performed by these configurations with each 
 environment, either by a configuration parameter or by the name of the build configuration. Note 

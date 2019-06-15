@@ -114,10 +114,10 @@ const Release = ({environment, releases}) => {
 const Build = ({release}) => (
     <a href={release.link}>
       <div className="build">
-        <div className="build-status">
+        <div className={`build-status ${statusClass(release.status)}`}>
           <StatusIcon status={release.status} latest={release.latest}/>
         </div>
-        <div className="build-info">
+        <div className="build-info grow">
           <span className="build-version">{release.version}</span>
           <span className="build-time">{dateTimes.format(release.time)}</span>
         </div>
@@ -128,10 +128,14 @@ const Build = ({release}) => (
 const StatusIcon = ({status, latest}) => {
   let iconType = statusIconClass(status)
   let rotateClass = status === "RUNNING" ? "fa-spin" : ""
-  let latestClass = latest ? "status-latest" : "status-older"
-  let classes = `status-icon status-${status} ${rotateClass} ${latestClass}`
+  let ageClass = latest ? "status-latest" : "status-older"
+  let classes = `status-icon ${statusClass(status)} ${rotateClass} ${ageClass}`
 
   return <FontAwesomeIcon icon={iconType} className={classes}/>
+}
+
+const statusClass = (status) => {
+  return `status-${status}`
 }
 
 const statusIconClass = status => {
@@ -145,5 +149,6 @@ const statusIconClass = status => {
     return faQuestionCircle
   }
 }
+
 
 export default App;

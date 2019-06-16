@@ -1,6 +1,6 @@
 {
   "name": "deployments",
-  "version": "1.0.0-SNAPSHOT",
+  "version": "1.0.0",
   "private": true,
   "//": "Use 'homepage: .' when running outside of TeamCity",
   "homepage": "/plugins/deployment-dashboard",

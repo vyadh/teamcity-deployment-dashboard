@@ -16,7 +16,8 @@ level to show different environments.
 * Shows deployment version as taken from the build number.
 * Highlights the latest version to emphasise build journey to production (assuming semver-formatted
 version string).
-* Provides real-time search to quickly narrow large numbers of projects.
+* Real-time search to quickly narrow large numbers of projects.
+* Auto-refresh capability with configurable polling period.
 * Pretty.
 
 
@@ -47,7 +48,7 @@ Configuration
 
 Enabling the plugin in the configuration will show three settings.
 
-<img src="screenshot-config.png" width="918"/>
+<img src="screenshot-config.png" width="948"/>
 
 1. Project key: This is used to customise the project name shown in the dashboard and can be used
 in the case where the name of the immediate project is not appropriate. If it is appropriate, leave 

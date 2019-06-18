@@ -1,5 +1,5 @@
 import {createTeamCityPluginSource} from "./sources/teamcityPlugin/teamCityPluginSource"
-import {createMemorySource} from "./sources/memory/memorySource"
+// import {createMemorySource} from "./sources/memory/memorySource"
 
 const configuration = {
 
@@ -12,9 +12,6 @@ const configuration = {
 
   // Indicates whether the app is embedded into TeamCity where some things are turned off
   embedded: true,
-
-  // Periodic refresh time in milliseconds or null if no refresh
-  refreshPeriodMillis: null
 
 }
 

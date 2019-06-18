@@ -14,6 +14,7 @@ export const createMemorySource = () => {
 const data = () => {
   return {
     environments: environments,
+    refreshSecs: "",
     deploys: deploys()
   }
 }

@@ -15,12 +15,14 @@ const App = ({configuration}) => {
   let source = configuration.source
   let [environments, setEnvironments] = useState([])
   let [releasesPerApp, setReleasesPerApp] = useState([])
+  let [refreshSecs, setRefreshSecs] = useState("")
 
   let load = () => source.fetch().then(data => {
-    let {environments, deploys} = data
+    let {environments, refreshSecs, deploys} = data
 
     setEnvironments(environments)
     setReleasesPerApp(releases.groupPerApp(deploys))
+    setRefreshSecs(refreshSecs)
   })
 
   useEffect(() => {
@@ -28,11 +30,11 @@ const App = ({configuration}) => {
   }, [source])
 
   useEffect(() => {
-    if (configuration.refreshPeriodMillis) {
-      let id = setInterval(() => load(), configuration.refreshPeriodMillis)
+    if (refreshSecs) {
+      let id = setInterval(() => load(), parseInt(refreshSecs) * 1000)
       return () => clearInterval(id)
     }
-  })
+  }, [refreshSecs])
 
   return (
       <div>

@@ -6,6 +6,7 @@
     "<c:out value="${environment}"/>"<c:if test="${!loop.last}">,</c:if>
     </c:forEach>
   ],
+  "refreshSecs": "<c:out value="${refreshSecs}"/>",
   "deploys": [
     <c:forEach items="${deploys}" var="deploy" varStatus="loop">
     {

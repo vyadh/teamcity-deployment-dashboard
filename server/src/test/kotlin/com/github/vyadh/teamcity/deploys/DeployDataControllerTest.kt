@@ -19,7 +19,6 @@ internal class DeployDataControllerTest {
 
   private val webManager = mock<WebControllerManager> { }
   private val links = links("http://host/builds/id/123")
-  private val noEnvironments = ""
 
   @Test
   internal fun doHandleRespondsAsJson() {
@@ -48,7 +47,7 @@ internal class DeployDataControllerTest {
 
   @Test
   internal fun doHandlePopulatesDeploys() {
-    val project = projectWith(buildTypeWith(build("SomeProject", "DEV")), noEnvironments)
+    val project = projectWith(buildTypeWith(build("SomeProject", "DEV")), environments = "")
     val projectManager = projectManagerReturning(project)
     val controller = controllerWith(projectManager)
 
@@ -61,13 +60,24 @@ internal class DeployDataControllerTest {
 
   @Test
   internal fun doHandlePopulatesEnvironments() {
-    val project = projectWith(buildTypeWith(build("SomeProject", "ANY")), "DEV,PRD")
+    val project = projectWith(buildTypeWith(build("SomeProject", "ANY")), environments = "DEV,PRD")
     val projectManager = projectManagerReturning(project)
     val controller = controllerWith(projectManager)
 
     val result = environments(controller.doHandle(anyRequest(), anyResponse()))
 
     assertThat(result).containsExactlyInAnyOrder("DEV", "PRD")
+  }
+
+  @Test
+  internal fun doHandlePopulatesRefreshSecs() {
+    val project = projectWith(buildTypeWith(build("SomeProject", "ANY")), refreshSecs = "5")
+    val projectManager = projectManagerReturning(project)
+    val controller = controllerWith(projectManager)
+
+    val result = refreshSecs(controller.doHandle(anyRequest(), anyResponse()))
+
+    assertThat(result).isEqualTo("5")
   }
 
   @Test
@@ -114,10 +124,14 @@ internal class DeployDataControllerTest {
     on { findProjectByExternalId(anyString()) } doReturn project
   }
 
-  private fun projectWith(buildType: SBuildType, environments: String): SProject {
+  private fun projectWith(buildType: SBuildType, environments: String = "DEV", refreshSecs: String = ""): SProject {
     val feature = mock<SProjectFeatureDescriptor> {
       on { parameters } doReturn DeployConfig(
-            "true", "PROJECT", "ENVIRONMENT", environments, "").toMap()
+            "true",
+            "PROJECT",
+            "ENVIRONMENT",
+            environments,
+            refreshSecs).toMap()
     }
     return mock {
       on { buildTypes } doReturn listOf(buildType)
@@ -146,6 +160,10 @@ internal class DeployDataControllerTest {
   @Suppress("UNCHECKED_CAST")
   private fun environments(result: ModelAndView?): List<String>? {
     return result?.model?.get("environments") as List<String>?
+  }
+
+  private fun refreshSecs(result: ModelAndView?): String? {
+    return result?.model?.get("refreshSecs") as String?
   }
 
 }

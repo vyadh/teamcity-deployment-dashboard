@@ -42,9 +42,8 @@ class DeployDataController(
     val config = configStore.findAvailable(project)
     if (!config.isEnabled()) return ModelAndView(path, emptyModel())
 
-    val environments = config.environmentsAsList()
     val deploys = createFinder(config).search(project)
-    val model = populatedModel(environments, deploys)
+    val model = populatedModel(deploys, config)
 
     return ModelAndView(path, model)
   }
@@ -54,16 +53,18 @@ class DeployDataController(
     return projectManager.findProjectByExternalId(id)
   }
 
-  private fun emptyModel(): Map<String, List<String>> {
+  private fun emptyModel(): Map<String, Any> {
     return mapOf(
-          Pair("environments", emptyList()),
-          Pair("deploys", emptyList())
+          Pair("environments", emptyList<String>()),
+          Pair("refreshSecs", ""),
+          Pair("deploys", emptyList<String>())
     )
   }
 
-  private fun populatedModel(environments: List<String>, deploys: List<Deploy>): Map<String, List<Any>> {
+  private fun populatedModel(deploys: List<Deploy>, config: DeployConfig): Map<String, Any> {
     return mapOf(
-          Pair("environments", environments),
+          Pair("environments", config.environmentsAsList()),
+          Pair("refreshSecs", config.refreshSecs),
           Pair("deploys", deploys)
     )
   }

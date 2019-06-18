@@ -18,49 +18,77 @@ const data = () => {
   }
 }
 
-const environments = ["DEV", "TST", "UAT", "PRD"]
+const environments = ["Development", "Test", "UAT", "Production"]
 
 const deploys = () => {
   return [
     {
       name: "Mercury",
       version: "1.3.3",
-      environment: "DEV",
-      time: "2018-06-09T21:58:12",
+      environment: "Development",
+      time: "2019-06-09T21:58:12",
       status: "SUCCESS"
     },
     {
       name: "Mercury",
       version: "1.3.3",
-      environment: "TST",
-      time: "2018-06-09T21:58:12",
+      environment: "Test",
+      time: "2019-06-09T21:58:12",
       status: "SUCCESS"
     },
     {
       name: "Mercury",
       version: "1.3.3",
       environment: "UAT",
-      time: "2018-06-09T21:58:12",
+      time: "2019-06-09T21:58:12",
       status: "SUCCESS"
     },
     {
       name: "Mercury",
       version: "1.3.3",
-      environment: "PRD",
-      time: "2018-06-09T21:58:12",
+      environment: "Production",
+      time: "2019-06-09T21:58:12",
+      status: "SUCCESS"
+    },
+    {
+      name: "Haumea",
+      version: "2.1.3",
+      environment: "Development",
+      time: "2019-06-03T20:12:03",
+      status: "SUCCESS"
+    },
+    {
+      name: "Haumea",
+      version: "2.1.3",
+      environment: "Test",
+      time: "2019-06-05T18:33:12",
+      status: "SUCCESS"
+    },
+    {
+      name: "Haumea",
+      version: "2.1.3",
+      environment: "UAT",
+      time: "2019-06-10T08:48:02",
+      status: "SUCCESS"
+    },
+    {
+      name: "Haumea",
+      version: "2.1.3",
+      environment: "Production",
+      time: "2019-06-14T09:57:04",
       status: "SUCCESS"
     },
     {
       name: "Venus",
       version: "17.0.1",
-      environment: "PRD",
-      time: "2018-06-04T22:20:33",
+      environment: "Production",
+      time: "2019-06-04T22:20:33",
       status: "SUCCESS"
     },
     {
       name: "Venus",
       version: "17.0.2",
-      environment: "TST",
+      environment: "Test",
       time: new Date().toISOString(),
       status: "RUNNING"
     },
@@ -68,76 +96,76 @@ const deploys = () => {
       name: "Venus",
       version: "17.0.1",
       environment: "UAT",
-      time: "2018-06-01T22:20:33",
+      time: "2019-06-01T22:20:33",
       status: "SUCCESS"
     },
     {
       name: "Venus",
       version: "17.0.2",
-      environment: "DEV",
-      time: "2018-06-01T22:20:33",
+      environment: "Development",
+      time: "2019-06-01T22:20:33",
       status: "SUCCESS"
     },
     {
       name: "Earth",
       version: "5.3.0",
-      environment: "DEV",
-      time: "2018-06-04T21:59:51",
+      environment: "Development",
+      time: "2019-06-04T21:59:51",
       status: "FAILURE"
     },
     {
       name: "Earth",
       version: "5.2.1",
-      environment: "TST",
-      time: "2018-06-04T21:59:51",
+      environment: "Test",
+      time: "2019-06-04T21:59:51",
       status: "SUCCESS"
     },
     {
       name: "Earth",
       version: "5.2.1",
       environment: "UAT",
-      time: "2018-06-04T21:59:51",
+      time: "2019-06-04T21:59:51",
       status: "SUCCESS"
     },
     {
       name: "Earth",
       version: "5.2.1",
-      environment: "PRD",
-      time: "2018-06-04T21:59:51",
+      environment: "Production",
+      time: "2019-06-04T21:59:51",
       status: "SUCCESS"
     },
     {
       name: "Uranus",
       version: "11.2.113",
-      environment: "DEV",
-      time: "2018-06-04T22:20:33",
+      environment: "Development",
+      time: "2019-06-04T22:20:33",
       status: "SUCCESS"
     },
     {
       name: "Uranus",
       version: "11.2.113",
-      environment: "TST",
-      time: "2018-06-04T22:20:33",
+      environment: "Test",
+      time: "2019-06-04T22:20:33",
       status: "SUCCESS"
     },
     {
       name: "Uranus",
       version: "11.2.112",
-      environment: "PRD",
-      time: "2018-06-04T22:20:33",
+      environment: "Production",
+      time: "2019-06-04T22:20:33",
       status: "OTHER"
     },
     {
       name: "Ceres",
       version: "1.0.0",
-      environment: "DEV",
-      time: "2018-06-16T09:54:00",
+      environment: "Development",
+      time: "2019-06-16T09:54:00",
       status: "SUCCESS"
     },
     {
       name: "Ceres",
       version: "1.0.0",
-      environment: "TST",
+      environment: "Test",
       time: new Date().toISOString(),
       status: "RUNNING"
     },
@@ -146,7 +174,6 @@ const deploys = () => {
     ...randomDeployment("Saturn"),
     ...randomDeployment("Neptune"),
     ...randomDeployment("Pluto"),
-    ...randomDeployment("Haumea"),
     ...randomDeployment("Makemake"),
     ...randomDeployment("Eris"),
     ...randomDeployment("Quaoar"),
@@ -156,7 +183,7 @@ const deploys = () => {
 }
 
 const randomDeployment = name => {
-  let envs = ["DEV", "TST", "UAT", "PRD"]
+  let envs = ["Development", "Test", "UAT", "Production"]
   let ver = (max) => Math.floor(Math.random() * max)
   let major = ver(9) + 1
   let minor = ver(20)
@@ -170,7 +197,7 @@ const randomDeployment = name => {
       name: name,
       version: version,
       environment: envs[i],
-      time: "2018-06-16T09:54:00",
+      time: "2019-06-16T09:54:00",
       status: failure() ? "FAILURE" : "SUCCESS",
       link: `http://localhost/${name}/${version}/${envs[i]}`
     }

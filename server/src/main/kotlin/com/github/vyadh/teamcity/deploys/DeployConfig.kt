@@ -9,7 +9,8 @@ data class DeployConfig(
       val dashboardEnabled: String,
       val projectKey: String,
       val environmentKey: String,
-      val environments: String
+      val environments: String,
+      val refreshSecs: String
 ) {
 
   companion object {
@@ -17,7 +18,8 @@ data class DeployConfig(
           dashboardEnabled = "false",
           projectKey = "",
           environmentKey = "",
-          environments = ""
+          environments = "",
+          refreshSecs = ""
     )
 
     fun fromMap(map: Map<String, String>): DeployConfig {
@@ -25,7 +27,8 @@ data class DeployConfig(
             dashboardEnabled = map.getOrDefault(DeployConfigKeys.dashboardEnabled,"false"),
             projectKey = map.getOrDefault(DeployConfigKeys.projectKey,""),
             environmentKey = map.getOrDefault(DeployConfigKeys.environmentKey,""),
-            environments = map.getOrDefault(DeployConfigKeys.environments,"")
+            environments = map.getOrDefault(DeployConfigKeys.environments,""),
+            refreshSecs = map.getOrDefault(DeployConfigKeys.refreshSecs, "")
       )
     }
   }
@@ -39,7 +42,8 @@ data class DeployConfig(
           Pair(DeployConfigKeys.dashboardEnabled, dashboardEnabled),
           Pair(DeployConfigKeys.projectKey, projectKey),
           Pair(DeployConfigKeys.environmentKey, environmentKey),
-          Pair(DeployConfigKeys.environments, environments)
+          Pair(DeployConfigKeys.environments, environments),
+          Pair(DeployConfigKeys.refreshSecs, refreshSecs)
     )
   }
 

@@ -6,7 +6,8 @@ function saveDeploymentDashboardConfig(form, actionUrl) {
       dashboardEnabled: form.dashboardEnabled.checked,
       projectKey: form.projectKey.value,
       environmentKey: form.environmentKey.value,
-      environments: form.environments.value
+      environments: form.environments.value,
+      refreshSecs: form.refreshSecs.value
   }
 
   console.log("Saving deploy config for " + form.projectExternalId + ": " + JSON.stringify(parameters))

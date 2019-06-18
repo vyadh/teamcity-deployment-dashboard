@@ -8,5 +8,6 @@ object DeployConfigKeys {
   const val projectKey = "projectKey"
   const val environmentKey = "environmentKey"
   const val environments = "environments"
+  const val refreshSecs = "refreshSecs"
 
 }

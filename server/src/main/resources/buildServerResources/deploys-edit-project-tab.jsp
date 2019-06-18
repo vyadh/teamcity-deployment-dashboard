@@ -63,6 +63,21 @@
           </span>
         </td>
       </tr>
+      <tr>
+        <td><label for="refreshSecs">Refresh Interval:</label></td>
+        <td>
+          <forms:select name="refreshSecs" enableFilter="true" className="smallField">
+            <forms:option selected="${refreshSecs.isEmpty()}" value="">No Refresh</forms:option>
+            <forms:option selected="${refreshSecs == '5'}" value="5">5 seconds</forms:option>
+            <forms:option selected="${refreshSecs == '10'}" value="10">10 seconds</forms:option>
+            <forms:option selected="${refreshSecs == '30'}" value="30">30 seconds</forms:option>
+            <forms:option selected="${refreshSecs == '60'}" value="60">60 seconds</forms:option>
+          </forms:select>
+          <span class="smallNote">
+            Polling interval between fetching new deployment build information, in seconds.
+          </span>
+        </td>
+      </tr>
     </table>
 
     <div class="saveButtonsBlock">

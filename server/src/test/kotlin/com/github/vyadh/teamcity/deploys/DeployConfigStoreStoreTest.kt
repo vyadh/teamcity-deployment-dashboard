@@ -12,7 +12,8 @@ internal class DeployConfigStoreStoreTest {
         dashboardEnabled = "true",
         projectKey = "project",
         environmentKey = "env",
-        environments = "dev,prod"
+        environments = "dev,prod",
+        refreshSecs = "30"
   )
 
   @Test

@@ -32,7 +32,8 @@ class DeployEditProjectController(
     val projectKey = request.getParameter(DeployConfigKeys.projectKey)
     val environmentKey = request.getParameter(DeployConfigKeys.environmentKey)
     val environments = request.getParameter(DeployConfigKeys.environments)
-    val config = DeployConfig(dashboardEnabled, projectKey, environmentKey, environments)
+    val refreshSecs = request.getParameter(DeployConfigKeys.refreshSecs) ?: ""
+    val config = DeployConfig(dashboardEnabled, projectKey, environmentKey, environments, refreshSecs)
 
     val projectExternalId = request.getParameter(DeployConfigKeys.projectExternalId)
     val project = projectManager.findProjectByExternalId(projectExternalId)

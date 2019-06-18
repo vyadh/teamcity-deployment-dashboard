@@ -117,7 +117,7 @@ internal class DeployDataControllerTest {
   private fun projectWith(buildType: SBuildType, environments: String): SProject {
     val feature = mock<SProjectFeatureDescriptor> {
       on { parameters } doReturn DeployConfig(
-            "true", "PROJECT", "ENVIRONMENT", environments).toMap()
+            "true", "PROJECT", "ENVIRONMENT", environments, "").toMap()
     }
     return mock {
       on { buildTypes } doReturn listOf(buildType)

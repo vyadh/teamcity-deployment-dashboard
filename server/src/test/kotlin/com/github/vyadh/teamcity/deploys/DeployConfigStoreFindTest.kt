@@ -35,7 +35,8 @@ internal class DeployConfigStoreFindTest {
           Pair(DeployConfigKeys.dashboardEnabled, "true"),
           Pair(DeployConfigKeys.projectKey, "project"),
           Pair(DeployConfigKeys.environmentKey, "env"),
-          Pair(DeployConfigKeys.environments, "dev,prod")
+          Pair(DeployConfigKeys.environments, "dev,prod"),
+          Pair(DeployConfigKeys.refreshSecs, "10")
     )
     val project = projectWith(listOf(feature(type, params)))
 
@@ -50,7 +51,8 @@ internal class DeployConfigStoreFindTest {
           Pair(DeployConfigKeys.dashboardEnabled, "true"),
           Pair(DeployConfigKeys.projectKey, "project"),
           Pair(DeployConfigKeys.environmentKey, "env"),
-          Pair(DeployConfigKeys.environments, "dev,prod")
+          Pair(DeployConfigKeys.environments, "dev,prod"),
+          Pair(DeployConfigKeys.refreshSecs, "30")
     )
     val project = projectWith(listOf(
           feature(type, DeployConfig.disabled.toMap()),
@@ -68,7 +70,8 @@ internal class DeployConfigStoreFindTest {
           Pair(DeployConfigKeys.dashboardEnabled, "true"),
           Pair(DeployConfigKeys.projectKey, "project"),
           Pair(DeployConfigKeys.environmentKey, "env"),
-          Pair(DeployConfigKeys.environments, "dev,prod")
+          Pair(DeployConfigKeys.environments, "dev,prod"),
+          Pair(DeployConfigKeys.refreshSecs, "10")
     )
     val project = projectWithOwn(listOf(
           feature(type, DeployConfig.disabled.toMap()),
@@ -86,7 +89,8 @@ internal class DeployConfigStoreFindTest {
           Pair(DeployConfigKeys.dashboardEnabled, "true"),
           Pair(DeployConfigKeys.projectKey, "project"),
           Pair(DeployConfigKeys.environmentKey, "env"),
-          Pair(DeployConfigKeys.environments, "dev,prod")
+          Pair(DeployConfigKeys.environments, "dev,prod"),
+          Pair(DeployConfigKeys.refreshSecs, "10")
     )
     val project = projectWithOwn(listOf(feature(type, params)))
 

@@ -1,6 +1,6 @@
-import * as releases from './releasesPerApp'
+import * as deploys from './deploysProcessor'
 
-it('releases are grouped by name, and the latest versions are marked as such', () => {
+it('deploys are grouped by name, and the latest versions are marked as such', () => {
   let data = [
     {
       name: "Mercury",
@@ -34,7 +34,7 @@ it('releases are grouped by name, and the latest versions are marked as such', (
     }
   ]
 
-  let deploysPerApp = releases.groupPerApp(data)
+  let deploysPerApp = deploys.groupPerApp(data)
 
   expect(deploysPerApp).toEqual(
     {

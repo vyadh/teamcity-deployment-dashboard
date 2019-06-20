@@ -6,7 +6,7 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 import { Search } from './components/Search'
 import * as dateTimes from './util/dateTimes'
-import * as releases from './releasesPerApp'
+import * as deploysProcessor from './deploysProcessor'
 import './App.css'
 import {filterApps} from "./searchApps"
 
@@ -14,14 +14,14 @@ const App = ({configuration}) => {
 
   let source = configuration.source
   let [environments, setEnvironments] = useState([])
-  let [releasesPerApp, setReleasesPerApp] = useState([])
+  let [deploysPerApp, setDeploysPerApp] = useState([])
   let [refreshSecs, setRefreshSecs] = useState("")
 
   let load = () => source.fetch().then(data => {
     let {environments, refreshSecs, deploys} = data
 
     setEnvironments(environments)
-    setReleasesPerApp(releases.groupPerApp(deploys))
+    setDeploysPerApp(deploysProcessor.groupPerApp(deploys))
     setRefreshSecs(refreshSecs)
   })
 
@@ -41,7 +41,7 @@ const App = ({configuration}) => {
         <Title embedded={configuration.embedded}/>
         <Page
             environments={environments}
-            unfilteredReleasesPerApp={releasesPerApp}/>
+            unfilteredDeploysPerApp={deploysPerApp}/>
       </div>
   )
 }
@@ -49,79 +49,79 @@ const App = ({configuration}) => {
 const Title = ({embedded}) =>
     <h1 className={embedded ? "invisible" : "visible"}>Deployments</h1>
 
-const Page = ({environments, unfilteredReleasesPerApp}) => {
+const Page = ({environments, unfilteredDeploysPerApp}) => {
   let [filter, setFilter] = useState("")
-  let releasesPerApp = useMemo(
-      () => filterApps(filter, unfilteredReleasesPerApp),
-      [filter, unfilteredReleasesPerApp])
+  let deploysPerApp = useMemo(
+      () => filterApps(filter, unfilteredDeploysPerApp),
+      [filter, unfilteredDeploysPerApp])
 
   return <>
     <Search filter={setFilter}/>
-    <Releases environments={environments} releasesPerApp={releasesPerApp}/>
+    <Deploys environments={environments} deploysPerApp={deploysPerApp}/>
   </>
 }
 
-const Releases = ({environments, releasesPerApp}) => {
+const Deploys = ({environments, deploysPerApp}) => {
   return (
       <div className="list">
         <table>
           <thead>
-            <ReleaseHeader environments={environments}/>
+            <DeployHeader environments={environments}/>
           </thead>
           <tbody>
-            <ReleaseRows environments={environments} releasesPerApp={releasesPerApp}/>
+            <DeployRows environments={environments} deploysPerApp={deploysPerApp}/>
           </tbody>
         </table>
       </div>
   )
 }
 
-const ReleaseHeader = ({environments}) => (
+const DeployHeader = ({environments}) => (
     <tr>
       <th>Project</th>
       {environments.map(env => <th key={env}>{env}</th>)}
     </tr>
 )
 
-const ReleaseRows = ({environments, releasesPerApp}) => {
-  let apps = useMemo(() => Object.keys(releasesPerApp).sort(), [releasesPerApp])
+const DeployRows = ({environments, deploysPerApp}) => {
+  let apps = useMemo(() => Object.keys(deploysPerApp).sort(), [deploysPerApp])
 
   return apps.map(app =>
-      <ReleaseRow
+      <DeployRow
           key={app}
           app={app}
           environments={environments}
-          releases={releasesPerApp[app]}/>
+          deploys={deploysPerApp[app]}/>
   )
 }
 
-const ReleaseRow = ({app, environments, releases}) => (
+const DeployRow = ({app, environments, deploys}) => (
     <tr>
       <td>{app}</td>
       {environments.map(env =>
-          <Release key={env} environment={env} releases={releases}/>)}
+          <Deploy key={env} environment={env} deploys={deploys}/>)}
     </tr>
 )
 
-const Release = ({environment, releases}) => {
-  let found = releases.find(release => release.environment === environment)
+const Deploy = ({environment, deploys}) => {
+  let found = deploys.find(deploy => deploy.environment === environment)
 
   if (found === undefined) {
     return <td key={environment}/>
   } else {
-    return <td key={environment}><Build release={found}/></td>
+    return <td key={environment}><Build deploy={found}/></td>
   }
 }
 
-const Build = ({release}) => (
-    <a href={release.link}>
+const Build = ({deploy}) => (
+    <a href={deploy.link}>
       <div className="build">
-        <div className={`build-status ${statusClass(release.status)}`}>
-          <StatusIcon status={release.status} latest={release.latest}/>
+        <div className={`build-status ${statusClass(deploy.status)}`}>
+          <StatusIcon status={deploy.status} latest={deploy.latest}/>
         </div>
         <div className="build-info grow">
-          <span className="build-version">{release.version}</span>
-          <span className="build-time">{dateTimes.format(release.time)}</span>
+          <span className="build-version">{deploy.version}</span>
+          <span className="build-time">{dateTimes.format(deploy.time)}</span>
         </div>
       </div>
     </a>

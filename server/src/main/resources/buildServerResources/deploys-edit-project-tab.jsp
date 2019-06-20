@@ -40,7 +40,11 @@
         <td><label for="projectKey">Project Property:</label></td>
         <td>
           <forms:textField maxlength="100" name="projectKey" value="${projectKey}"/>
-          <span class="smallNote">Property name for the project, or leave blank to use the actual project name.</span>
+          <span class="smallNote">
+            Property name for the project, or leave blank to use the actual project name.
+            Use no prefix for configuration parameters, 'env.' for environment variables
+            and 'system.' for system properties.
+          </span>
         </td>
       </tr>
       <tr>
@@ -49,7 +53,8 @@
           <forms:textField maxlength="100" name="environmentKey" value="${environmentKey}"/>
           <span class="smallNote">
             Property name for the environment where the build was deployed, or blank to use the
-            name of the build configuration.
+            name of the build configuration. Use no prefix for configuration parameters,
+            'env.' for environment variables and 'system.' for system properties.
           </span>
         </td>
       </tr>

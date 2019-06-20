@@ -1,0 +1,101 @@
+:root {
+    --unknown-colour: #1c66bf;
+    --success-colour: #40b55f;
+    --failure-colour: #f26c5c;
+}
+
+#deploys .build {
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+
+#deploys .build-status {
+    margin-right: 0.5rem;
+}
+
+#deploys .build-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#deploys .status-icon {
+    display: inline-block;
+    font-size: 2.5rem;
+    color: #1c66bf; /* status unknown = blue */
+}
+#deploys .status-SUCCESS { color: #40b55f; }
+#deploys .status-RUNNING { color: #40b55f; }
+#deploys .status-FAILURE { color: #f26c5c; }
+
+#deploys .status-latest {
+    opacity: 1.0;
+}
+#deploys .status-older {
+    opacity: 0.3;
+}
+
+
+/* Status hover effect (hat-tip: https://codepen.io/honglio/pen/FKyxG?editors=1100) */
+#deploys .build-status {
+    border-radius: 50%;
+    position: relative;
+    text-decoration: none;
+    z-index: 1;
+    color: #fff;
+}
+#deploys .build-status:after {
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    content:'';
+    box-sizing: content-box;
+
+    top: -1px; /* Account for padding */
+    left: -1px; /* Account for padding */
+    padding: 1px; /* How far the circle is from the content */
+    transition: transform 0.2s, opacity 0.2s;
+    transform: scale(1.4);
+    opacity: 0;
+}
+/* Make circular border around status icon of appropriate colour */
+#deploys .build-status:after {
+    box-shadow: 0 0 0 4px var(--unknown-colour); /* px is thickness of circle */
+}
+#deploys .build-status.status-RUNNING:after {
+    box-shadow: 0 0 0 4px var(--success-colour); /* px is thickness of circle */
+}
+#deploys .build-status.status-SUCCESS:after {
+    box-shadow: 0 0 0 4px var(--success-colour); /* px is thickness of circle */
+}
+#deploys .build-status.status-FAILURE:after {
+    box-shadow: 0 0 0 4px var(--failure-colour); /* px is thickness of circle */
+}
+/* When hover on .build, trigger the hover affect on component after build-status */
+#deploys .build:hover > .build-status:after {
+    transform: scale(1);
+    opacity: 1;
+}
+/* Increase text size when hovering on build, triggering on build-info child */
+#container:hover #cube { background-color: yellow; }
+
+#deploys .build .build-info {
+    transition: all 0.2s;
+}
+#deploys .build:hover .build-info {
+    transform: scale(1.1) translateX(5px); /* Translate accounts for build icon effect above. */
+}
+
+
+#deploys .build-version {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+#deploys .build-time {
+    font-size: 0.7rem;
+}

@@ -30,7 +30,7 @@ const Build = ({deploy}) => (
 
 const StatusIcon = ({status, latest}) => {
     let iconType = statusIconClass(status)
-    let rotateClass = status === "RUNNING" ? "fa-spin" : ""
+    let rotateClass = status === "RUNNING" || status === "FAILING" ? "fa-spin" : ""
     let ageClass = latest ? "status-latest" : "status-older"
     let classes = `status-icon ${statusClass(status)} ${rotateClass} ${ageClass}`
 
@@ -46,7 +46,7 @@ const statusIconClass = status => {
         return faCheckCircle
     } else if (status === "FAILURE") {
         return faExclamationCircle
-    } else if (status === "RUNNING") {
+    } else if (status === "RUNNING" || status === "FAILING") {
         return faCircleNotch // fa-spin";
     } else {
         return faQuestionCircle

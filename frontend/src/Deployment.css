@@ -26,9 +26,10 @@
     font-size: 2.5rem;
     color: #1c66bf; /* status unknown = blue */
 }
-#deploys .status-SUCCESS { color: #40b55f; }
-#deploys .status-RUNNING { color: #40b55f; }
-#deploys .status-FAILURE { color: #f26c5c; }
+#deploys .status-SUCCESS { color: var(--success-colour); }
+#deploys .status-RUNNING { color: var(--success-colour); }
+#deploys .status-FAILURE { color: var(--failure-colour); }
+#deploys .status-FAILING { color: var(--failure-colour); }
 
 #deploys .status-latest {
     opacity: 1.0;
@@ -73,6 +74,9 @@
     box-shadow: 0 0 0 4px var(--success-colour); /* px is thickness of circle */
 }
 #deploys .build-status.status-FAILURE:after {
+    box-shadow: 0 0 0 4px var(--failure-colour); /* px is thickness of circle */
+}
+#deploys .build-status.status-FAILING:after {
     box-shadow: 0 0 0 4px var(--failure-colour); /* px is thickness of circle */
 }
 /* When hover on .build, trigger the hover affect on component after build-status */

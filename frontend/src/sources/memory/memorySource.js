@@ -35,7 +35,7 @@ const deploys = () => {
       version: "1.3.3",
       environment: "Test",
       time: "2019-06-09T21:58:12",
-      status: "SUCCESS"
+      status: "FAILING"
     },
     {
       name: "Mercury",

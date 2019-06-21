@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "com.github.vyadh.teamcity"
-version = "1.1.0"
+version = "1.2.0"
 
 extra["teamcityVersion"] = findProperty("teamcity.version") ?: "2018.2"
 

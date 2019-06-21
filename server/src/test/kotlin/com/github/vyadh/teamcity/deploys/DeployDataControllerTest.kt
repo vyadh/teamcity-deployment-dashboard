@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.*
 import jetbrains.buildServer.web.openapi.PluginDescriptor
 import jetbrains.buildServer.web.openapi.WebControllerManager
@@ -149,6 +150,7 @@ internal class DeployDataControllerTest {
   private fun build(name: String, env: String): SFinishedBuild = mock {
     on { buildOwnParameters } doReturn mapOf(Pair("PROJECT", name), Pair("ENVIRONMENT", env))
     on { buildNumber } doReturn "1.0"
+    on { buildStatus } doReturn Status.NORMAL
     on { finishDate } doReturn Date()
   }
 

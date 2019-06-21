@@ -1,5 +1,6 @@
 package com.github.vyadh.teamcity.deploys
 
+import jetbrains.buildServer.RunningBuild
 import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.*
 import java.time.ZoneOffset
@@ -24,27 +25,20 @@ class DeployFinder(
     return project
           .buildTypes
           .filter { isDeployment(it) }
-          .flatMap { toDeploy(it) }
+          .flatMap { toDeploys(it) }
   }
 
-  private fun toDeploy(type: SBuildType): List<Deploy> {
+  internal fun toDeploys(type: SBuildType): List<Deploy> {
     val deploy = toDeployOrNull(type)
     return if (deploy == null) emptyList() else listOf(deploy)
   }
 
   private fun toDeployOrNull(type: SBuildType): Deploy? {
-    val runningBuilds = type.runningBuilds
-
-    return if (runningBuilds.isEmpty()) {
-      val build = type.lastChangesFinished
-      if (build == null) null
-      else toDeploy(build, toStatus(build))
-    } else {
-      toDeploy(runningBuilds[0], runningStatus)
-    }
+    val build = type.runningBuilds.firstOrNull() ?: type.lastChangesFinished
+    return if (build == null) null else toDeploy(build)
   }
 
-  internal fun toDeploy(build: SBuild, status: String): Deploy? {
+  internal fun toDeploy(build: SBuild): Deploy? {
     val projectName = projectName(build) ?: return null
 
     return Deploy(
@@ -52,7 +46,7 @@ class DeployFinder(
           build.buildNumber,
           environmentName(build),
           timeOf(build),
-          status,
+          toStatus(build),
           links.getViewResultsUrl(build)
     )
   }
@@ -84,17 +78,34 @@ class DeployFinder(
       return ZonedDateTime.ofInstant(dateTime.toInstant(), ZoneOffset.UTC)
     }
 
+    //todo hanging, internal error?
     /**
      * Values: SUCCESS, WARNING, FAILURE, ERROR, UNKNOWN
      * @see jetbrains.buildServer.messages.Status
      */
-    internal fun toStatus(build: SFinishedBuild): String {
-      val status = build.buildStatus ?: Status.UNKNOWN
-      return status.text
+    internal fun toStatus(build: SBuild): String {
+      val running = build is RunningBuild
+      val status = build.buildStatus
+
+      return when {
+         running && isFailing(status) -> "FAILING"
+         running && isSuccess(status) -> "RUNNING"
+         isFailing(status) -> "FAILURE"
+         isSuccess(status) -> "SUCCESS"
+         else -> "UNKNOWN"
+      }
     }
 
-    /** We currently classify running as just another status. */
-    const val runningStatus = "RUNNING"
+    private fun isFailing(status: Status): Boolean {
+      return when (status) {
+        Status.ERROR -> true
+        Status.FAILURE -> true
+        else -> false
+      }
+    }
+
+    private fun isSuccess(status: Status): Boolean =
+          status == Status.NORMAL
   }
 
 }

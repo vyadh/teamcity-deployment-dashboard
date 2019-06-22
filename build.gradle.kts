@@ -13,6 +13,11 @@ plugins {
   kotlin("jvm") version "1.3.31"
 }
 
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
 group = "com.github.vyadh.teamcity"
 version = "1.2.0"
 

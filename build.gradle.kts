@@ -1,3 +1,7 @@
+import org.jetbrains.kotlin.resolve.constants.evaluate.parseBoolean
+import java.time.format.DateTimeFormatter
+import java.time.LocalDateTime
+
 buildscript {
   repositories {
     mavenLocal()
@@ -19,7 +23,7 @@ repositories {
 }
 
 group = "com.github.vyadh.teamcity"
-version = "1.2.0"
+version = "1.2.0${buildNumber()}"
 
 extra["teamcityVersion"] = findProperty("teamcity.version") ?: "2018.2"
 
@@ -36,4 +40,14 @@ subprojects {
       jvmTarget = "1.8"
     }
   }
+}
+
+fun buildNumber(): String {
+  val snapshot = parseBoolean(System.getenv("SNAPSHOT"))
+  return if (snapshot) "-SNAPSHOT-${timestamp()}" else ""
+}
+
+fun timestamp(): String {
+  val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+  return LocalDateTime.now().format(formatter)
 }

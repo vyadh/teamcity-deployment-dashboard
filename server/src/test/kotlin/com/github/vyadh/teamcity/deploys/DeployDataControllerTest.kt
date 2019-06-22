@@ -1,16 +1,15 @@
 package com.github.vyadh.teamcity.deploys
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.*
+import jetbrains.buildServer.util.ItemProcessor
 import jetbrains.buildServer.web.openapi.PluginDescriptor
 import jetbrains.buildServer.web.openapi.WebControllerManager
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyString
+import org.mockito.invocation.InvocationOnMock
 import org.springframework.web.servlet.ModelAndView
 import java.util.*
 import javax.servlet.http.HttpServletRequest
@@ -24,7 +23,7 @@ internal class DeployDataControllerTest {
   @Test
   internal fun doHandleRespondsAsJson() {
     val projectManager = mock<ProjectManager> { }
-    val controller = controllerWith(projectManager)
+    val controller = controllerWith(projectManager, buildHistory())
     val response = mock<HttpServletResponse> { }
 
     controller.doHandle(anyRequest(), response)
@@ -34,8 +33,8 @@ internal class DeployDataControllerTest {
 
   @Test
   internal fun doHandleReturnsEmptyCollectionsWhenProjectNotFound() {
-    val projectManager = projectManagerReturning(null)
-    val controller = controllerWith(projectManager)
+    val projectManager = projectManager(null)
+    val controller = controllerWith(projectManager, buildHistory())
 
     val result = controller.doHandle(anyRequest(), anyResponse())
 
@@ -48,9 +47,9 @@ internal class DeployDataControllerTest {
 
   @Test
   internal fun doHandlePopulatesDeploys() {
-    val project = projectWith(buildTypeWith(build("SomeProject", "DEV")), environments = "")
-    val projectManager = projectManagerReturning(project)
-    val controller = controllerWith(projectManager)
+    val project = projectWith(environments = "")
+    val build = build("SomeProject", "DEV")
+    val controller = controllerWith(projectManager(project), buildHistory(build))
 
     val result = controller.doHandle(anyRequest(), anyResponse())
 
@@ -61,9 +60,9 @@ internal class DeployDataControllerTest {
 
   @Test
   internal fun doHandlePopulatesEnvironments() {
-    val project = projectWith(buildTypeWith(build("SomeProject", "ANY")), environments = "DEV,PRD")
-    val projectManager = projectManagerReturning(project)
-    val controller = controllerWith(projectManager)
+    val project = projectWith(environments = "DEV,PRD")
+    val build = build("SomeProject", "ANY")
+    val controller = controllerWith(projectManager(project), buildHistory(build))
 
     val result = environments(controller.doHandle(anyRequest(), anyResponse()))
 
@@ -72,9 +71,9 @@ internal class DeployDataControllerTest {
 
   @Test
   internal fun doHandlePopulatesRefreshSecs() {
-    val project = projectWith(buildTypeWith(build("SomeProject", "ANY")), refreshSecs = "5")
-    val projectManager = projectManagerReturning(project)
-    val controller = controllerWith(projectManager)
+    val project = projectWith(refreshSecs = "5")
+    val build = build("SomeProject", "ANY")
+    val controller = controllerWith(projectManager(project), buildHistory(build))
 
     val result = refreshSecs(controller.doHandle(anyRequest(), anyResponse()))
 
@@ -100,12 +99,12 @@ internal class DeployDataControllerTest {
   }
 
 
-  private fun controllerWith(projectManager: ProjectManager): DeployDataController {
-    return DeployDataController(projectManager, pluginDescriptor(), links, webManager)
+  private fun controllerWith(projectManager: ProjectManager, buildHistory: BuildHistory): DeployDataController {
+    return DeployDataController(projectManager, pluginDescriptor(), links, buildHistory, webManager)
   }
 
   private fun pluginDescriptor(): PluginDescriptor = mock {
-    on { getPluginResourcesPath(anyString()) } doReturn "path"
+    on { getPluginResourcesPath(any()) } doReturn "path"
   }
 
   private fun anyRequest() = requestWithURI("http://host/app/deployment-dashboard/id")
@@ -121,11 +120,12 @@ internal class DeployDataControllerTest {
     on { getViewResultsUrl(any()) } doReturn link
   }
 
-  private fun projectManagerReturning(project: SProject?): ProjectManager = mock {
-    on { findProjectByExternalId(anyString()) } doReturn project
+  private fun projectManager(project: SProject?): ProjectManager = mock {
+    on { findProjectByExternalId(any()) } doReturn project
   }
 
-  private fun projectWith(buildType: SBuildType, environments: String = "DEV", refreshSecs: String = ""): SProject {
+  private fun projectWith(environments: String = "DEV", refreshSecs: String = ""): SProject {
+    val type = buildType()
     val feature = mock<SProjectFeatureDescriptor> {
       on { parameters } doReturn DeployConfig(
             "true",
@@ -135,15 +135,39 @@ internal class DeployDataControllerTest {
             refreshSecs).toMap()
     }
     return mock {
-      on { buildTypes } doReturn listOf(buildType)
+      on { buildTypes } doReturn listOf(type)
       on { getAvailableFeaturesOfType(DeployConfigStore.type) } doReturn listOf(feature)
     }
   }
 
-  private fun buildTypeWith(build: SFinishedBuild): SBuildType = mock {
-    on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "DEPLOYMENT"
-    on { runningBuilds } doReturn emptyList()
-    on { lastChangesFinished } doReturn build
+  private fun buildType(): SBuildType {
+    return mock {
+      on { internalId } doReturn "id"
+      on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "DEPLOYMENT"
+      on { runningBuilds } doReturn emptyList()
+    }
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  private fun buildHistory(build: SFinishedBuild? = null): BuildHistory = mock {
+    return mock {
+      val invokeWithBuild: (InvocationOnMock) -> Unit = { invocation ->
+        if (build != null) {
+          val processor = invocation.arguments[5] as ItemProcessor<SFinishedBuild>
+          processor.processItem(build)
+        }
+      }
+      on {
+        processEntries(
+              anyString(),
+              isNull(),
+              eq(true),
+              eq(false),
+              eq(false),
+              any<ItemProcessor<SFinishedBuild>>()
+        )
+      } doAnswer invokeWithBuild
+    }
   }
 
   @Suppress("SameParameterValue")

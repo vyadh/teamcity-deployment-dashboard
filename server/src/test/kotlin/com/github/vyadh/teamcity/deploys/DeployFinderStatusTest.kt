@@ -1,5 +1,6 @@
 package com.github.vyadh.teamcity.deploys
 
+import com.github.vyadh.teamcity.deploys.buildfinder.MissingBuildFinder
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -14,7 +15,7 @@ internal class DeployFinderStatusTest {
   private val links = links("http://link")
   private val projectKey = "PROJECT"
   private val envKey = "ENV"
-  private val finder = DeployFinder(links, projectKey, envKey)
+  private val finder = DeployFinder(links, projectKey, envKey, MissingBuildFinder())
 
   @Test
   internal fun statusOfBuildWhenNormal() {

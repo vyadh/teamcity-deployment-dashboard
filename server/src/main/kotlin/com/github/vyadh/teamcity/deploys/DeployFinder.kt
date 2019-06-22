@@ -1,5 +1,6 @@
 package com.github.vyadh.teamcity.deploys
 
+import com.github.vyadh.teamcity.deploys.buildfinder.BuildFinder
 import jetbrains.buildServer.RunningBuild
 import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.*
@@ -19,7 +20,8 @@ import java.util.*
 class DeployFinder(
       private val links: WebLinks,
       private val projectKey: String,
-      private val environmentKey: String) {
+      private val environmentKey: String,
+      private val buildFinder: BuildFinder) {
 
   fun search(project: SProject): List<Deploy> {
     return project
@@ -34,7 +36,7 @@ class DeployFinder(
   }
 
   private fun toDeployOrNull(type: SBuildType): Deploy? {
-    val build = type.runningBuilds.firstOrNull() ?: type.lastChangesFinished
+    val build = type.runningBuilds.firstOrNull() ?: buildFinder.find(type)
     return if (build == null) null else toDeploy(build)
   }
 
@@ -78,7 +80,7 @@ class DeployFinder(
       return ZonedDateTime.ofInstant(dateTime.toInstant(), ZoneOffset.UTC)
     }
 
-    //todo hanging, internal error?
+    //todo indicate hanging or personal build
     /**
      * Values: SUCCESS, WARNING, FAILURE, ERROR, UNKNOWN
      * @see jetbrains.buildServer.messages.Status

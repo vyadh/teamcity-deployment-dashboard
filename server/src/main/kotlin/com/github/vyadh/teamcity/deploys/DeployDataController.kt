@@ -1,6 +1,8 @@
 package com.github.vyadh.teamcity.deploys
 
+import com.github.vyadh.teamcity.deploys.buildfinder.HistoryBuildFinder
 import jetbrains.buildServer.controllers.BaseController
+import jetbrains.buildServer.serverSide.BuildHistory
 import jetbrains.buildServer.serverSide.ProjectManager
 import jetbrains.buildServer.serverSide.SProject
 import jetbrains.buildServer.serverSide.WebLinks
@@ -19,6 +21,7 @@ class DeployDataController(
       private val projectManager: ProjectManager,
       private val pluginDescriptor: PluginDescriptor,
       private val links: WebLinks,
+      private val buildHistory: BuildHistory,
       webManager: WebControllerManager
 ) : BaseController() {
 
@@ -70,7 +73,8 @@ class DeployDataController(
   }
 
   private fun createFinder(config: DeployConfig): DeployFinder {
-    return DeployFinder(links, config.projectKey, config.environmentKey)
+    val historicalBuilds = HistoryBuildFinder(buildHistory)
+    return DeployFinder(links, config.projectKey, config.environmentKey, historicalBuilds)
   }
 
   companion object {

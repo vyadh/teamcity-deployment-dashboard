@@ -1,8 +1,8 @@
 package com.github.vyadh.teamcity.deploys
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
+import com.github.vyadh.teamcity.deploys.buildfinder.FoundBuildFinder
+import com.github.vyadh.teamcity.deploys.buildfinder.MissingBuildFinder
+import com.nhaarman.mockitokotlin2.*
 import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.*
 import org.assertj.core.api.Assertions.assertThat
@@ -15,13 +15,12 @@ internal class DeployFinderTest {
   private val links = links("http://link")
   private val projectKey = "PROJECT"
   private val envKey = "ENV"
-  private val finder = DeployFinder(links, projectKey, envKey)
 
   @Test
   fun searchWithNoBuildTypes() {
     val project = project(types = emptyList())
 
-    val result = finder.search(project)
+    val result = finder().search(project)
 
     assertThat(result).isEmpty()
   }
@@ -30,7 +29,7 @@ internal class DeployFinderTest {
   fun searchWithNoDeploymentTypes() {
     val project = project(listOf(regularBuildType()))
 
-    val result = finder.search(project)
+    val result = finder().search(project)
 
     assertThat(result).isEmpty()
   }
@@ -45,7 +44,7 @@ internal class DeployFinderTest {
     }
     val project = project(listOf(buildTypeWith(build)))
 
-    val result = finder.search(project).first()
+    val result = finder().search(project).first()
 
     assertThat(result.project).isEqualTo("Ruminous")
     assertThat(result.environment).isEqualTo("UAT")
@@ -53,13 +52,14 @@ internal class DeployFinderTest {
 
   @Test
   fun searchWithFinishedBuild() {
+    val project = project(listOf(deploymentBuildType()))
     val build = mock<SFinishedBuild> {
       on { buildOwnParameters } doReturn mapOf(Pair(projectKey, "Frustrum"), Pair(envKey, "PRD"))
       on { buildNumber } doReturn "1.0"
       on { buildStatus } doReturn Status.NORMAL
       on { finishDate } doReturn Date()
     }
-    val project = project(listOf(buildTypeWith(build)))
+    val finder = finder(build)
 
     val result = finder.search(project).first()
 
@@ -81,9 +81,10 @@ internal class DeployFinderTest {
       on { buildStatus } doReturn Status.NORMAL
       on { startDate } doReturn Date()
     }
+    val finder = finder(buildFinished)
     val project = project(listOf(
           buildTypeWith(buildRunning),
-          buildTypeWith(buildFinished),
+          deploymentBuildType(),
           regularBuildType()
     ))
 
@@ -105,7 +106,7 @@ internal class DeployFinderTest {
       on { finishDate } doReturn Date.from(finished.toInstant())
     }
     val deployLinks = links("http://host/build/1")
-    val deployFinder = DeployFinder(deployLinks, projectKey, envKey)
+    val deployFinder = DeployFinder(deployLinks, projectKey, envKey, MissingBuildFinder())
 
     val result = deployFinder.toDeploy(build)
 
@@ -127,7 +128,7 @@ internal class DeployFinderTest {
       on { startDate } doReturn Date.from(started.toInstant())
     }
     val deployLinks = links("http://host/build/2")
-    val deployFinder = DeployFinder(deployLinks, projectKey, envKey)
+    val deployFinder = DeployFinder(deployLinks, projectKey, envKey, MissingBuildFinder())
 
     val result = deployFinder.toDeploy(build)
 
@@ -142,7 +143,7 @@ internal class DeployFinderTest {
   @Test
   internal fun toDeployWhenProjectParameterNameBlank() {
     val build = buildWith("Project", "Build", emptyMap())
-    val finder = DeployFinder(links, "", envKey)
+    val finder = DeployFinder(links, "", envKey, MissingBuildFinder())
 
     val result = finder.toDeploy(build)
 
@@ -153,7 +154,7 @@ internal class DeployFinderTest {
   internal fun toDeployWhenEnvironmentParameterNameBlank() {
     val build = buildWith("Project", "Build",
           mapOf(Pair(projectKey, "Project Alt")))
-    val finder = DeployFinder(links, projectKey, "")
+    val finder = DeployFinder(links, projectKey, "", MissingBuildFinder())
 
     val result = finder.toDeploy(build)
 
@@ -164,7 +165,7 @@ internal class DeployFinderTest {
   internal fun toDeployReturnsNullWhenProjectParameterNotFound() {
     val build = buildWith("Project", "Build", emptyMap())
 
-    val result = finder.toDeploy(build)
+    val result = finder().toDeploy(build)
 
     assertThat(result?.project).isNull()
   }
@@ -174,7 +175,7 @@ internal class DeployFinderTest {
     val build = buildWith("Project", "Build",
           mapOf(Pair(projectKey, "Ruminous")))
 
-    val result = finder.toDeploy(build)
+    val result = finder().toDeploy(build)
 
     assertThat(result?.environment).isEqualTo("[missing]")
   }
@@ -182,6 +183,11 @@ internal class DeployFinderTest {
 
   private fun links(link: String): WebLinks = mock {
     on { getViewResultsUrl(any()) } doReturn link
+  }
+
+  private fun finder(build: SFinishedBuild? = null): DeployFinder {
+    val lastBuilds = if (build == null) MissingBuildFinder() else FoundBuildFinder(build)
+    return DeployFinder(links, projectKey, envKey, lastBuilds)
   }
 
   private fun project(types: List<SBuildType>): SProject = mock {
@@ -192,10 +198,9 @@ internal class DeployFinderTest {
     on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "REGULAR"
   }
 
-  private fun buildTypeWith(build: SFinishedBuild): SBuildType = mock {
+  private fun deploymentBuildType(): SBuildType = mock {
     on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "DEPLOYMENT"
     on { runningBuilds } doReturn emptyList()
-    on { lastChangesFinished } doReturn build
   }
 
   private fun buildTypeWith(build: SRunningBuild): SBuildType = mock {

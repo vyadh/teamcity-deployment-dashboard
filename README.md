@@ -77,8 +77,8 @@ Projects inherit parent configuration unless overridden at a lower level. If all
 TeamCity instance are the same, the configuration only needs to be set in the root project.
 
 
-TeamCity Configuration Scenarios
---------------------------------
+TeamCity Project Configuration Scenarios
+----------------------------------------
 
 Here are a couple of good ways of structuring build configurations, both of which work
 well with the deployment dashboard.
@@ -96,6 +96,12 @@ When using dedicated TeamCity agents for each environment, an environment variab
 property defined in the agent configuration could be used rather than specifically as part of
 the build. Since the build inherits these variables, the deployment dashboard will work as normal.
 This allows leveraging agent requirements to indicate the environment.
+
+Note that the deployments for each environment still currently have to be in separate build
+configurations and so this scenario will need to used via agent requirements. Ideally this scenario
+would be more fully supported, but the plugin only gets the last build for any build configuration
+for efficiency reasons as we cannot query the entire build history to find deployments for each
+environment. It may be we can use a slower approach via configuration for those that need it.
 
 
 Scaling to Multiple Teams with the Project Hierarchy
@@ -130,6 +136,7 @@ than 'Run'
 2. Has a property<sup>[1](#f1)</sup> matching the project key when not blank.
 3. Has a property<sup>[1](#f1)</sup> that matches the environment key when not blank.
 4. The environment deployed to is contained in the list of configured environments.
+5. It is the most recent non-cancelled build for that build configuration.
 
 
 Implementation
@@ -144,6 +151,9 @@ Possible Future Features
 ------------------------
 
 * Show real-time progress by having the frontend subscribe to build changes via server-sent events.
+* Efficiently look for multiple environment deployments within the same build configuration.
+Currently we only get the most recent as it's not clear to know when to stop unless we make it
+configurable. See in TeamCity Project Configuration Scenario #2 above.
 
 
 Notes

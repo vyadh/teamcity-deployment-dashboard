@@ -1,5 +1,5 @@
 import {groupBy} from "./util/collections"
-import {maxVersion} from "./util/versions"
+import {firstWord, maxVersion} from "./util/versions"
 
 export const groupPerApp = deploys => {
   let grouped = groupBy(deploys, deploy => deploy.name)
@@ -20,6 +20,6 @@ export const markLatestAppDeploy = deploysPerApp => {
 
 export const markLatestVersion = (app, deploys, latestVersion) => {
   for (let deploy of deploys) {
-    deploy.latest = deploy.version === latestVersion
+    deploy.latest = firstWord(deploy.version) === latestVersion
   }
 }

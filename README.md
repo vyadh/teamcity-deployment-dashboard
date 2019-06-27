@@ -132,6 +132,26 @@ environment can then see all their deployments, the additional environment just 
 at the top level.
 
 
+Versioning of Builds
+--------------------
+
+The dashboard will show the TeamCity build number as the version. This can be customised using
+[TeamCity Service Messages](https://www.jetbrains.com/help/teamcity/build-script-interaction-with-teamcity.html#BuildScriptInteractionwithTeamCity-ReportingBuildNumber).
+
+This can be any formatted version string, but in order to visualise the journey of the build
+through environments it interprets the version number to work out which is the latest build
+and de-emphasises any deployments that are not. This is why in the screenshot above the older
+builds are slightly faded, to keep emphasis on a new build moving towards production.
+
+The format supported is standard [SemVer 2](https://semver.org). For example `1.2.3` or `1.2.3+45`
+if a build number is required.
+
+Sometimes more than the version number is required. In order to avoid conflicting with the version
+detection, put this information after the SemVer version separated by a space. This allows adding
+other information such as deployment region like `1.2.3 EUR` and `1.2.3 JAP` but still treat them
+as the same version.
+
+
 Deployment Visibility
 ---------------------
 

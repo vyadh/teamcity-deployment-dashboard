@@ -1,6 +1,6 @@
 
 /* Use maxVersion to sort a list of likely-seen versions for concise tests */
-import {compareVersion, maxVersion} from "./versions"
+import {compareVersion, firstWord, maxVersion} from "./versions"
 
 it ('compareVersionTest', () => {
   let versions = [
@@ -46,6 +46,11 @@ it ('compareVersionTest', () => {
   ])
 })
 
+it ('first words', () => {
+  expect(firstWord('1.2.3 metadata')).toEqual('1.2.3')
+  expect(firstWord('1.2.3+4 5')).toEqual('1.2.3+4')
+})
+
 it ('maxVersionTest with minor position change', () => {
   let versions = ['1.1', '1.0.1', '1.0.1.4159', '1.1.0+123']
   
@@ -60,4 +65,12 @@ it ('maxVersionTest with build number change', () => {
   let result = maxVersion(versions)
 
   expect(result).toEqual('1.0.1+4159')
+})
+
+it ('use only first word as part of semver comparison', () => {
+  let versions = ['1.2.3+1 ijk', '1.2.3+1 xyz', '1.2.3+1 abc', '1.2.3+0 zzz']
+
+  let result = maxVersion(versions)
+
+  expect(result).toEqual('1.2.3+1')
 })

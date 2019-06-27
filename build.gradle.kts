@@ -23,7 +23,7 @@ repositories {
 }
 
 group = "com.github.vyadh.teamcity"
-version = "1.2.0${buildNumber()}"
+version = "1.3.0${buildNumber()}"
 
 extra["teamcityVersion"] = findProperty("teamcity.version") ?: "2018.2"
 

@@ -80,8 +80,7 @@ TeamCity instance are the same, the configuration only needs to be set in the ro
 TeamCity Project Configuration Scenarios
 ----------------------------------------
 
-Here are a couple of good ways of structuring build configurations, both of which work
-well with the deployment dashboard.
+Here are some ideas to help support different build configurations.
 
 **Scenario 1**
 
@@ -102,6 +101,15 @@ configurations and so this scenario will need to used via agent requirements. Id
 would be more fully supported, but the plugin only gets the last build for any build configuration
 for efficiency reasons as we cannot query the entire build history to find deployments for each
 environment. It may be we can use a slower approach via configuration for those that need it.
+
+**Scenario 3**
+
+Some environment consist of multiple deployment locations, such as deploying to different cloud
+regions. One way of visualising such multi-region deployments is to define a new composite
+parameter that combines environment and region. For example, DEV and PRD in region EUR and USA
+could be done by defining a parameter with a value like `%environment%-%region%`. Once the plugin
+has been configured to use this new parameter as the environment key, the environment list of
+deploys to show would be `DEV-EUR,DEV-USA,DEV-EUR,PRD-USA`.
 
 
 Scaling to Multiple Teams with the Project Hierarchy

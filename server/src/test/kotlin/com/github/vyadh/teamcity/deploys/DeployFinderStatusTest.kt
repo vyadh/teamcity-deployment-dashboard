@@ -14,8 +14,9 @@ internal class DeployFinderStatusTest {
 
   private val links = links("http://link")
   private val projectKey = "PROJECT"
+  private val versionKey = "VERSION"
   private val envKey = "ENV"
-  private val finder = DeployFinder(links, projectKey, envKey, MissingBuildFinder())
+  private val finder = DeployFinder(links, projectKey, versionKey, envKey, MissingBuildFinder())
 
   @Test
   internal fun statusOfBuildWhenNormal() {
@@ -69,6 +70,7 @@ internal class DeployFinderStatusTest {
   }
 
 
+  @Suppress("SameParameterValue")
   private fun links(link: String): WebLinks = mock {
     on { getViewResultsUrl(any()) } doReturn link
   }
@@ -81,10 +83,14 @@ internal class DeployFinderStatusTest {
   private fun runningBuildWithStatus(status: Status): SRunningBuild {
     return mock {
       on { buildStatus } doReturn status
-      on { buildOwnParameters } doReturn mapOf<String?, String>(Pair(projectKey, "Project"), Pair(envKey, "ENV"))
-      on { buildNumber } doReturn "1.0"
+      on { buildOwnParameters } doReturn params()
       on { startDate } doReturn Date()
     }
   }
+
+  private fun params() = mapOf<String?, String>(
+        Pair(projectKey, "Project"),
+        Pair(versionKey, "1.0"),
+        Pair(envKey, "ENV"))
 
 }

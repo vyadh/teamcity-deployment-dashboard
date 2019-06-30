@@ -67,7 +67,10 @@ Enabling the plugin in the configuration will show three settings.
 in the case where the name of the immediate project is not appropriate. If it is appropriate, leave 
 this blank, otherwise the dashboard will be picked up from the build property<sup>[1](#f1)</sup>
 named by this key.
-2. Environment key: This signifies the build property<sup>[1](#f1)</sup> that indicates the
+2. Version key: This signifies the build property<sup>[1](#f1)</sup> that indicates the
+semver-formatted version string, e.g. 1.2.3 or 1.2.3+45 with a build number. See Versioning of
+Builds below.
+3. Environment key: This signifies the build property<sup>[1](#f1)</sup> that indicates the
 environment name, e.g. Dev, UAT.
 3. Environments: This lists all the possible environments, and will determine the columns shown on
 the dashboard. If the environment of the build is not in this list, it will not appear on the
@@ -135,8 +138,8 @@ at the top level.
 Versioning of Builds
 --------------------
 
-The dashboard will show the TeamCity build number as the version. This can be customised using
-[TeamCity Service Messages](https://www.jetbrains.com/help/teamcity/build-script-interaction-with-teamcity.html#BuildScriptInteractionwithTeamCity-ReportingBuildNumber).
+By default, the dashboard will show the TeamCity build number as the version. This can be
+customised using [TeamCity Service Messages](https://www.jetbrains.com/help/teamcity/build-script-interaction-with-teamcity.html#BuildScriptInteractionwithTeamCity-ReportingBuildNumber).
 
 This can be any formatted version string, but in order to visualise the journey of the build
 through environments it interprets the version number to work out which is the latest build
@@ -146,10 +149,8 @@ builds are slightly faded, to keep emphasis on a new build moving towards produc
 The format supported is standard [SemVer 2](https://semver.org). For example `1.2.3` or `1.2.3+45`
 if a build number is required.
 
-Sometimes more than the version number is required. In order to avoid conflicting with the version
-detection, put this information after the SemVer version separated by a space. This allows adding
-other information such as deployment region like `1.2.3 EUR` and `1.2.3 JAP` but still treat them
-as the same version.
+However, if the TeamCity build number is being used for other purposes, or it contains other
+information, you can use the `Version Property` in the plugin configuration.
 
 
 Deployment Visibility

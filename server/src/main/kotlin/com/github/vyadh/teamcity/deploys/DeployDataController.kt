@@ -74,7 +74,8 @@ class DeployDataController(
 
   private fun createFinder(config: DeployConfig): DeployFinder {
     val historicalBuilds = HistoryBuildFinder(buildHistory)
-    return DeployFinder(links, config.projectKey, config.environmentKey, historicalBuilds)
+    return DeployFinder(
+          links, config.projectKey, config.versionKey, config.environmentKey, historicalBuilds)
   }
 
   companion object {

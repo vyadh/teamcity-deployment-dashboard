@@ -14,12 +14,15 @@ import java.util.*
  *
  * @param projectKey configuration property name to lookup the project name or blank
  * if the project name itself should be used.
+ * @param versionKey configuration property name to lookup the version number or blank
+ * if the TeamCity build number should be used.
  * @param environmentKey configuration property name to lookup the environment name
  * or blank if the build type name should be used.
  */
 class DeployFinder(
       private val links: WebLinks,
       private val projectKey: String,
+      private val versionKey: String,
       private val environmentKey: String,
       private val buildFinder: BuildFinder) {
 
@@ -45,7 +48,7 @@ class DeployFinder(
 
     return Deploy(
           projectName,
-          build.buildNumber,
+          version(build),
           environmentName(build),
           timeOf(build),
           toStatus(build),
@@ -55,6 +58,9 @@ class DeployFinder(
 
   private fun projectName(build: SBuild) =
         param(build, projectKey) { build.buildType?.projectName }
+
+  private fun version(build: SBuild) =
+        param(build, versionKey) { build.buildNumber } ?: missing
 
   private fun environmentName(build: SBuild) =
         param(build, environmentKey) { build.buildType?.name } ?: missing

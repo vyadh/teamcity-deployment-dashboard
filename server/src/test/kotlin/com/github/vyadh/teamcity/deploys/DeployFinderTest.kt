@@ -1,5 +1,6 @@
 package com.github.vyadh.teamcity.deploys
 
+import com.github.vyadh.teamcity.deploys.buildfinder.BuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.FoundBuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.MissingBuildFinder
 import com.nhaarman.mockitokotlin2.*
@@ -14,6 +15,7 @@ internal class DeployFinderTest {
 
   private val links = links("http://link")
   private val projectKey = "PROJECT"
+  private val versionKey = "VERSION"
   private val envKey = "ENV"
 
   @Test
@@ -59,7 +61,7 @@ internal class DeployFinderTest {
       on { buildStatus } doReturn Status.NORMAL
       on { finishDate } doReturn Date()
     }
-    val finder = finder(build)
+    val finder = finder(buildFinder = lastBuild(build))
 
     val result = finder.search(project).first()
 
@@ -70,18 +72,16 @@ internal class DeployFinderTest {
   @Test
   fun searchWithMultipleBuilds() {
     val buildFinished = mock<SFinishedBuild> {
-      on { buildOwnParameters } doReturn mapOf(Pair(projectKey, "Ruminous"), Pair(envKey, "PRD"))
-      on { buildNumber } doReturn "1.0.0"
+      on { buildOwnParameters } doReturn properties("Ruminous", "1.0", "PRD")
       on { buildStatus } doReturn Status.NORMAL
       on { finishDate } doReturn Date()
     }
     val buildRunning = mock<SRunningBuild> {
-      on { buildOwnParameters } doReturn mapOf(Pair(projectKey, "Frustrum"), Pair(envKey, "DEV"))
-      on { buildNumber } doReturn "1.0.0"
+      on { buildOwnParameters } doReturn properties("Frustrum", "1.0", "DEV")
       on { buildStatus } doReturn Status.NORMAL
       on { startDate } doReturn Date()
     }
-    val finder = finder(buildFinished)
+    val finder = finder(buildFinder = lastBuild(buildFinished))
     val project = project(listOf(
           buildTypeWith(buildRunning),
           deploymentBuildType(),
@@ -99,14 +99,13 @@ internal class DeployFinderTest {
     val started = ZonedDateTime.parse("2019-05-19T16:54:30+01:00")
     val finished = started.plusMinutes(2)
     val build = mock<SBuild> {
-      on { buildOwnParameters } doReturn mapOf(Pair(projectKey, "Dash"), Pair(envKey, "DEV"))
-      on { buildNumber } doReturn "1.1.0"
+      on { buildOwnParameters } doReturn properties("Dash", "1.1.0", "DEV")
       on { buildStatus } doReturn Status.NORMAL
       on { startDate } doReturn Date.from(started.toInstant())
       on { finishDate } doReturn Date.from(finished.toInstant())
     }
     val deployLinks = links("http://host/build/1")
-    val deployFinder = DeployFinder(deployLinks, projectKey, envKey, MissingBuildFinder())
+    val deployFinder = finder(links = deployLinks)
 
     val result = deployFinder.toDeploy(build)
 
@@ -122,28 +121,27 @@ internal class DeployFinderTest {
   internal fun toDeployWhenRunning() {
     val started = ZonedDateTime.parse("2019-05-19T16:54:30+01:00")
     val build = mock<SRunningBuild> { // Signifies running
-      on { buildOwnParameters } doReturn mapOf(Pair(projectKey, "Dash"), Pair(envKey, "DEV"))
-      on { buildNumber } doReturn "1.1.0"
+      on { buildOwnParameters } doReturn properties("Dash", "1.1.0", "DEV")
       on { buildStatus } doReturn Status.NORMAL
       on { startDate } doReturn Date.from(started.toInstant())
     }
     val deployLinks = links("http://host/build/2")
-    val deployFinder = DeployFinder(deployLinks, projectKey, envKey, MissingBuildFinder())
+    val deployFinder = finder(links = deployLinks)
 
     val result = deployFinder.toDeploy(build)
 
     assertThat(result?.project).isEqualTo("Dash")
-    assertThat(result?.environment).isEqualTo("DEV")
     assertThat(result?.version).isEqualTo("1.1.0")
+    assertThat(result?.environment).isEqualTo("DEV")
     assertThat(result?.time).isEqualTo(started)
     assertThat(result?.status).isEqualTo("RUNNING")
     assertThat(result?.link).isEqualTo("http://host/build/2")
   }
 
   @Test
-  internal fun toDeployWhenProjectParameterNameBlank() {
-    val build = buildWith("Project", "Build", emptyMap())
-    val finder = DeployFinder(links, "", envKey, MissingBuildFinder())
+  internal fun toDeployWhenProjectKeyBlank() {
+    val build = buildWith(project = "Project")
+    val finder = finder(projectKey = "")
 
     val result = finder.toDeploy(build)
 
@@ -151,10 +149,19 @@ internal class DeployFinderTest {
   }
 
   @Test
-  internal fun toDeployWhenEnvironmentParameterNameBlank() {
-    val build = buildWith("Project", "Build",
-          mapOf(Pair(projectKey, "Project Alt")))
-    val finder = DeployFinder(links, projectKey, "", MissingBuildFinder())
+  internal fun toDeployWhenVersionKeyBlank() {
+    val build = buildWith(buildNumber = "1.2.3")
+    val finder = finder(versionKey = "")
+
+    val result = finder.toDeploy(build)
+
+    assertThat(result?.version).isEqualTo("1.2.3")
+  }
+
+  @Test
+  internal fun toDeployWhenEnvironmentKeyBlank() {
+    val build = buildWith(buildType = "Build")
+    val finder = finder(envKey = "")
 
     val result = finder.toDeploy(build)
 
@@ -163,19 +170,27 @@ internal class DeployFinderTest {
 
   @Test
   internal fun toDeployReturnsNullWhenProjectParameterNotFound() {
-    val build = buildWith("Project", "Build", emptyMap())
+    val build = buildWith(params = emptyMap())
 
-    val result = finder().toDeploy(build)
+    val result = finder(projectKey = projectKey).toDeploy(build)
 
     assertThat(result?.project).isNull()
   }
 
   @Test
-  internal fun toDeployShowsAsMissingWhenEnvironmentParameterNotFound() {
-    val build = buildWith("Project", "Build",
-          mapOf(Pair(projectKey, "Ruminous")))
+  internal fun toDeployShowsMissingWhenVersionParameterNotFound() {
+    val build = buildWith(params = defaultParams())
 
-    val result = finder().toDeploy(build)
+    val result = finder(versionKey = versionKey).toDeploy(build)
+
+    assertThat(result?.version).isEqualTo("[missing]")
+  }
+
+  @Test
+  internal fun toDeployShowsAsMissingWhenEnvironmentParameterNotFound() {
+    val build = buildWith(params = defaultParams())
+
+    val result = finder(envKey = envKey).toDeploy(build)
 
     assertThat(result?.environment).isEqualTo("[missing]")
   }
@@ -185,10 +200,19 @@ internal class DeployFinderTest {
     on { getViewResultsUrl(any()) } doReturn link
   }
 
-  private fun finder(build: SFinishedBuild? = null): DeployFinder {
-    val lastBuilds = if (build == null) MissingBuildFinder() else FoundBuildFinder(build)
-    return DeployFinder(links, projectKey, envKey, lastBuilds)
+  private fun finder(
+        links: WebLinks = this.links,
+        projectKey: String = this.projectKey,
+        versionKey: String = this.versionKey,
+        envKey: String = this.envKey,
+        buildFinder: BuildFinder = MissingBuildFinder()
+  ): DeployFinder {
+
+    return DeployFinder(links, projectKey, versionKey, envKey, buildFinder)
   }
+
+  private fun lastBuild(build: SFinishedBuild? = null): BuildFinder =
+        if (build == null) MissingBuildFinder() else FoundBuildFinder(build)
 
   private fun project(types: List<SBuildType>): SProject = mock {
     on { buildTypes } doReturn types
@@ -214,18 +238,38 @@ internal class DeployFinderTest {
     on { projectName } doReturn project
   }
 
-  private fun buildWith(project: String, build: String, params: Map<String, String>): SBuild {
-    return buildWith(buildTypeWith(build, project), params)
+  private fun buildWith(
+        project: String = "ProjectName",
+        buildType: String = "BuildTypeName",
+        buildNumber: String = "#1",
+        params: Map<String, String> = defaultParams()
+  ): SBuild {
+
+    return buildWith(buildTypeWith(buildType, project), buildNumber, params)
   }
 
-  private fun buildWith(type: SBuildType, params: Map<String, String>): SBuild {
+  private fun defaultParams() =
+        mapOf(Pair(projectKey, "DefaultProject"))
+
+  private fun buildWith(type: SBuildType, buildNum: String, params: Map<String, String>): SBuild {
     return mock {
       on { buildOwnParameters } doReturn params
       on { buildType } doReturn type
-      on { buildNumber } doReturn "1.0"
+      on { buildNumber } doReturn buildNum
       on { buildStatus } doReturn Status.NORMAL
       on { finishDate } doReturn Date()
     }
+  }
+
+  private fun properties(
+        project: String? = null, version: String? = null, env: String? = null
+  ): Map<String, String> {
+
+    val map = HashMap<String, String>()
+    if (project != null) map[projectKey] = project
+    if (version != null) map[versionKey] = version
+    if (env != null) map[envKey] = env
+    return map
   }
 
 }

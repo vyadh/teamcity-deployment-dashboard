@@ -61,7 +61,7 @@ Configuration
 
 Enabling the plugin in the configuration will show three settings.
 
-<img src="screenshot-config.png" width="948"/>
+<img src="screenshot-config.png" width="928"/>
 
 1. Project key: This is used to customise the project name shown in the dashboard and can be used
 in the case where the name of the immediate project is not appropriate. If it is appropriate, leave 

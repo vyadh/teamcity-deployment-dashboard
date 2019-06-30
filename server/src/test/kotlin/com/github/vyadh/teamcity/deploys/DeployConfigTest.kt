@@ -10,6 +10,7 @@ internal class DeployConfigTest {
     val config = DeployConfig(
           dashboardEnabled = "true",
           projectKey = "project",
+          versionKey = "version",
           environmentKey = "environment",
           environments = "development,production",
           refreshSecs = "10"
@@ -20,6 +21,7 @@ internal class DeployConfigTest {
     assertThat(map).isEqualTo(mapOf(
           Pair(DeployConfigKeys.dashboardEnabled, "true"),
           Pair(DeployConfigKeys.projectKey, "project"),
+          Pair(DeployConfigKeys.versionKey, "version"),
           Pair(DeployConfigKeys.environmentKey, "environment"),
           Pair(DeployConfigKeys.environments, "development,production"),
           Pair(DeployConfigKeys.refreshSecs, "10")
@@ -31,6 +33,7 @@ internal class DeployConfigTest {
     val map = mapOf(
           Pair(DeployConfigKeys.dashboardEnabled, "true"),
           Pair(DeployConfigKeys.projectKey, "project"),
+          Pair(DeployConfigKeys.versionKey, "1.0"),
           Pair(DeployConfigKeys.environmentKey, "environment"),
           Pair(DeployConfigKeys.environments, "development,production"),
           Pair(DeployConfigKeys.refreshSecs, "30")
@@ -41,6 +44,7 @@ internal class DeployConfigTest {
     assertThat(config).isEqualTo(DeployConfig(
           dashboardEnabled = "true",
           projectKey = "project",
+          versionKey = "1.0",
           environmentKey = "environment",
           environments = "development,production",
           refreshSecs = "30"
@@ -65,6 +69,7 @@ internal class DeployConfigTest {
     assertThat(config).isEqualTo(DeployConfig(
           dashboardEnabled = "true",
           projectKey = "",
+          versionKey = "",
           environmentKey = "",
           environments = "",
           refreshSecs = ""
@@ -73,14 +78,14 @@ internal class DeployConfigTest {
 
   @Test
   internal fun enabledWhenKeyIndicated() {
-    val config = DeployConfig("true", "", "", "", "")
+    val config = DeployConfig(dashboardEnabled = "true")
 
     assertThat(config.isEnabled()).isTrue()
   }
 
   @Test
   internal fun disabledWhenKeyIndicated() {
-    val config = DeployConfig("false", "", "", "", "")
+    val config = DeployConfig(dashboardEnabled = "false")
 
     assertThat(config.isEnabled()).isFalse()
   }
@@ -92,6 +97,7 @@ internal class DeployConfigTest {
     assertThat(config).isEqualTo(DeployConfig(
           dashboardEnabled = "false",
           projectKey = "",
+          versionKey = "",
           environmentKey = "",
           environments = "",
           refreshSecs = ""
@@ -100,7 +106,7 @@ internal class DeployConfigTest {
 
   @Test
   internal fun environmentsAsList() {
-    fun config(envs: String) = DeployConfig("", "", "", envs, "")
+    fun config(envs: String) = DeployConfig(environments = envs)
 
     assertThat(config("").environmentsAsList()).isEmpty()
     assertThat(config("DEV").environmentsAsList()).containsOnly("DEV")
@@ -109,7 +115,7 @@ internal class DeployConfigTest {
 
   @Test
   internal fun environmentsAsListWhenEmptyString() {
-    val config = DeployConfig("", "", "", "", "")
+    val config = DeployConfig(environments = "")
 
     assertThat(config.environmentsAsList()).isEmpty()
   }

@@ -34,6 +34,7 @@ internal class DeployConfigStoreFindTest {
     val params = mapOf(
           Pair(DeployConfigKeys.dashboardEnabled, "true"),
           Pair(DeployConfigKeys.projectKey, "project"),
+          Pair(DeployConfigKeys.versionKey, "1.0.0"),
           Pair(DeployConfigKeys.environmentKey, "env"),
           Pair(DeployConfigKeys.environments, "dev,prod"),
           Pair(DeployConfigKeys.refreshSecs, "10")
@@ -50,6 +51,7 @@ internal class DeployConfigStoreFindTest {
     val params = mapOf(
           Pair(DeployConfigKeys.dashboardEnabled, "true"),
           Pair(DeployConfigKeys.projectKey, "project"),
+          Pair(DeployConfigKeys.versionKey, "1.0.0"),
           Pair(DeployConfigKeys.environmentKey, "env"),
           Pair(DeployConfigKeys.environments, "dev,prod"),
           Pair(DeployConfigKeys.refreshSecs, "30")
@@ -69,6 +71,7 @@ internal class DeployConfigStoreFindTest {
     val params = mapOf(
           Pair(DeployConfigKeys.dashboardEnabled, "true"),
           Pair(DeployConfigKeys.projectKey, "project"),
+          Pair(DeployConfigKeys.versionKey, "1.0.0"),
           Pair(DeployConfigKeys.environmentKey, "env"),
           Pair(DeployConfigKeys.environments, "dev,prod"),
           Pair(DeployConfigKeys.refreshSecs, "10")
@@ -88,6 +91,7 @@ internal class DeployConfigStoreFindTest {
     val params = mapOf(
           Pair(DeployConfigKeys.dashboardEnabled, "true"),
           Pair(DeployConfigKeys.projectKey, "project"),
+          Pair(DeployConfigKeys.versionKey, "1.0.0"),
           Pair(DeployConfigKeys.environmentKey, "env"),
           Pair(DeployConfigKeys.environments, "dev,prod"),
           Pair(DeployConfigKeys.refreshSecs, "10")

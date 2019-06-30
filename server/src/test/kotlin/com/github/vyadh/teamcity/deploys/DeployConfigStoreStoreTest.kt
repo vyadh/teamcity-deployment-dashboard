@@ -11,6 +11,7 @@ internal class DeployConfigStoreStoreTest {
   private val config = DeployConfig(
         dashboardEnabled = "true",
         projectKey = "project",
+        versionKey = "1.0.0",
         environmentKey = "env",
         environments = "dev,prod",
         refreshSecs = "30"

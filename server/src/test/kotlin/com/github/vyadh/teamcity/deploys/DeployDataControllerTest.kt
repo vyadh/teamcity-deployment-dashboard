@@ -124,12 +124,16 @@ internal class DeployDataControllerTest {
     on { findProjectByExternalId(any()) } doReturn project
   }
 
-  private fun projectWith(environments: String = "DEV", refreshSecs: String = ""): SProject {
+  private fun projectWith(
+        environments: String = "DEV",
+        refreshSecs: String = ""): SProject {
+
     val type = buildType()
     val feature = mock<SProjectFeatureDescriptor> {
       on { parameters } doReturn DeployConfig(
             "true",
             "PROJECT",
+            "VERSION",
             "ENVIRONMENT",
             environments,
             refreshSecs).toMap()

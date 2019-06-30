@@ -48,6 +48,17 @@
         </td>
       </tr>
       <tr>
+        <td><label for="versionKey">Version Property:</label></td>
+        <td>
+          <forms:textField maxlength="100" name="versionKey" value="${versionKey}"/>
+          <span class="smallNote">
+            Property name for the version of the build being deployed, or blank to use the
+            TeamCity build number. Use no prefix for configuration parameters, 'env.' for environment
+            variables and 'system.' for system properties.
+          </span>
+        </td>
+      </tr>
+      <tr>
         <td><label for="environmentKey">Environment Property:</label></td>
         <td>
           <forms:textField maxlength="100" name="environmentKey" value="${environmentKey}"/>

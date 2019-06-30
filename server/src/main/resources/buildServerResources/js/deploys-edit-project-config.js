@@ -5,6 +5,7 @@ function saveDeploymentDashboardConfig(form, actionUrl) {
       projectExternalId: form.projectExternalId.value,
       dashboardEnabled: form.dashboardEnabled.checked,
       projectKey: form.projectKey.value,
+      versionKey: form.versionKey.value,
       environmentKey: form.environmentKey.value,
       environments: form.environments.value,
       refreshSecs: form.refreshSecs.value

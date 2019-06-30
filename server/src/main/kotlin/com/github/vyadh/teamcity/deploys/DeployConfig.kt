@@ -6,17 +6,19 @@ package com.github.vyadh.teamcity.deploys
  * @see DeployFinder for more information on project and environment keys.
  */
 data class DeployConfig(
-      val dashboardEnabled: String,
-      val projectKey: String,
-      val environmentKey: String,
-      val environments: String,
-      val refreshSecs: String
+      val dashboardEnabled: String = "false",
+      val projectKey: String = "",
+      val versionKey: String = "",
+      val environmentKey: String = "",
+      val environments: String = "",
+      val refreshSecs: String = ""
 ) {
 
   companion object {
     val disabled = DeployConfig(
           dashboardEnabled = "false",
           projectKey = "",
+          versionKey = "",
           environmentKey = "",
           environments = "",
           refreshSecs = ""
@@ -26,6 +28,7 @@ data class DeployConfig(
       return DeployConfig(
             dashboardEnabled = map.getOrDefault(DeployConfigKeys.dashboardEnabled,"false"),
             projectKey = map.getOrDefault(DeployConfigKeys.projectKey,""),
+            versionKey = map.getOrDefault(DeployConfigKeys.versionKey,""),
             environmentKey = map.getOrDefault(DeployConfigKeys.environmentKey,""),
             environments = map.getOrDefault(DeployConfigKeys.environments,""),
             refreshSecs = map.getOrDefault(DeployConfigKeys.refreshSecs, "")
@@ -41,6 +44,7 @@ data class DeployConfig(
     return mapOf(
           Pair(DeployConfigKeys.dashboardEnabled, dashboardEnabled),
           Pair(DeployConfigKeys.projectKey, projectKey),
+          Pair(DeployConfigKeys.versionKey, versionKey),
           Pair(DeployConfigKeys.environmentKey, environmentKey),
           Pair(DeployConfigKeys.environments, environments),
           Pair(DeployConfigKeys.refreshSecs, refreshSecs)

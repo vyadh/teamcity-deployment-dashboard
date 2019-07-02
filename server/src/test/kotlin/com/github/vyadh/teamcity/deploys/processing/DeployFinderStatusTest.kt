@@ -1,4 +1,4 @@
-package com.github.vyadh.teamcity.deploys
+package com.github.vyadh.teamcity.deploys.processing
 
 import com.github.vyadh.teamcity.deploys.buildfinder.MissingBuildFinder
 import com.nhaarman.mockitokotlin2.any

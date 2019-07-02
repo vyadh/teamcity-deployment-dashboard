@@ -1,4 +1,4 @@
-package com.github.vyadh.teamcity.deploys
+package com.github.vyadh.teamcity.deploys.processing
 
 import com.github.vyadh.teamcity.deploys.buildfinder.BuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.FoundBuildFinder

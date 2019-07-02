@@ -8,6 +8,8 @@ import jetbrains.buildServer.serverSide.*
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
+import java.util.stream.Collectors
+import java.util.stream.Stream
 
 /**
  * Queries deployment information from the project hierarchy based on the supplied
@@ -28,15 +30,15 @@ class DeployFinder(
       private val buildFinder: BuildFinder) {
 
   fun search(project: SProject): List<Deploy> {
-    return project
-          .buildTypes
+    return project.buildTypes.stream()
           .filter { isDeployment(it) }
           .flatMap { toDeploys(it) }
+          .collect(Collectors.toList())
   }
 
-  internal fun toDeploys(type: SBuildType): List<Deploy> {
+  internal fun toDeploys(type: SBuildType): Stream<Deploy> {
     val deploy = toDeployOrNull(type)
-    return if (deploy == null) emptyList() else listOf(deploy)
+    return if (deploy == null) Stream.empty() else Stream.of(deploy)
   }
 
   private fun toDeployOrNull(type: SBuildType): Deploy? {

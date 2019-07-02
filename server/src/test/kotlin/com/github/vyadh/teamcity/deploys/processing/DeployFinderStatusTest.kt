@@ -52,10 +52,10 @@ internal class DeployFinderStatusTest {
   }
 
   @Test
-  internal fun statusOfBuildWhenRunningNormal() {
+  internal fun statusOfBuildWhenRunningAndNormal() {
     val buildType = buildTypeWith(runningBuildWithStatus(Status.NORMAL))
 
-    val result = finder.toDeploys(buildType)[0].status
+    val result = finder.toDeploys(buildType).findAny().get().status
 
     assertThat(result).isEqualTo("RUNNING")
   }
@@ -64,7 +64,7 @@ internal class DeployFinderStatusTest {
   internal fun statusOfBuildWhenRunningAndFailing() {
     val buildType = buildTypeWith(runningBuildWithStatus(Status.FAILURE))
 
-    val result = finder.toDeploys(buildType)[0].status
+    val result = finder.toDeploys(buildType).findAny().get().status
 
     assertThat(result).isEqualTo("FAILING")
   }

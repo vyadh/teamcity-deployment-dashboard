@@ -1,8 +1,13 @@
 package com.github.vyadh.teamcity.deploys.processing
 
 import com.github.vyadh.teamcity.deploys.buildfinder.BuildFinder
-import com.github.vyadh.teamcity.deploys.buildfinder.FoundBuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.MissingBuildFinder
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.buildTypeWith
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.buildWith
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.deploymentBuildType
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.lastBuild
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.project
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.regularBuildType
 import com.nhaarman.mockitokotlin2.*
 import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.*
@@ -13,7 +18,7 @@ import java.util.*
 
 internal class DeployFinderTest {
 
-  private val links = links("http://link")
+  private val links = BuildMocks.links("http://link")
   private val projectKey = "PROJECT"
   private val versionKey = "VERSION"
   private val envKey = "ENV"
@@ -104,7 +109,7 @@ internal class DeployFinderTest {
       on { startDate } doReturn Date.from(started.toInstant())
       on { finishDate } doReturn Date.from(finished.toInstant())
     }
-    val deployLinks = links("http://host/build/1")
+    val deployLinks = BuildMocks.links("http://host/build/1")
     val deployFinder = finder(links = deployLinks)
 
     val result = deployFinder.toDeploy(build)
@@ -125,7 +130,7 @@ internal class DeployFinderTest {
       on { buildStatus } doReturn Status.NORMAL
       on { startDate } doReturn Date.from(started.toInstant())
     }
-    val deployLinks = links("http://host/build/2")
+    val deployLinks = BuildMocks.links("http://host/build/2")
     val deployFinder = finder(links = deployLinks)
 
     val result = deployFinder.toDeploy(build)
@@ -195,11 +200,6 @@ internal class DeployFinderTest {
     assertThat(result?.environment).isEqualTo("[missing]")
   }
 
-
-  private fun links(link: String): WebLinks = mock {
-    on { getViewResultsUrl(any()) } doReturn link
-  }
-
   private fun finder(
         links: WebLinks = this.links,
         projectKey: String = this.projectKey,
@@ -209,33 +209,6 @@ internal class DeployFinderTest {
   ): DeployFinder {
 
     return DeployFinder(links, projectKey, versionKey, envKey, buildFinder)
-  }
-
-  private fun lastBuild(build: SFinishedBuild? = null): BuildFinder =
-        if (build == null) MissingBuildFinder() else FoundBuildFinder(build)
-
-  private fun project(types: List<SBuildType>): SProject = mock {
-    on { buildTypes } doReturn types
-  }
-
-  private fun regularBuildType(): SBuildType = mock {
-    on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "REGULAR"
-  }
-
-  private fun deploymentBuildType(): SBuildType = mock {
-    on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "DEPLOYMENT"
-    on { runningBuilds } doReturn emptyList()
-  }
-
-  private fun buildTypeWith(build: SRunningBuild): SBuildType = mock {
-    on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "DEPLOYMENT"
-    on { runningBuilds } doReturn listOf(build)
-  }
-
-  private fun buildTypeWith(build: String, project: String): SBuildType = mock {
-    on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "DEPLOYMENT"
-    on { name } doReturn build
-    on { projectName } doReturn project
   }
 
   private fun buildWith(
@@ -250,16 +223,6 @@ internal class DeployFinderTest {
 
   private fun defaultParams() =
         mapOf(Pair(projectKey, "DefaultProject"))
-
-  private fun buildWith(type: SBuildType, buildNum: String, params: Map<String, String>): SBuild {
-    return mock {
-      on { buildOwnParameters } doReturn params
-      on { buildType } doReturn type
-      on { buildNumber } doReturn buildNum
-      on { buildStatus } doReturn Status.NORMAL
-      on { finishDate } doReturn Date()
-    }
-  }
 
   private fun properties(
         project: String? = null, version: String? = null, env: String? = null

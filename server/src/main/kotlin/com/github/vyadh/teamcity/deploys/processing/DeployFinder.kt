@@ -30,10 +30,11 @@ class DeployFinder(
       private val buildFinder: BuildFinder) {
 
   fun search(project: SProject): List<Deploy> {
-    return project.buildTypes.stream()
+    val deploys = project.buildTypes.stream()
           .filter { isDeployment(it) }
           .flatMap { toDeploys(it) }
-          .collect(Collectors.toList())
+
+    return DeployDuplicateResolver.resolve(deploys)
   }
 
   internal fun toDeploys(type: SBuildType): Stream<Deploy> {

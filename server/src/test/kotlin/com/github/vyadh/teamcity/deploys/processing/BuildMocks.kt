@@ -1,8 +1,8 @@
 package com.github.vyadh.teamcity.deploys.processing
 
 import com.github.vyadh.teamcity.deploys.buildfinder.BuildFinder
-import com.github.vyadh.teamcity.deploys.buildfinder.FoundBuildFinder
-import com.github.vyadh.teamcity.deploys.buildfinder.MissingBuildFinder
+import com.github.vyadh.teamcity.deploys.buildfinder.LastBuildFinder
+import com.github.vyadh.teamcity.deploys.buildfinder.SimulatedBuildHistory
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -16,8 +16,8 @@ object BuildMocks {
     on { getViewResultsUrl(any()) } doReturn link
   }
 
-  internal fun lastBuild(build: SFinishedBuild? = null): BuildFinder =
-        if (build == null) MissingBuildFinder() else FoundBuildFinder(build)
+  internal fun lastBuild(build: SFinishedBuild): BuildFinder =
+        LastBuildFinder(SimulatedBuildHistory(build))
 
   internal fun project(types: List<SBuildType>): SProject = mock {
     on { buildTypes } doReturn types
@@ -40,6 +40,7 @@ object BuildMocks {
   internal fun buildTypeWith(build: String, project: String): SBuildType = mock {
     on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "DEPLOYMENT"
     on { name } doReturn build
+    on { internalId } doReturn "internal-id"
     on { projectName } doReturn project
   }
 

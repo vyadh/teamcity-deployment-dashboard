@@ -1,7 +1,8 @@
 package com.github.vyadh.teamcity.deploys.processing
 
 import com.github.vyadh.teamcity.deploys.buildfinder.BuildFinder
-import com.github.vyadh.teamcity.deploys.buildfinder.MissingBuildFinder
+import com.github.vyadh.teamcity.deploys.buildfinder.LastBuildFinder
+import com.github.vyadh.teamcity.deploys.buildfinder.SimulatedBuildHistory
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.buildTypeWith
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.deploymentBuildType
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.lastBuild
@@ -14,6 +15,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.Instant
 import java.util.*
+import kotlin.collections.HashMap
 
 internal class DeployFinderDuplicateTest {
 
@@ -51,7 +53,7 @@ internal class DeployFinderDuplicateTest {
         projectKey: String = this.projectKey,
         versionKey: String = this.versionKey,
         envKey: String = this.envKey,
-        buildFinder: BuildFinder = MissingBuildFinder()
+        buildFinder: BuildFinder = LastBuildFinder(SimulatedBuildHistory.empty())
   ): DeployFinder {
 
     return DeployFinder(links, projectKey, versionKey, envKey, buildFinder)

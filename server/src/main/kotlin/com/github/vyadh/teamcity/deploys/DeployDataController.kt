@@ -1,6 +1,6 @@
 package com.github.vyadh.teamcity.deploys
 
-import com.github.vyadh.teamcity.deploys.buildfinder.HistoryBuildFinder
+import com.github.vyadh.teamcity.deploys.buildfinder.LastBuildFinder
 import com.github.vyadh.teamcity.deploys.processing.DeployFinder
 import jetbrains.buildServer.controllers.BaseController
 import jetbrains.buildServer.serverSide.BuildHistory
@@ -74,7 +74,7 @@ class DeployDataController(
   }
 
   private fun createFinder(config: DeployConfig): DeployFinder {
-    val historicalBuilds = HistoryBuildFinder(buildHistory)
+    val historicalBuilds = LastBuildFinder(buildHistory)
     return DeployFinder(
           links, config.projectKey, config.versionKey, config.environmentKey, historicalBuilds)
   }

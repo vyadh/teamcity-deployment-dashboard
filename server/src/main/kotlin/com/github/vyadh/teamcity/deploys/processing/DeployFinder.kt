@@ -43,7 +43,7 @@ class DeployFinder(
   }
 
   private fun toDeployOrNull(type: SBuildType): Deploy? {
-    val build = type.runningBuilds.firstOrNull() ?: buildFinder.find(type)
+    val build = buildFinder.find(type)
     return if (build == null) null else toDeploy(build)
   }
 

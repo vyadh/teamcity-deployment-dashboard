@@ -1,6 +1,7 @@
 package com.github.vyadh.teamcity.deploys.processing
 
-import com.github.vyadh.teamcity.deploys.buildfinder.MissingBuildFinder
+import com.github.vyadh.teamcity.deploys.buildfinder.LastBuildFinder
+import com.github.vyadh.teamcity.deploys.buildfinder.SimulatedBuildHistory
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -16,7 +17,8 @@ internal class DeployFinderStatusTest {
   private val projectKey = "PROJECT"
   private val versionKey = "VERSION"
   private val envKey = "ENV"
-  private val finder = DeployFinder(links, projectKey, versionKey, envKey, MissingBuildFinder())
+  private val finder = DeployFinder(
+        links, projectKey, versionKey, envKey, LastBuildFinder(SimulatedBuildHistory.empty()))
 
   @Test
   internal fun statusOfBuildWhenNormal() {

@@ -5,11 +5,13 @@ import jetbrains.buildServer.serverSide.SBuild
 import jetbrains.buildServer.serverSide.SBuildType
 import jetbrains.buildServer.serverSide.SFinishedBuild
 import jetbrains.buildServer.util.ItemProcessor
+import java.util.stream.Stream
 
 class LastBuildFinder(private val history: BuildHistory) : BuildFinder {
 
-  override fun find(type: SBuildType): SBuild? {
-    return running(type) ?: finished(type)
+  override fun find(type: SBuildType): Stream<SBuild> {
+    val build = running(type) ?: finished(type)
+    return if (build == null) Stream.empty() else Stream.of(build)
   }
 
   private fun running(type: SBuildType) = type.runningBuilds.firstOrNull()

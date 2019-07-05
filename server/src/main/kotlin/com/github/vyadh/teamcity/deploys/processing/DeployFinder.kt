@@ -8,7 +8,6 @@ import jetbrains.buildServer.serverSide.*
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
-import java.util.stream.Collectors
 import java.util.stream.Stream
 
 /**
@@ -38,19 +37,13 @@ class DeployFinder(
   }
 
   internal fun toDeploys(type: SBuildType): Stream<Deploy> {
-    val deploy = toDeployOrNull(type)
-    return if (deploy == null) Stream.empty() else Stream.of(deploy)
+    return buildFinder.find(type).flatMap { toDeploy(it) }
   }
 
-  private fun toDeployOrNull(type: SBuildType): Deploy? {
-    val build = buildFinder.find(type)
-    return if (build == null) null else toDeploy(build)
-  }
+  internal fun toDeploy(build: SBuild): Stream<Deploy> {
+    val projectName = projectName(build) ?: return Stream.of()
 
-  internal fun toDeploy(build: SBuild): Deploy? {
-    val projectName = projectName(build) ?: return null
-
-    return Deploy(
+    val deploy = Deploy(
           projectName,
           version(build),
           environmentName(build),
@@ -58,6 +51,8 @@ class DeployFinder(
           toStatus(build),
           links.getViewResultsUrl(build)
     )
+
+    return Stream.of(deploy)
   }
 
   private fun projectName(build: SBuild) =

@@ -114,14 +114,14 @@ internal class DeployFinderTest {
     val deployLinks = BuildMocks.links("http://host/build/1")
     val deployFinder = finder(links = deployLinks)
 
-    val result = deployFinder.toDeploy(build)
+    val result = deployFinder.toDeploy(build).findFirst().get()
 
-    assertThat(result?.project).isEqualTo("Dash")
-    assertThat(result?.environment).isEqualTo("DEV")
-    assertThat(result?.version).isEqualTo("1.1.0")
-    assertThat(result?.time).isEqualTo(finished)
-    assertThat(result?.status).isEqualTo("SUCCESS")
-    assertThat(result?.link).isEqualTo("http://host/build/1")
+    assertThat(result.project).isEqualTo("Dash")
+    assertThat(result.environment).isEqualTo("DEV")
+    assertThat(result.version).isEqualTo("1.1.0")
+    assertThat(result.time).isEqualTo(finished)
+    assertThat(result.status).isEqualTo("SUCCESS")
+    assertThat(result.link).isEqualTo("http://host/build/1")
   }
 
   @Test
@@ -135,14 +135,14 @@ internal class DeployFinderTest {
     val deployLinks = BuildMocks.links("http://host/build/2")
     val deployFinder = finder(links = deployLinks)
 
-    val result = deployFinder.toDeploy(build)
+    val result = deployFinder.toDeploy(build).findFirst().get()
 
-    assertThat(result?.project).isEqualTo("Dash")
-    assertThat(result?.version).isEqualTo("1.1.0")
-    assertThat(result?.environment).isEqualTo("DEV")
-    assertThat(result?.time).isEqualTo(started)
-    assertThat(result?.status).isEqualTo("RUNNING")
-    assertThat(result?.link).isEqualTo("http://host/build/2")
+    assertThat(result.project).isEqualTo("Dash")
+    assertThat(result.version).isEqualTo("1.1.0")
+    assertThat(result.environment).isEqualTo("DEV")
+    assertThat(result.time).isEqualTo(started)
+    assertThat(result.status).isEqualTo("RUNNING")
+    assertThat(result.link).isEqualTo("http://host/build/2")
   }
 
   @Test
@@ -150,9 +150,9 @@ internal class DeployFinderTest {
     val build = buildWith(project = "Project")
     val finder = finder(projectKey = "")
 
-    val result = finder.toDeploy(build)
+    val result = finder.toDeploy(build).findFirst().get()
 
-    assertThat(result?.project).isEqualTo("Project")
+    assertThat(result.project).isEqualTo("Project")
   }
 
   @Test
@@ -160,9 +160,9 @@ internal class DeployFinderTest {
     val build = buildWith(buildNumber = "1.2.3")
     val finder = finder(versionKey = "")
 
-    val result = finder.toDeploy(build)
+    val result = finder.toDeploy(build).findFirst().get()
 
-    assertThat(result?.version).isEqualTo("1.2.3")
+    assertThat(result.version).isEqualTo("1.2.3")
   }
 
   @Test
@@ -170,36 +170,36 @@ internal class DeployFinderTest {
     val build = buildWith(buildType = "Build")
     val finder = finder(envKey = "")
 
-    val result = finder.toDeploy(build)
+    val result = finder.toDeploy(build).findFirst().get()
 
-    assertThat(result?.environment).isEqualTo("Build")
+    assertThat(result.environment).isEqualTo("Build")
   }
 
   @Test
   internal fun toDeployReturnsNullWhenProjectParameterNotFound() {
     val build = buildWith(params = emptyMap())
 
-    val result = finder(projectKey = projectKey).toDeploy(build)
+    val result = finder(projectKey = projectKey).toDeploy(build).findFirst()
 
-    assertThat(result?.project).isNull()
+    assertThat(result).isEmpty
   }
 
   @Test
   internal fun toDeployShowsMissingWhenVersionParameterNotFound() {
     val build = buildWith(params = defaultParams())
 
-    val result = finder(versionKey = versionKey).toDeploy(build)
+    val result = finder(versionKey = versionKey).toDeploy(build).findFirst().get()
 
-    assertThat(result?.version).isEqualTo("[missing]")
+    assertThat(result.version).isEqualTo("[missing]")
   }
 
   @Test
   internal fun toDeployShowsAsMissingWhenEnvironmentParameterNotFound() {
     val build = buildWith(params = defaultParams())
 
-    val result = finder(envKey = envKey).toDeploy(build)
+    val result = finder(envKey = envKey).toDeploy(build).findFirst().get()
 
-    assertThat(result?.environment).isEqualTo("[missing]")
+    assertThat(result.environment).isEqualTo("[missing]")
   }
 
   private fun finder(

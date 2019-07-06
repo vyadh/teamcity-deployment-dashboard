@@ -59,15 +59,15 @@ internal class DeployFinderDuplicateTest {
     return DeployFinder(links, projectKey, versionKey, envKey, buildFinder)
   }
 
-  private fun properties(
-        project: String? = null, version: String? = null, env: String? = null
-  ): Map<String, String> {
+  @Suppress("SameParameterValue")
+  private fun properties(project: String, version: String, env: String):
+        Map<String, String> {
 
-    val map = HashMap<String, String>()
-    if (project != null) map[projectKey] = project
-    if (version != null) map[versionKey] = version
-    if (env != null) map[envKey] = env
-    return map
+    return mapOf(
+          Pair(projectKey, project),
+          Pair(versionKey, version),
+          Pair(envKey, env)
+    )
   }
 
 }

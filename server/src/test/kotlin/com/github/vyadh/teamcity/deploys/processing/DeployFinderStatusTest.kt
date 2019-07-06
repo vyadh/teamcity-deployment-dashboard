@@ -26,7 +26,7 @@ internal class DeployFinderStatusTest {
       on { buildStatus } doReturn Status.NORMAL
     }
 
-    val result = DeployFinder.toStatus(build)
+    val result = DeployExtractor.toStatus(build)
 
     assertThat(result).isEqualTo("SUCCESS")
   }
@@ -37,7 +37,7 @@ internal class DeployFinderStatusTest {
       on { buildStatus } doReturn Status.FAILURE
     }
 
-    val result = DeployFinder.toStatus(build)
+    val result = DeployExtractor.toStatus(build)
 
     assertThat(result).isEqualTo("FAILURE")
   }
@@ -48,7 +48,7 @@ internal class DeployFinderStatusTest {
       on { buildStatus } doReturn Status.UNKNOWN
     }
 
-    val result = DeployFinder.toStatus(build)
+    val result = DeployExtractor.toStatus(build)
 
     assertThat(result).isEqualTo("UNKNOWN")
   }

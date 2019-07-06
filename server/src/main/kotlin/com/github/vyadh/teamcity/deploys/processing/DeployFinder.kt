@@ -2,12 +2,7 @@ package com.github.vyadh.teamcity.deploys.processing
 
 import com.github.vyadh.teamcity.deploys.Deploy
 import com.github.vyadh.teamcity.deploys.buildfinder.BuildFinder
-import jetbrains.buildServer.RunningBuild
-import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.*
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
-import java.util.*
 import java.util.stream.Stream
 
 /**
@@ -36,83 +31,29 @@ class DeployFinder(
     return DeployDuplicateResolver.resolve(deploys)
   }
 
+  private fun isDeployment(type: SBuildType?): Boolean {
+    return type != null &&
+          type.getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) == "DEPLOYMENT"
+  }
+
   internal fun toDeploys(type: SBuildType): Stream<Deploy> {
     return buildFinder.find(type).flatMap { toDeploy(it) }
   }
 
   internal fun toDeploy(build: SBuild): Stream<Deploy> {
-    val projectName = projectName(build) ?: return Stream.of()
+    val projectName = DeployExtractor.projectName(build, projectKey) ?:
+      return Stream.of()
 
     val deploy = Deploy(
           projectName,
-          version(build),
-          environmentName(build),
-          timeOf(build),
-          toStatus(build),
+          DeployExtractor.version(build, versionKey),
+          DeployExtractor.environmentName(build, environmentKey),
+          DeployExtractor.timeOf(build),
+          DeployExtractor.toStatus(build),
           links.getViewResultsUrl(build)
     )
 
     return Stream.of(deploy)
-  }
-
-  private fun projectName(build: SBuild) =
-        param(build, projectKey) { build.buildType?.projectName }
-
-  private fun version(build: SBuild) =
-        param(build, versionKey) { build.buildNumber } ?: missing
-
-  private fun environmentName(build: SBuild) =
-        param(build, environmentKey) { build.buildType?.name } ?: missing
-
-  companion object {
-    const val missing = "[missing]"
-
-    private fun isDeployment(type: SBuildType?): Boolean {
-      return type != null &&
-            type.getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) == "DEPLOYMENT"
-    }
-
-    private fun param(build: SBuild, key: String, default: () -> String?): String? {
-      return if (key.isBlank()) default()
-             else build.buildOwnParameters[key]
-    }
-
-    private fun timeOf(build: SBuild): ZonedDateTime {
-      return toUTC(build.finishDate ?: build.startDate)
-    }
-
-    private fun toUTC(dateTime: Date): ZonedDateTime {
-      return ZonedDateTime.ofInstant(dateTime.toInstant(), ZoneOffset.UTC)
-    }
-
-    //todo indicate hanging or personal build
-    /**
-     * Values: SUCCESS, WARNING, FAILURE, ERROR, UNKNOWN
-     * @see jetbrains.buildServer.messages.Status
-     */
-    internal fun toStatus(build: SBuild): String {
-      val running = build is RunningBuild
-      val status = build.buildStatus
-
-      return when {
-         running && isFailing(status) -> "FAILING"
-         running && isSuccess(status) -> "RUNNING"
-         isFailing(status) -> "FAILURE"
-         isSuccess(status) -> "SUCCESS"
-         else -> "UNKNOWN"
-      }
-    }
-
-    private fun isFailing(status: Status): Boolean {
-      return when (status) {
-        Status.ERROR -> true
-        Status.FAILURE -> true
-        else -> false
-      }
-    }
-
-    private fun isSuccess(status: Status): Boolean =
-          status == Status.NORMAL
   }
 
 }

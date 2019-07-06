@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.*
+import java.time.Instant
 import java.util.*
 
 object BuildMocks {
@@ -37,6 +38,11 @@ object BuildMocks {
     on { runningBuilds } doReturn listOf(build)
   }
 
+  internal fun buildTypeWith(builds: List<SRunningBuild>): SBuildType = mock {
+    on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "DEPLOYMENT"
+    on { runningBuilds } doReturn builds
+  }
+
   internal fun buildTypeWith(build: String, project: String): SBuildType = mock {
     on { getOption(BuildTypeOptions.BT_BUILD_CONFIGURATION_TYPE) } doReturn "DEPLOYMENT"
     on { name } doReturn build
@@ -51,6 +57,32 @@ object BuildMocks {
       on { buildNumber } doReturn buildNum
       on { buildStatus } doReturn Status.NORMAL
       on { finishDate } doReturn Date()
+    }
+  }
+
+  internal fun running(
+        properties: Map<String, String> = emptyMap(),
+        status: Status = Status.NORMAL,
+        start: Date = Date.from(Instant.parse("2019-01-01T00:00:00.00Z"))
+  ): SRunningBuild {
+
+    return mock {
+      on { buildOwnParameters } doReturn properties
+      on { buildStatus } doReturn status
+      on { startDate } doReturn start
+    }
+  }
+
+  internal fun finished(
+        properties: Map<String, String> = emptyMap(),
+        status: Status = Status.NORMAL,
+        finish: Date = Date.from(Instant.parse("2019-01-01T00:00:00.00Z"))
+  ): SFinishedBuild {
+
+    return mock {
+      on { buildOwnParameters } doReturn properties
+      on { buildStatus } doReturn status
+      on { finishDate } doReturn finish
     }
   }
 

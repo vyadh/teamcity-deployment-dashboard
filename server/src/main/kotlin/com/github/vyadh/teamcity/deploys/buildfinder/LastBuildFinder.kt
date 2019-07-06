@@ -7,6 +7,11 @@ import jetbrains.buildServer.serverSide.SFinishedBuild
 import jetbrains.buildServer.util.ItemProcessor
 import java.util.stream.Stream
 
+/**
+ * Gets a single build for a configuration, the running build if there is one
+ * or otherwise the last finished build. Fast method for configurations that
+ * have one configuration per environment.
+ */
 class LastBuildFinder(private val history: BuildHistory) : BuildFinder {
 
   override fun find(type: SBuildType): Stream<SBuild> {

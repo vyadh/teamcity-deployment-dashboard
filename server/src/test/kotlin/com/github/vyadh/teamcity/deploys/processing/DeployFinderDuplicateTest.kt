@@ -15,7 +15,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.Instant
 import java.util.*
-import kotlin.collections.HashMap
 
 internal class DeployFinderDuplicateTest {
 
@@ -60,9 +59,7 @@ internal class DeployFinderDuplicateTest {
   }
 
   @Suppress("SameParameterValue")
-  private fun properties(project: String, version: String, env: String):
-        Map<String, String> {
-
+  private fun properties(project: String, version: String, env: String): Map<String, String> {
     return mapOf(
           Pair(projectKey, project),
           Pair(versionKey, version),

@@ -8,13 +8,6 @@ import java.util.stream.Stream
 /**
  * Queries deployment information from the project hierarchy based on the supplied
  * configuration.
- *
- * @param projectKey configuration property name to lookup the project name or blank
- * if the project name itself should be used.
- * @param versionKey configuration property name to lookup the version number or blank
- * if the TeamCity build number should be used.
- * @param environmentKey configuration property name to lookup the environment name
- * or blank if the build type name should be used.
  */
 class DeployFinder(
       private val links: WebLinks,

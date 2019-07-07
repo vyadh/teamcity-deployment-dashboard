@@ -1,5 +1,6 @@
 package com.github.vyadh.teamcity.deploys
 
+import com.github.vyadh.teamcity.deploys.buildfinder.BuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.LastBuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.MultiBuildFinder
 import com.github.vyadh.teamcity.deploys.processing.DeployFinder
@@ -47,7 +48,7 @@ class DeployDataController(
     val config = configStore.findAvailable(project)
     if (!config.isEnabled()) return ModelAndView(path, emptyModel())
 
-    val deploys = createFinder(config).search(project)
+    val deploys = createDeployFinder(config).search(project)
     val model = populatedModel(deploys, config)
 
     return ModelAndView(path, model)
@@ -74,11 +75,20 @@ class DeployDataController(
     )
   }
 
-  private fun createFinder(config: DeployConfig): DeployFinder {
-//    val historicalBuilds = MultiBuildFinder(buildHistory, config.environmentsAsList())
-    val historicalBuilds = LastBuildFinder(buildHistory)
+  private fun createDeployFinder(config: DeployConfig): DeployFinder {
     return DeployFinder(
-          links, config.projectKey, config.versionKey, config.environmentKey, historicalBuilds)
+          links,
+          config.projectKey,
+          config.versionKey,
+          config.environmentKey,
+          createBuildFinder(config)
+    )
+  }
+
+  private fun createBuildFinder(config: DeployConfig): BuildFinder {
+    return if (config.isMultiEnvConfig())
+      MultiBuildFinder(buildHistory, config.environmentKey, config.environmentsAsList())
+    else LastBuildFinder(buildHistory)
   }
 
   companion object {

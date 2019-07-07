@@ -10,5 +10,6 @@ object DeployConfigKeys {
   const val environmentKey = "environmentKey"
   const val environments = "environments"
   const val refreshSecs = "refreshSecs"
+  const val multiEnvConfig = "multiEnvConfig"
 
 }

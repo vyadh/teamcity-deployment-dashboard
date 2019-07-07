@@ -8,7 +8,8 @@ function saveDeploymentDashboardConfig(form, actionUrl) {
       versionKey: form.versionKey.value,
       environmentKey: form.environmentKey.value,
       environments: form.environments.value,
-      refreshSecs: form.refreshSecs.value
+      refreshSecs: form.refreshSecs.value,
+      multiEnvConfig: form.multiEnvConfig.checked
   }
 
   console.log("Saving deploy config for " + form.projectExternalId + ": " + JSON.stringify(parameters))

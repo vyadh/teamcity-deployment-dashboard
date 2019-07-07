@@ -47,6 +47,7 @@
           </span>
         </td>
       </tr>
+
       <tr>
         <td><label for="versionKey">Version Property:</label></td>
         <td>
@@ -58,6 +59,7 @@
           </span>
         </td>
       </tr>
+
       <tr>
         <td><label for="environmentKey">Environment Property:</label></td>
         <td>
@@ -69,6 +71,7 @@
           </span>
         </td>
       </tr>
+
       <tr>
         <td><label for="environments">Environments:</label></td>
         <td>
@@ -79,6 +82,7 @@
           </span>
         </td>
       </tr>
+
       <tr>
         <td><label for="refreshSecs">Refresh Interval:</label></td>
         <td>
@@ -91,6 +95,23 @@
           </forms:select>
           <span class="smallNote">
             Polling interval between fetching new deployment build information, in seconds.
+          </span>
+        </td>
+      </tr>
+
+      <tr>
+        <td/>
+        <td>
+          <forms:checkbox
+                  name="multiEnvConfig"
+                  checked="${multiEnvConfig}"/>
+          <label for="multiEnvConfig">Multi-Environment Build Configurations</label>
+          <span class="smallNote">
+            Enable this option only if deploying to more than one environment from the same build
+            configuration. This requires a deeper scan of the build history and so may cause
+            performance issues. The plugin will stop scanning a build configuration when deployments
+            for all configured environments have been found, which should mitigate issues in this
+            common case.
           </span>
         </td>
       </tr>

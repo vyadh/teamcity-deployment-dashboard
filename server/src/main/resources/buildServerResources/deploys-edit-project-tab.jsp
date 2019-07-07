@@ -100,18 +100,17 @@
       </tr>
 
       <tr>
-        <td/>
+        <td>Build Scanning:</td>
         <td>
           <forms:checkbox
                   name="multiEnvConfig"
                   checked="${multiEnvConfig}"/>
           <label for="multiEnvConfig">Multi-Environment Build Configurations</label>
           <span class="smallNote">
-            Enable this option only if deploying to more than one environment from the same build
-            configuration. This requires a deeper scan of the build history and so may cause
-            performance issues. The plugin will stop scanning a build configuration when deployments
-            for all configured environments have been found, which should mitigate issues in this
-            common case.
+                Enable this option only if deploying to more than one environment from the same build
+                configuration. This requires a deeper scan of the build history and so may cause
+                performance issues. The plugin will stop scanning a build configuration when deployments
+                for all configured environments have been found, which should mitigate most issues.
           </span>
         </td>
       </tr>

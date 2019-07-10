@@ -13,7 +13,7 @@ class DeployFinder(
       private val links: WebLinks,
       private val projectKey: String,
       private val versionKey: String,
-      private val environmentKey: String,
+      private val environment: DeployEnvironment,
       private val buildFinder: BuildFinder) {
 
   fun search(project: SProject): List<Deploy> {
@@ -40,7 +40,7 @@ class DeployFinder(
     val deploy = Deploy(
           projectName,
           DeployExtractor.version(build, versionKey),
-          DeployExtractor.environmentName(build, environmentKey),
+          environment.name(build),
           DeployExtractor.timeOf(build),
           DeployExtractor.toStatus(build),
           links.getViewResultsUrl(build)

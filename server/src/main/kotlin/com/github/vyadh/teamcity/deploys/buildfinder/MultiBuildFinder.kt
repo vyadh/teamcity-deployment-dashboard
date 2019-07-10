@@ -1,6 +1,6 @@
 package com.github.vyadh.teamcity.deploys.buildfinder
 
-import com.github.vyadh.teamcity.deploys.processing.DeployExtractor.environmentName
+import com.github.vyadh.teamcity.deploys.processing.DeployEnvironment
 import jetbrains.buildServer.serverSide.*
 import jetbrains.buildServer.util.ItemProcessor
 import java.util.*
@@ -21,8 +21,7 @@ import kotlin.collections.ArrayList
  */
 class MultiBuildFinder(
       private val history: BuildHistory,
-      private val environmentKey: String,
-      private val environments: List<String>
+      private val environment: DeployEnvironment
 ) : BuildFinder {
 
   companion object {
@@ -36,11 +35,11 @@ class MultiBuildFinder(
 
   private fun running(type: SBuildType): Stream<SRunningBuild> {
     return type.runningBuilds.stream()
-          .filter { environments.contains(environmentName(it, environmentKey)) }
+          .filter { environment.contains(it) }
   }
 
   private fun finished(type: SBuildType): Stream<SFinishedBuild> {
-    val processor = MatchingItemProcessor(environmentKey, environments)
+    val processor = MatchingItemProcessor(environment)
 
     history.processEntries(
           type.internalId,
@@ -54,16 +53,14 @@ class MultiBuildFinder(
     return processor.builds.stream()
   }
 
-  class MatchingItemProcessor(val environmentKey: String, environments: List<String>) :
-        ItemProcessor<SFinishedBuild> {
-
+  class MatchingItemProcessor(val environment: DeployEnvironment): ItemProcessor<SFinishedBuild> {
     val builds = ArrayList<SFinishedBuild>(100)
 
-    private val leftToMatch = LinkedList(environments)
+    private val leftToMatch = LinkedList(environment.list)
     private var countDown = upperBound
 
     override fun processItem(build: SFinishedBuild): Boolean {
-      val env = environmentName(build, environmentKey)
+      val env = environment.name(build)
 
       if (leftToMatch.contains(env)) {
         builds.add(build)

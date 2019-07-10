@@ -3,6 +3,7 @@ package com.github.vyadh.teamcity.deploys
 import com.github.vyadh.teamcity.deploys.buildfinder.BuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.LastBuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.MultiBuildFinder
+import com.github.vyadh.teamcity.deploys.processing.DeployEnvironment
 import com.github.vyadh.teamcity.deploys.processing.DeployFinder
 import jetbrains.buildServer.controllers.BaseController
 import jetbrains.buildServer.serverSide.BuildHistory
@@ -76,19 +77,22 @@ class DeployDataController(
   }
 
   private fun createDeployFinder(config: DeployConfig): DeployFinder {
+    val environment = DeployEnvironment(config.environmentKey, config.environmentsAsList())
+
     return DeployFinder(
           links,
           config.projectKey,
           config.versionKey,
-          config.environmentKey,
-          createBuildFinder(config)
+          environment,
+          createBuildFinder(config, environment)
     )
   }
 
-  private fun createBuildFinder(config: DeployConfig): BuildFinder {
+  private fun createBuildFinder(config: DeployConfig, environment: DeployEnvironment): BuildFinder {
     return if (config.isMultiEnvConfig())
-      MultiBuildFinder(buildHistory, config.environmentKey, config.environmentsAsList())
-    else LastBuildFinder(buildHistory)
+      MultiBuildFinder(buildHistory, environment)
+    else
+      LastBuildFinder(buildHistory)
   }
 
   companion object {

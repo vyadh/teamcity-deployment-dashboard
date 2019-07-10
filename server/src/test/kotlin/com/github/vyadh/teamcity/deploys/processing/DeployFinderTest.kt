@@ -23,6 +23,7 @@ internal class DeployFinderTest {
   private val projectKey = "PROJECT"
   private val versionKey = "VERSION"
   private val envKey = "ENV"
+  private val environment = DeployEnvironment(envKey, listOf("DEV", "UAT", "PRD"))
 
   @Test
   fun searchWithNoBuildTypes() {
@@ -77,14 +78,14 @@ internal class DeployFinderTest {
   }
 
   @Test
-  fun searchWithMultipleBuilds() {
+  fun searchWithMultipleBuildsOfDifferentCase() {
     val buildFinished = mock<SFinishedBuild> {
-      on { buildOwnParameters } doReturn properties("Ruminous", "1.0", "PRD")
+      on { buildOwnParameters } doReturn properties("Ruminous", "1.0", "prd")
       on { buildStatus } doReturn Status.NORMAL
       on { finishDate } doReturn Date()
     }
     val buildRunning = mock<SRunningBuild> {
-      on { buildOwnParameters } doReturn properties("Frustrum", "1.0", "DEV")
+      on { buildOwnParameters } doReturn properties("Frustrum", "1.0", "Dev")
       on { buildStatus } doReturn Status.NORMAL
       on { startDate } doReturn Date()
     }
@@ -168,7 +169,7 @@ internal class DeployFinderTest {
   @Test
   internal fun toDeployWhenEnvironmentKeyBlank() {
     val build = buildWith(buildType = "Build")
-    val finder = finder(envKey = "")
+    val finder = finder(environment = DeployEnvironment("", listOf("DEV")))
 
     val result = finder.toDeploy(build).findFirst().get()
 
@@ -196,8 +197,9 @@ internal class DeployFinderTest {
   @Test
   internal fun toDeployShowsAsMissingWhenEnvironmentParameterNotFound() {
     val build = buildWith(params = defaultParams())
+    val env = DeployEnvironment(envKey, emptyList())
 
-    val result = finder(envKey = envKey).toDeploy(build).findFirst().get()
+    val result = finder(environment = env).toDeploy(build).findFirst().get()
 
     assertThat(result.environment).isEqualTo("[missing]")
   }
@@ -206,11 +208,11 @@ internal class DeployFinderTest {
         links: WebLinks = this.links,
         projectKey: String = this.projectKey,
         versionKey: String = this.versionKey,
-        envKey: String = this.envKey,
+        environment: DeployEnvironment = this.environment,
         buildFinder: BuildFinder = LastBuildFinder(SimulatedBuildHistory.empty())
   ): DeployFinder {
 
-    return DeployFinder(links, projectKey, versionKey, envKey, buildFinder)
+    return DeployFinder(links, projectKey, versionKey, environment, buildFinder)
   }
 
   private fun buildWith(

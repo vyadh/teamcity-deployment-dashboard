@@ -18,7 +18,8 @@ internal class DeployFinderStatusTest {
   private val versionKey = "VERSION"
   private val envKey = "ENV"
   private val finder = DeployFinder(
-        links, projectKey, versionKey, envKey, LastBuildFinder(SimulatedBuildHistory.empty()))
+        links, projectKey, versionKey, DeployEnvironment(envKey, listOf("ENV")),
+        LastBuildFinder(SimulatedBuildHistory.empty()))
 
   @Test
   internal fun statusOfBuildWhenNormal() {

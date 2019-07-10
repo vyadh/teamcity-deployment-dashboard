@@ -22,6 +22,7 @@ internal class DeployFinderDuplicateTest {
   private val projectKey = "PROJECT"
   private val versionKey = "VERSION"
   private val envKey = "ENV"
+  private val environment = DeployEnvironment(envKey, listOf("PRD"))
 
   @Test
   fun searchSeesOnlyLastDatedBuild() {
@@ -48,14 +49,12 @@ internal class DeployFinderDuplicateTest {
   }
 
   private fun finder(
-        links: WebLinks = this.links,
         projectKey: String = this.projectKey,
         versionKey: String = this.versionKey,
-        envKey: String = this.envKey,
         buildFinder: BuildFinder = LastBuildFinder(SimulatedBuildHistory.empty())
   ): DeployFinder {
 
-    return DeployFinder(links, projectKey, versionKey, envKey, buildFinder)
+    return DeployFinder(links, projectKey, versionKey, environment, buildFinder)
   }
 
   @Suppress("SameParameterValue")

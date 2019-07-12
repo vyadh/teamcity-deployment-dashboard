@@ -3,6 +3,7 @@ package com.github.vyadh.teamcity.deploys
 import com.github.vyadh.teamcity.deploys.buildfinder.BuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.LastBuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.MultiBuildFinder
+import com.github.vyadh.teamcity.deploys.buildparams.ObfuscatedParameterExtractor
 import com.github.vyadh.teamcity.deploys.processing.BuildAttributeConverter
 import com.github.vyadh.teamcity.deploys.processing.DeployEnvironment
 import com.github.vyadh.teamcity.deploys.processing.DeployFinder
@@ -11,6 +12,7 @@ import jetbrains.buildServer.serverSide.BuildHistory
 import jetbrains.buildServer.serverSide.ProjectManager
 import jetbrains.buildServer.serverSide.SProject
 import jetbrains.buildServer.serverSide.WebLinks
+import jetbrains.buildServer.serverSide.parameters.types.PasswordsSearcher
 import jetbrains.buildServer.web.openapi.PluginDescriptor
 import jetbrains.buildServer.web.openapi.WebControllerManager
 import org.springframework.web.servlet.ModelAndView
@@ -27,10 +29,12 @@ class DeployDataController(
       private val pluginDescriptor: PluginDescriptor,
       private val links: WebLinks,
       private val buildHistory: BuildHistory,
+      passwordsSearcher: PasswordsSearcher,
       webManager: WebControllerManager
 ) : BaseController() {
 
   private val configStore = DeployConfigStore()
+  private val converter = BuildAttributeConverter(ObfuscatedParameterExtractor(passwordsSearcher))
   private val appPath = "/app/deployment-dashboard/**"
   private val jspPath = "deploys-project-data.jsp"
 
@@ -78,7 +82,6 @@ class DeployDataController(
   }
 
   private fun createDeployFinder(config: DeployConfig): DeployFinder {
-    val converter = BuildAttributeConverter()
     val environment = DeployEnvironment(config.environmentKey, config.environmentsAsList(), converter)
 
     return DeployFinder(

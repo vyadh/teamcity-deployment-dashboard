@@ -3,6 +3,11 @@ package com.github.vyadh.teamcity.deploys.buildparams
 import jetbrains.buildServer.serverSide.SBuild
 import jetbrains.buildServer.serverSide.parameters.types.PasswordsSearcher
 
+/**
+ * Ensure that any parameter read from the build is obfuscated using the passwords
+ * configured in this build. Makes it harder to expose passwords configured in parent
+ * projects by child projects where a user may have more permissions.
+ */
 class ObfuscatedParameterExtractor(private val passwordsSearcher: PasswordsSearcher) :
       BasicParameterExtractor() {
 

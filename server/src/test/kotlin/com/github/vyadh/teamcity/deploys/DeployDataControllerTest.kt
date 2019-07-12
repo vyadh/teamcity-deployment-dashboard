@@ -3,6 +3,7 @@ package com.github.vyadh.teamcity.deploys
 import com.nhaarman.mockitokotlin2.*
 import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.*
+import jetbrains.buildServer.serverSide.parameters.types.PasswordsSearcher
 import jetbrains.buildServer.util.ItemProcessor
 import jetbrains.buildServer.web.openapi.PluginDescriptor
 import jetbrains.buildServer.web.openapi.WebControllerManager
@@ -98,13 +99,37 @@ internal class DeployDataControllerTest {
     assertThat(result).isEqualTo("")
   }
 
+  @Test
+  internal fun secretsAreObfuscatedWhenPresent() {
+    val project = projectWith(environments = "")
+    val build = build("Some[passwd]Project", "DEV", "Ver[passwd]sion")
+    val controller = controllerWith(
+          projectManager(project), buildHistory(build), passwordsSearcher("passwd"))
 
-  private fun controllerWith(projectManager: ProjectManager, buildHistory: BuildHistory): DeployDataController {
-    return DeployDataController(projectManager, pluginDescriptor(), links, buildHistory, webManager)
+    val result = controller.doHandle(anyRequest(), anyResponse())
+
+    val deploy = deploys(result)?.first()!!
+    assertThat(deploy.project).isEqualTo("Some[******]Project")
+    assertThat(deploy.version).isEqualTo("Ver[******]sion")
+    assertThat(deploy.environment).isEqualTo("DEV")
+  }
+
+
+  private fun controllerWith(
+        projectManager: ProjectManager,
+        buildHistory: BuildHistory,
+        passwordsSearcher: PasswordsSearcher = passwordsSearcher()): DeployDataController {
+
+    return DeployDataController(
+          projectManager, pluginDescriptor(), links, buildHistory, passwordsSearcher, webManager)
   }
 
   private fun pluginDescriptor(): PluginDescriptor = mock {
     on { getPluginResourcesPath(any()) } doReturn "path"
+  }
+
+  private fun passwordsSearcher(vararg passwords: String): PasswordsSearcher = mock {
+    on { collectPasswords(any()) } doReturn setOf(*passwords)
   }
 
   private fun anyRequest() = requestWithURI("http://host/app/deployment-dashboard/id")
@@ -175,8 +200,11 @@ internal class DeployDataControllerTest {
   }
 
   @Suppress("SameParameterValue")
-  private fun build(name: String, env: String): SFinishedBuild = mock {
-    on { buildOwnParameters } doReturn mapOf(Pair("PROJECT", name), Pair("ENVIRONMENT", env))
+  private fun build(name: String, env: String, version: String = ""): SFinishedBuild = mock {
+    on { buildOwnParameters } doReturn mapOf(
+          Pair("PROJECT", name),
+          Pair("VERSION", version),
+          Pair("ENVIRONMENT", env))
     on { buildNumber } doReturn "1.0"
     on { buildStatus } doReturn Status.NORMAL
     on { finishDate } doReturn Date()

@@ -1,5 +1,6 @@
 package com.github.vyadh.teamcity.deploys.processing
 
+import com.github.vyadh.teamcity.deploys.buildparams.BasicParameterExtractor
 import jetbrains.buildServer.RunningBuild
 import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.SBuild
@@ -13,20 +14,16 @@ import java.util.*
 object DeployExtractor {
 
   private const val missing = "[missing]"
+  private val params = BasicParameterExtractor()
 
   fun projectName(build: SBuild, projectKey: String) =
-        param(build, projectKey) { build.buildType?.projectName }
+        params.extract(build, projectKey) { build.buildType?.projectName }
 
   fun version(build: SBuild, versionKey: String) =
-        param(build, versionKey) { build.buildNumber } ?: missing
+        params.extract(build, versionKey) { build.buildNumber } ?: missing
 
   fun environmentName(build: SBuild, environmentKey: String) =
-        param(build, environmentKey) { build.buildType?.name } ?: missing
-
-  private fun param(build: SBuild, key: String, default: () -> String?): String? {
-    return if (key.isBlank()) default()
-    else build.buildOwnParameters[key]
-  }
+        params.extract(build, environmentKey) { build.buildType?.name } ?: missing
 
   fun timeOf(build: SBuild): ZonedDateTime {
     return toUTC(build.finishDate ?: build.startDate)

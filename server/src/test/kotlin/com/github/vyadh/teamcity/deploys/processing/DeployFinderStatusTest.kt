@@ -17,9 +17,10 @@ internal class DeployFinderStatusTest {
   private val projectKey = "PROJECT"
   private val versionKey = "VERSION"
   private val envKey = "ENV"
+  private val converter = BuildAttributeConverter()
   private val finder = DeployFinder(
-        links, projectKey, versionKey, DeployEnvironment(envKey, listOf("ENV")),
-        LastBuildFinder(SimulatedBuildHistory.empty()))
+        links, projectKey, versionKey, DeployEnvironment(envKey, listOf("ENV"), converter),
+        LastBuildFinder(SimulatedBuildHistory.empty()), converter)
 
   @Test
   internal fun statusOfBuildWhenNormal() {
@@ -27,7 +28,7 @@ internal class DeployFinderStatusTest {
       on { buildStatus } doReturn Status.NORMAL
     }
 
-    val result = DeployExtractor.toStatus(build)
+    val result = converter.toStatus(build)
 
     assertThat(result).isEqualTo("SUCCESS")
   }
@@ -38,7 +39,7 @@ internal class DeployFinderStatusTest {
       on { buildStatus } doReturn Status.FAILURE
     }
 
-    val result = DeployExtractor.toStatus(build)
+    val result = converter.toStatus(build)
 
     assertThat(result).isEqualTo("FAILURE")
   }
@@ -49,7 +50,7 @@ internal class DeployFinderStatusTest {
       on { buildStatus } doReturn Status.UNKNOWN
     }
 
-    val result = DeployExtractor.toStatus(build)
+    val result = converter.toStatus(build)
 
     assertThat(result).isEqualTo("UNKNOWN")
   }

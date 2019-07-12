@@ -14,7 +14,8 @@ class DeployFinder(
       private val projectKey: String,
       private val versionKey: String,
       private val environment: DeployEnvironment,
-      private val buildFinder: BuildFinder) {
+      private val buildFinder: BuildFinder,
+      private val converter: BuildAttributeConverter) {
 
   fun search(project: SProject): List<Deploy> {
     val deploys = project.buildTypes.stream()
@@ -34,15 +35,15 @@ class DeployFinder(
   }
 
   internal fun toDeploy(build: SBuild): Stream<Deploy> {
-    val projectName = DeployExtractor.projectName(build, projectKey) ?:
+    val projectName = converter.projectName(build, projectKey) ?:
       return Stream.of()
 
     val deploy = Deploy(
           projectName,
-          DeployExtractor.version(build, versionKey),
+          converter.version(build, versionKey),
           environment.name(build),
-          DeployExtractor.timeOf(build),
-          DeployExtractor.toStatus(build),
+          converter.timeOf(build),
+          converter.toStatus(build),
           links.getViewResultsUrl(build)
     )
 

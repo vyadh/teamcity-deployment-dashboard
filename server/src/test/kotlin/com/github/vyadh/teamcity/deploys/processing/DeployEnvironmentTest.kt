@@ -13,12 +13,13 @@ class DeployEnvironmentTest {
 
   private val envKey = "ENVIRONMENT"
   private val noKey = ""
+  private val converter = BuildAttributeConverter()
 
   @Test
   fun environmentNameFromBuildType() {
     val build = buildWithTypeName("DEV")
 
-    val env = DeployEnvironment(noKey, listOf("DEV")).name(build)
+    val env = DeployEnvironment(noKey, listOf("DEV"), converter).name(build)
 
     assertThat(env).isEqualTo("DEV")
   }
@@ -27,7 +28,7 @@ class DeployEnvironmentTest {
   fun environmentNameFromBuildProperty() {
     val build = build("DEV")
 
-    val env = DeployEnvironment(envKey, listOf("DEV")).name(build)
+    val env = DeployEnvironment(envKey, listOf("DEV"), converter).name(build)
 
     assertThat(env).isEqualTo("DEV")
   }
@@ -36,7 +37,7 @@ class DeployEnvironmentTest {
   fun environmentIsNormalisedToSuppliedList() {
     val build = build("dev")
 
-    val env = DeployEnvironment(envKey, listOf("DEV")).name(build)
+    val env = DeployEnvironment(envKey, listOf("DEV"), converter).name(build)
 
     assertThat(env).isEqualTo("DEV")
   }
@@ -45,14 +46,14 @@ class DeployEnvironmentTest {
   fun environmentIsNotNormalisedWhenMissingFromSuppliedList() {
     val build = build("prod")
 
-    val env = DeployEnvironment(envKey, listOf("DEV", "PRD")).name(build)
+    val env = DeployEnvironment(envKey, listOf("DEV", "PRD"), converter).name(build)
 
     assertThat(env).isEqualTo("prod")
   }
 
   @Test
   fun environmentsAreAllNormalisedToSuppliedList() {
-    val environments = DeployEnvironment(envKey, listOf("Dev", "UAT", "Prod"))
+    val environments = DeployEnvironment(envKey, listOf("Dev", "UAT", "Prod"), converter)
 
     assertThat(environments.name(build("DEV"))).isEqualTo("Dev")
     assertThat(environments.name(build("uat"))).isEqualTo("UAT")
@@ -61,7 +62,7 @@ class DeployEnvironmentTest {
 
   @Test
   fun indicateWhenEnvironmentIsKnown() {
-    val environments = DeployEnvironment(envKey, listOf("Dev", "UAT", "Prod"))
+    val environments = DeployEnvironment(envKey, listOf("Dev", "UAT", "Prod"), converter)
 
     assertThat(environments.contains(build("DEV"))).isTrue()
     assertThat(environments.contains(build("uat"))).isTrue()

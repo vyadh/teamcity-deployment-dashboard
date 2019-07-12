@@ -23,7 +23,8 @@ internal class DeployFinderTest {
   private val projectKey = "PROJECT"
   private val versionKey = "VERSION"
   private val envKey = "ENV"
-  private val environment = DeployEnvironment(envKey, listOf("DEV", "UAT", "PRD"))
+  private val converter = BuildAttributeConverter()
+  private val environment = DeployEnvironment(envKey, listOf("DEV", "UAT", "PRD"), converter)
 
   @Test
   fun searchWithNoBuildTypes() {
@@ -169,7 +170,7 @@ internal class DeployFinderTest {
   @Test
   internal fun toDeployWhenEnvironmentKeyBlank() {
     val build = buildWith(buildType = "Build")
-    val finder = finder(environment = DeployEnvironment("", listOf("DEV")))
+    val finder = finder(environment = DeployEnvironment("", listOf("DEV"), converter))
 
     val result = finder.toDeploy(build).findFirst().get()
 
@@ -197,7 +198,7 @@ internal class DeployFinderTest {
   @Test
   internal fun toDeployShowsAsMissingWhenEnvironmentParameterNotFound() {
     val build = buildWith(params = defaultParams())
-    val env = DeployEnvironment(envKey, emptyList())
+    val env = DeployEnvironment(envKey, emptyList(), converter)
 
     val result = finder(environment = env).toDeploy(build).findFirst().get()
 
@@ -212,7 +213,7 @@ internal class DeployFinderTest {
         buildFinder: BuildFinder = LastBuildFinder(SimulatedBuildHistory.empty())
   ): DeployFinder {
 
-    return DeployFinder(links, projectKey, versionKey, environment, buildFinder)
+    return DeployFinder(links, projectKey, versionKey, environment, buildFinder, converter)
   }
 
   private fun buildWith(

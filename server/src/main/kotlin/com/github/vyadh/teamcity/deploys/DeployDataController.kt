@@ -3,6 +3,7 @@ package com.github.vyadh.teamcity.deploys
 import com.github.vyadh.teamcity.deploys.buildfinder.BuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.LastBuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.MultiBuildFinder
+import com.github.vyadh.teamcity.deploys.processing.BuildAttributeConverter
 import com.github.vyadh.teamcity.deploys.processing.DeployEnvironment
 import com.github.vyadh.teamcity.deploys.processing.DeployFinder
 import jetbrains.buildServer.controllers.BaseController
@@ -77,14 +78,16 @@ class DeployDataController(
   }
 
   private fun createDeployFinder(config: DeployConfig): DeployFinder {
-    val environment = DeployEnvironment(config.environmentKey, config.environmentsAsList())
+    val converter = BuildAttributeConverter()
+    val environment = DeployEnvironment(config.environmentKey, config.environmentsAsList(), converter)
 
     return DeployFinder(
           links,
           config.projectKey,
           config.versionKey,
           environment,
-          createBuildFinder(config, environment)
+          createBuildFinder(config, environment),
+          converter
     )
   }
 

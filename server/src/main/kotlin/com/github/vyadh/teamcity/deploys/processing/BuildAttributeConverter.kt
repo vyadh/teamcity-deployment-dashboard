@@ -1,6 +1,7 @@
 package com.github.vyadh.teamcity.deploys.processing
 
 import com.github.vyadh.teamcity.deploys.buildparams.BasicParameterExtractor
+import com.github.vyadh.teamcity.deploys.buildparams.ParameterExtractor
 import jetbrains.buildServer.RunningBuild
 import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.SBuild
@@ -11,10 +12,10 @@ import java.util.*
 /**
  * Responsible for extracting the required data out of TeamCity build objects.
  */
-object DeployExtractor {
+class BuildAttributeConverter(
+      private val params: ParameterExtractor = BasicParameterExtractor()) {
 
-  private const val missing = "[missing]"
-  private val params = BasicParameterExtractor()
+  private val missing = "[missing]"
 
   fun projectName(build: SBuild, projectKey: String) =
         params.extract(build, projectKey) { build.buildType?.projectName }

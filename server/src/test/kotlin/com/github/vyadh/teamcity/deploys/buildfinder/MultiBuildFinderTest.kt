@@ -1,5 +1,6 @@
 package com.github.vyadh.teamcity.deploys.buildfinder
 
+import com.github.vyadh.teamcity.deploys.processing.BuildAttributeConverter
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.buildTypeWith
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.deploymentBuildType
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.finished
@@ -17,13 +18,14 @@ internal class MultiBuildFinderTest {
   private val projectKey = "PROJECT"
   private val versionKey = "VERSION"
   private val envKey = "ENV"
+  private val converter = BuildAttributeConverter()
 
   @Test
   internal fun noBuilds() {
     val type = deploymentBuildType()
     val finder = MultiBuildFinder(
           SimulatedBuildHistory.empty(),
-          DeployEnvironment(envKey, emptyList()))
+          DeployEnvironment(envKey, emptyList(), converter))
 
     val result = finder.find(type).collect(toList())
 
@@ -38,7 +40,7 @@ internal class MultiBuildFinderTest {
     ))
     val finder = MultiBuildFinder(
           SimulatedBuildHistory.empty(),
-          DeployEnvironment(envKey, listOf("DEV", "PRD")))
+          DeployEnvironment(envKey, listOf("DEV", "PRD"), converter))
 
     val result = finder.find(type).map { info(it) }.collect(toList())
     
@@ -48,7 +50,7 @@ internal class MultiBuildFinderTest {
   @Test
   internal fun multipleFinishedBuilds() {
     val type = deploymentBuildType()
-    val environment = DeployEnvironment(envKey, listOf("DEV", "PRD"))
+    val environment = DeployEnvironment(envKey, listOf("DEV", "PRD"), converter)
     val finder = MultiBuildFinder(SimulatedBuildHistory(
           finished(properties("Vega", "DEV")),
           finished(properties("Vega", "PRD"))
@@ -69,7 +71,7 @@ internal class MultiBuildFinderTest {
           finished(properties("Vega", "UAT")),
           finished(properties("Vega", "prd"))
     )
-    val environment = DeployEnvironment(envKey, listOf("DEV", "TST", "UAT", "PRD"))
+    val environment = DeployEnvironment(envKey, listOf("DEV", "TST", "UAT", "PRD"), converter)
     val type = buildTypeWith(running)
     val finder = MultiBuildFinder(finished, environment)
 
@@ -93,7 +95,7 @@ internal class MultiBuildFinderTest {
           finished(properties("Sol", "UAT")),
           finished(properties("Sol", "UnknownFinished"))
     )
-    val environment = DeployEnvironment(envKey, listOf("DEV", "UAT"))
+    val environment = DeployEnvironment(envKey, listOf("DEV", "UAT"), converter)
     val type = buildTypeWith(running)
     val finder = MultiBuildFinder(finished, environment)
 
@@ -113,7 +115,7 @@ internal class MultiBuildFinderTest {
           finished(properties("Sol", "DEV", "2.0")),
           finished(properties("Sol", "UAT", "2.1"))
     )
-    val environment = DeployEnvironment(envKey, listOf("DEV", "UAT"))
+    val environment = DeployEnvironment(envKey, listOf("DEV", "UAT"), converter)
     val type = deploymentBuildType()
     val finder = MultiBuildFinder(finished, environment)
 
@@ -134,7 +136,7 @@ internal class MultiBuildFinderTest {
           .limit(1000)
     val buildsUat = Stream.of(finished(properties("Vega", "UAT", "1rc")))
     val history = SimulatedBuildHistory(*toArray(Stream.concat(buildsDev, buildsUat)))
-    val environment = DeployEnvironment(envKey, listOf("DEV", "UAT"))
+    val environment = DeployEnvironment(envKey, listOf("DEV", "UAT"), converter)
     val type = deploymentBuildType()
     val finder = MultiBuildFinder(history, environment)
 

@@ -20,7 +20,7 @@ const Build = ({deploy}) => (
             <div className={`build-status ${statusClass(deploy.status)}`}>
                 <StatusIcon status={deploy.status} latest={deploy.latest}/>
             </div>
-            <div className="build-info grow">
+            <div className="build-info">
                 <span className="build-version">{deploy.version}</span>
                 <span className="build-time">{dateTimes.format(deploy.time)}</span>
             </div>

@@ -7,9 +7,6 @@
   font-family: 'Helvetica Neue', 'Arial', sans-serif;
   font-weight: normal;
   color: var(--main-text-colour);
-
-  max-width: 950px;
-  width: 100%;
   margin: 1rem auto;
   margin-top: 2rem;
 
@@ -40,13 +37,9 @@
   color: var(--main-text-colour);
 }
 
-#deploys .list {
-  margin: 1rem;
-}
-
 #deploys table {
   border-spacing: 0;
-  width: 100%;
+  margin: 1rem auto;
 }
 
 #deploys th {
@@ -74,6 +67,6 @@
 
 #deploys th, #deploys td {
   justify-content: space-between;
-  padding: 1rem;
+  padding: 1rem 1.3rem;
   border-bottom: 1px solid lightgrey;
 }

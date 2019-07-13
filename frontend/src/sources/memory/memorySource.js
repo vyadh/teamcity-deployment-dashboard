@@ -136,6 +136,13 @@ const deploys = () => {
       status: "SUCCESS"
     },
     {
+      name: "The Winter-Morning Star",
+      version: "1.0.0",
+      environment: "Test",
+      time: "2019-07-13T12:00:00",
+      status: "SUCCESS"
+    },
+    {
       name: "Uranus",
       version: "11.2.113",
       environment: "Development",

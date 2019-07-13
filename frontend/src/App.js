@@ -73,7 +73,7 @@ const Deploys = ({environments, deploysPerApp}) => {
 
 const DeployHeader = ({environments}) => (
     <tr>
-      <th>Project</th>
+      <th></th>
       {environments.map(env => <th key={env}>{env}</th>)}
     </tr>
 )

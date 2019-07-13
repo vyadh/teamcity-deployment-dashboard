@@ -48,6 +48,13 @@
   font-weight: normal;
   font-size: 1.3rem;
   text-align: left;
+
+  /* Make the header sticky to the top when scrolling */
+  position: sticky;
+  top: 0;
+  /* Position header above table content and making sure it doesn't show through */
+  z-index: 100;
+  background-color: white;
 }
 
 /* Project name column header */

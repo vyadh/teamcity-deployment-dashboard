@@ -8,17 +8,31 @@
     margin: 0;
     display: flex;
     flex-direction: row;
+    /* Ensure images line up when content is different sizes */
     justify-content: left;
+    /* Always position elements center, important for hover anim when text wraps */
+    align-items: center;
 }
 
 #deploys .build-status {
-    margin-right: 0.5rem;
+    margin-right: 0.8rem;
 }
 
 #deploys .build-info {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
+    /* Minor correction for vertical centering given smaller date-time font. */
+    padding-top: 0.2rem;
+}
+
+#deploys .build-version {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+#deploys .build-time {
+    font-size: 0.7rem;
 }
 
 #deploys .status-icon {
@@ -92,14 +106,4 @@
 }
 #deploys .build:hover .build-info {
     transform: scale(1.1) translateX(5px); /* Translate accounts for build icon effect above. */
-}
-
-
-#deploys .build-version {
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-#deploys .build-time {
-    font-size: 0.7rem;
 }

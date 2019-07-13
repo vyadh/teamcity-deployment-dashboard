@@ -11,6 +11,11 @@
   max-width: 950px;
   width: 100%;
   margin: 1rem auto;
+  margin-top: 2rem;
+
+  /* Consistency with TeamCity styling (useful when run outside TC) */
+  line-height: 1.5em;
+  font-size: 0.8rem;
 }
 
 #deploys h1 {

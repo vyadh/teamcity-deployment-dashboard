@@ -59,7 +59,7 @@ const Page = ({environments, unfilteredDeploysPerApp}) => {
 const Deploys = ({environments, deploysPerApp}) => {
   return (
       <div className="list">
-        <table>
+        <table style={{ '--environment-count': environments.length }}>
           <thead>
             <DeployHeader environments={environments}/>
           </thead>

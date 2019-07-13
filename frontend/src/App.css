@@ -1,6 +1,7 @@
 
 :root {
   --main-text-colour: #595959;
+  --environment-count: 0; /* Dynamic - set by App.js */
 }
 
 #deploys {
@@ -37,15 +38,32 @@
   color: var(--main-text-colour);
 }
 
+#deploys .list {
+  /* Center child table */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  margin: 1rem 1rem;
+}
+
 #deploys table {
-  border-spacing: 0;
-  margin: 1rem auto;
+  display: grid;
+  /* Project name + number of environments set in App.js */
+  grid-template-columns: minmax(10em, auto) repeat(var(--environment-count), minmax(10em, 13rem));
+}
+
+/* Do not include these table elements as part of grid layout */
+#deploys thead, #deploys tbody, #deploys tr {
+  display: contents;
 }
 
 #deploys th {
   font-weight: normal;
   font-size: 1.3rem;
   text-align: left;
+  /* Wrap title at any character rather than under-flowing into next */
+  word-break: break-word;
 
   /* Make the header sticky to the top when scrolling */
   position: sticky;
@@ -55,18 +73,19 @@
   background-color: white;
 }
 
-/* Project name column header */
-#deploys th:nth-child(1) {
-  text-align: left;
-}
 /* Project names */
 #deploys td:nth-child(1) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   text-align: left;
+
   font-weight: bold;
+  padding: 0 1rem;
 }
 
 #deploys th, #deploys td {
   justify-content: space-between;
-  padding: 1rem 1.3rem;
+  padding: 1rem 0;
   border-bottom: 1px solid lightgrey;
 }

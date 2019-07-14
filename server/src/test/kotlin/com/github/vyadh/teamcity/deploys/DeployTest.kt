@@ -15,6 +15,7 @@ internal class DeployTest {
           time = ZonedDateTime.parse("2019-05-19T09:41:30+01:00"),
           status = "SUCCESS",
           running = true,
+          personal = true,
           link = "http://tc/build/2"
     )
 
@@ -28,6 +29,7 @@ internal class DeployTest {
         time: "2019-05-19T09:41:30+01:00",
         status: "SUCCESS",
         running: true,
+        personal: true,
         link: "http://tc/build/2"
       }
     """.trimIndent())

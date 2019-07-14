@@ -45,6 +45,7 @@ class DeployFinder(
           converter.timeOf(build),
           converter.toStatus(build),
           converter.isRunning(build),
+          converter.isPersonal(build),
           links.getViewResultsUrl(build)
     )
 

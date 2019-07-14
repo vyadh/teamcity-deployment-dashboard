@@ -29,7 +29,8 @@ const deploys = () => {
       environment: "Development",
       time: "2019-06-09T21:58:12",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "Mercury",
@@ -37,7 +38,8 @@ const deploys = () => {
       environment: "Test",
       time: "2019-06-09T21:58:12",
       status: "FAILURE",
-      running: true
+      running: true,
+      personal: false
     },
     {
       name: "Mercury",
@@ -45,7 +47,8 @@ const deploys = () => {
       environment: "UAT",
       time: "2019-06-09T21:58:12",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "Mercury",
@@ -60,8 +63,9 @@ const deploys = () => {
       version: "2.1.3",
       environment: "Development",
       time: "2019-06-03T20:12:03",
-      status: "SUCCESS",
-      running: false
+      status: "FAILURE",
+      running: true,
+      personal: true
     },
     {
       name: "Haumea",
@@ -69,15 +73,17 @@ const deploys = () => {
       environment: "Test",
       time: "2019-06-05T18:33:12",
       status: "SUCCESS",
-      running: false
+      running: true,
+      personal: true
     },
     {
       name: "Haumea",
       version: "2.1.3",
       environment: "UAT",
       time: "2019-06-10T08:48:02",
-      status: "SUCCESS",
-      running: false
+      status: "FAILURE",
+      running: false,
+      personal: true
     },
     {
       name: "Haumea",
@@ -85,7 +91,8 @@ const deploys = () => {
       environment: "Production",
       time: "2019-06-14T09:57:04",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: true
     },
     {
       name: "Venus",
@@ -93,7 +100,8 @@ const deploys = () => {
       environment: "Production",
       time: "2019-06-04T22:20:33",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "Venus",
@@ -101,7 +109,8 @@ const deploys = () => {
       environment: "Test",
       time: new Date().toISOString(),
       status: "SUCCESS",
-      running: true
+      running: true,
+      personal: false
     },
     {
       name: "Venus",
@@ -109,7 +118,8 @@ const deploys = () => {
       environment: "UAT",
       time: "2019-06-01T22:20:33",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "Venus",
@@ -117,7 +127,8 @@ const deploys = () => {
       environment: "Development",
       time: "2019-06-01T22:20:33",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "Earth",
@@ -125,7 +136,8 @@ const deploys = () => {
       environment: "Development",
       time: "2019-06-04T21:59:51",
       status: "FAILURE",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "Earth",
@@ -133,7 +145,8 @@ const deploys = () => {
       environment: "Test",
       time: "2019-06-04T21:59:51",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: true
     },
     {
       name: "Earth",
@@ -141,7 +154,8 @@ const deploys = () => {
       environment: "UAT",
       time: "2019-06-04T21:59:51",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "Earth",
@@ -149,7 +163,8 @@ const deploys = () => {
       environment: "Production",
       time: "2019-06-04T21:59:51",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "The Winter-Morning Star",
@@ -157,7 +172,8 @@ const deploys = () => {
       environment: "Test",
       time: "2019-07-13T12:00:00",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "Uranus",
@@ -165,7 +181,8 @@ const deploys = () => {
       environment: "Development",
       time: "2019-06-04T22:20:33",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "Uranus",
@@ -173,7 +190,8 @@ const deploys = () => {
       environment: "Test",
       time: "2019-06-04T22:20:33",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "Uranus",
@@ -181,7 +199,8 @@ const deploys = () => {
       environment: "Production",
       time: "2019-06-04T22:20:33",
       status: "OTHER",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "Ceres",
@@ -189,7 +208,8 @@ const deploys = () => {
       environment: "Development",
       time: "2019-06-16T09:54:00",
       status: "SUCCESS",
-      running: false
+      running: false,
+      personal: false
     },
     {
       name: "Ceres",
@@ -197,7 +217,8 @@ const deploys = () => {
       environment: "Test",
       time: new Date().toISOString(),
       status: "SUCCESS",
-      running: true
+      running: true,
+      personal: false
     },
     ...randomDeployment("Mars"),
     ...randomDeployment("Jupiter"),
@@ -231,6 +252,7 @@ const randomDeployment = name => {
       time: "2019-06-16T09:54:00",
       status: failure() ? "FAILURE" : "SUCCESS",
       running: false,
+      personal: false,
       link: `http://localhost/${name}/${version}/${envs[i]}`
     }
   })

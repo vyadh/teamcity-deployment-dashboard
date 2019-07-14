@@ -61,4 +61,6 @@ class BuildAttributeConverter(
 
   fun isRunning(build: SBuild): Boolean = build is RunningBuild
 
+  fun isPersonal(build: SBuild): Boolean = build.isPersonal
+
 }

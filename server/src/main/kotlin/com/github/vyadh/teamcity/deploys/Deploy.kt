@@ -9,6 +9,7 @@ data class Deploy(
       val time: ZonedDateTime,
       val status: String,
       val running: Boolean,
+      val personal: Boolean,
       val link: String
 ) {
 
@@ -21,6 +22,7 @@ data class Deploy(
         time: "$time",
         status: "$status",
         running: $running,
+        personal: $personal,
         link: "$link"
       }
     """.trimIndent()

@@ -1,7 +1,7 @@
 import React from 'react';
 import * as dateTimes from "./util/dateTimes";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheckCircle, faCircleNotch, faExclamationCircle, faQuestionCircle, faUserCircle} from "@fortawesome/free-solid-svg-icons";
+import {faCheckCircle, faCircleNotch, faExclamationCircle, faQuestionCircle, faClock} from "@fortawesome/free-solid-svg-icons";
 import './Deployment.css'
 
 export const Deployment = ({environment, deploys}) => {
@@ -17,11 +17,11 @@ export const Deployment = ({environment, deploys}) => {
 const Build = ({deploy}) => (
   <a href={deploy.link}>
     <div className="build">
-      <div className={`build-status ${statusClass(deploy.status)}`}>
+      <div className={`build-status ${statusClass(deploy.status, deploy.hanging)}`}>
         <StatusIcon
           status={deploy.status}
           running={deploy.running}
-          personal={deploy.personal}
+          hanging={deploy.hanging}
           latest={deploy.latest}/>
       </div>
       <div className="build-info">
@@ -32,22 +32,22 @@ const Build = ({deploy}) => (
   </a>
 )
 
-const StatusIcon = ({status, running, personal, latest}) => {
-  let iconType = statusIconClass(status, running, personal)
-  let rotateClass = running ? "fa-spin" : ""
+const StatusIcon = ({status, running, hanging, latest}) => {
+  let iconType = statusIconClass(status, running, hanging)
+  let rotateClass = running && !hanging ? "fa-spin" : ""
   let ageClass = latest ? "status-latest" : "status-older"
-  let classes = `status-icon ${statusClass(status)} ${rotateClass} ${ageClass}`
+  let classes = `status-icon ${statusClass(status, hanging)} ${rotateClass} ${ageClass}`
 
   return <FontAwesomeIcon icon={iconType} className={classes}/>
 }
 
-const statusClass = (status) => {
-  return `status-${status}`
+const statusClass = (status, hanging) => {
+  return `status-${hanging ? "HANGING" : status}`
 }
 
-const statusIconClass = (status, running, personal) => {
-  if (personal) {
-    return faUserCircle
+const statusIconClass = (status, running, hanging) => {
+  if (hanging) {
+    return faClock
   } else if (running) {
     return faCircleNotch
   } else if (status === "SUCCESS") {

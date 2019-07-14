@@ -2,6 +2,7 @@
     --unknown-colour: #1c66bf;
     --success-colour: #40b55f;
     --failure-colour: #f26c5c;
+    --warning-colour: #eda200;
 }
 
 #deploys .build {
@@ -42,6 +43,7 @@
 }
 #deploys .status-SUCCESS { color: var(--success-colour); }
 #deploys .status-FAILURE { color: var(--failure-colour); }
+#deploys .status-HANGING { color: var(--warning-colour); }
 
 #deploys .status-latest {
     opacity: 1.0;
@@ -79,17 +81,14 @@
 #deploys .build-status:after {
     box-shadow: 0 0 0 4px var(--unknown-colour); /* px is thickness of circle */
 }
-#deploys .build-status.status-RUNNING:after {
-    box-shadow: 0 0 0 4px var(--success-colour); /* px is thickness of circle */
-}
 #deploys .build-status.status-SUCCESS:after {
     box-shadow: 0 0 0 4px var(--success-colour); /* px is thickness of circle */
 }
 #deploys .build-status.status-FAILURE:after {
     box-shadow: 0 0 0 4px var(--failure-colour); /* px is thickness of circle */
 }
-#deploys .build-status.status-FAILING:after {
-    box-shadow: 0 0 0 4px var(--failure-colour); /* px is thickness of circle */
+#deploys .build-status.status-HANGING:after {
+    box-shadow: 0 0 0 4px var(--warning-colour); /* px is thickness of circle */
 }
 /* When hover on .build, trigger the hover affect on component after build-status */
 #deploys .build:hover > .build-status:after {

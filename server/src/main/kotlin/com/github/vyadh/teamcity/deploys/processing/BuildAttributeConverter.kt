@@ -5,6 +5,7 @@ import com.github.vyadh.teamcity.deploys.buildparams.ParameterExtractor
 import jetbrains.buildServer.RunningBuild
 import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.SBuild
+import jetbrains.buildServer.serverSide.SRunningBuild
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
@@ -61,6 +62,7 @@ class BuildAttributeConverter(
 
   fun isRunning(build: SBuild): Boolean = build is RunningBuild
 
-  fun isPersonal(build: SBuild): Boolean = build.isPersonal
+  fun isHanging(build: SBuild): Boolean =
+        build is SRunningBuild && build.isProbablyHanging
 
 }

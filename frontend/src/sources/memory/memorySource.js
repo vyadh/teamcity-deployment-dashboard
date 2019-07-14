@@ -30,7 +30,7 @@ const deploys = () => {
       time: "2019-06-09T21:58:12",
       status: "SUCCESS",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "Mercury",
@@ -39,7 +39,7 @@ const deploys = () => {
       time: "2019-06-09T21:58:12",
       status: "FAILURE",
       running: true,
-      personal: false
+      hanging: false
     },
     {
       name: "Mercury",
@@ -48,7 +48,7 @@ const deploys = () => {
       time: "2019-06-09T21:58:12",
       status: "SUCCESS",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "Mercury",
@@ -56,7 +56,8 @@ const deploys = () => {
       environment: "Production",
       time: "2019-06-09T21:58:12",
       status: "SUCCESS",
-      running: false
+      running: false,
+      hanging: false
     },
     {
       name: "Haumea",
@@ -65,7 +66,7 @@ const deploys = () => {
       time: "2019-06-03T20:12:03",
       status: "FAILURE",
       running: true,
-      personal: true
+      hanging: true
     },
     {
       name: "Haumea",
@@ -74,7 +75,7 @@ const deploys = () => {
       time: "2019-06-05T18:33:12",
       status: "SUCCESS",
       running: true,
-      personal: true
+      hanging: true
     },
     {
       name: "Haumea",
@@ -83,7 +84,7 @@ const deploys = () => {
       time: "2019-06-10T08:48:02",
       status: "FAILURE",
       running: false,
-      personal: true
+      hanging: true
     },
     {
       name: "Haumea",
@@ -92,7 +93,7 @@ const deploys = () => {
       time: "2019-06-14T09:57:04",
       status: "SUCCESS",
       running: false,
-      personal: true
+      hanging: true
     },
     {
       name: "Venus",
@@ -101,7 +102,7 @@ const deploys = () => {
       time: "2019-06-04T22:20:33",
       status: "SUCCESS",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "Venus",
@@ -110,7 +111,7 @@ const deploys = () => {
       time: new Date().toISOString(),
       status: "SUCCESS",
       running: true,
-      personal: false
+      hanging: false
     },
     {
       name: "Venus",
@@ -119,7 +120,7 @@ const deploys = () => {
       time: "2019-06-01T22:20:33",
       status: "SUCCESS",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "Venus",
@@ -128,7 +129,7 @@ const deploys = () => {
       time: "2019-06-01T22:20:33",
       status: "SUCCESS",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "Earth",
@@ -137,7 +138,7 @@ const deploys = () => {
       time: "2019-06-04T21:59:51",
       status: "FAILURE",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "Earth",
@@ -145,8 +146,8 @@ const deploys = () => {
       environment: "Test",
       time: "2019-06-04T21:59:51",
       status: "SUCCESS",
-      running: false,
-      personal: true
+      running: true,
+      hanging: true
     },
     {
       name: "Earth",
@@ -155,7 +156,7 @@ const deploys = () => {
       time: "2019-06-04T21:59:51",
       status: "SUCCESS",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "Earth",
@@ -164,7 +165,7 @@ const deploys = () => {
       time: "2019-06-04T21:59:51",
       status: "SUCCESS",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "The Winter-Morning Star",
@@ -173,7 +174,7 @@ const deploys = () => {
       time: "2019-07-13T12:00:00",
       status: "SUCCESS",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "Uranus",
@@ -182,7 +183,7 @@ const deploys = () => {
       time: "2019-06-04T22:20:33",
       status: "SUCCESS",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "Uranus",
@@ -191,7 +192,7 @@ const deploys = () => {
       time: "2019-06-04T22:20:33",
       status: "SUCCESS",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "Uranus",
@@ -200,7 +201,7 @@ const deploys = () => {
       time: "2019-06-04T22:20:33",
       status: "OTHER",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "Ceres",
@@ -209,7 +210,7 @@ const deploys = () => {
       time: "2019-06-16T09:54:00",
       status: "SUCCESS",
       running: false,
-      personal: false
+      hanging: false
     },
     {
       name: "Ceres",
@@ -218,7 +219,7 @@ const deploys = () => {
       time: new Date().toISOString(),
       status: "SUCCESS",
       running: true,
-      personal: false
+      hanging: false
     },
     ...randomDeployment("Mars"),
     ...randomDeployment("Jupiter"),
@@ -252,7 +253,7 @@ const randomDeployment = name => {
       time: "2019-06-16T09:54:00",
       status: failure() ? "FAILURE" : "SUCCESS",
       running: false,
-      personal: false,
+      hanging: false,
       link: `http://localhost/${name}/${version}/${envs[i]}`
     }
   })

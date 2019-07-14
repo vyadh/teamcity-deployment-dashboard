@@ -51,31 +51,30 @@ internal class DeployFinderTest {
       on { buildNumber } doReturn "1.0"
       on { buildStatus } doReturn Status.NORMAL
       on { startDate } doReturn Date()
-      on { isPersonal } doReturn true
     }
     val project = project(listOf(buildTypeWith(build)))
 
     val result = finder().search(project).first()
 
     assertThat(result.project).isEqualTo("Ruminous")
-    assertThat(result.personal).isTrue()
+    assertThat(result.hanging).isFalse()
   }
 
   @Test
   fun searchWithPersonalBuild() {
-    val project = project(listOf(deploymentBuildType()))
-    val build = mock<SFinishedBuild> {
-      on { buildOwnParameters } doReturn mapOf(Pair(projectKey, "Superious"), Pair(envKey, "TST"))
+    val build = mock<SRunningBuild> {
+      on { buildOwnParameters } doReturn mapOf(Pair(projectKey, "Superious"), Pair(envKey, "UAT"))
       on { buildNumber } doReturn "1.0"
       on { buildStatus } doReturn Status.NORMAL
-      on { finishDate } doReturn Date()
+      on { startDate } doReturn Date()
+      on { isProbablyHanging } doReturn true
     }
-    val finder = finder(buildFinder = lastBuild(build))
+    val project = project(listOf(buildTypeWith(build)))
 
-    val result = finder.search(project).first()
+    val result = finder().search(project).first()
 
     assertThat(result.project).isEqualTo("Superious")
-    assertThat(result.environment).isEqualTo("TST")
+    assertThat(result.hanging).isTrue()
   }
 
   @Test
@@ -142,7 +141,7 @@ internal class DeployFinderTest {
     assertThat(result.time).isEqualTo(finished)
     assertThat(result.status).isEqualTo("SUCCESS")
     assertThat(result.running).isEqualTo(false)
-    assertThat(result.personal).isEqualTo(false)
+    assertThat(result.hanging).isEqualTo(false)
     assertThat(result.link).isEqualTo("http://host/build/1")
   }
 
@@ -165,7 +164,7 @@ internal class DeployFinderTest {
     assertThat(result.time).isEqualTo(started)
     assertThat(result.status).isEqualTo("SUCCESS")
     assertThat(result.running).isEqualTo(true)
-    assertThat(result.personal).isEqualTo(false)
+    assertThat(result.hanging).isEqualTo(false)
     assertThat(result.link).isEqualTo("http://host/build/2")
   }
 

@@ -18,6 +18,7 @@ dependencies {
   implementation(kotlin("stdlib-jdk8"))
 
   compileOnly("org.jetbrains.teamcity.internal:server:${rootProject.extra["teamcityVersion"]}")
+  testCompile("org.jetbrains.teamcity.internal:server:${rootProject.extra["teamcityVersion"]}")
 
   testCompile("org.assertj:assertj-core:3.12.2")
   testCompile("org.junit.jupiter:junit-jupiter-api:5.4.2")

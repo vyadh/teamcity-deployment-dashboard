@@ -43,7 +43,7 @@ subprojects {
 }
 
 fun buildNumber(): String {
-  val snapshot = parseBoolean(System.getenv("SNAPSHOT"))
+  val snapshot = parseBoolean(System.getenv("SNAPSHOT") ?: "true")
   return if (snapshot) "-SNAPSHOT-${timestamp()}" else ""
 }
 

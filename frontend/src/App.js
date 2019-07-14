@@ -3,6 +3,7 @@ import { Search } from './components/Search'
 import * as deploysProcessor from './deploysProcessor'
 import './App.css'
 import {filterApps} from "./searchApps"
+import {sort} from "./util/collections"
 import {Deployment} from "./Deployment";
 
 const App = ({configuration}) => {
@@ -81,7 +82,7 @@ const DeployHeader = ({environments}) => (
 )
 
 const DeployRows = ({environments, deploysPerApp}) => {
-  let apps = useMemo(() => Object.keys(deploysPerApp).sort(), [deploysPerApp])
+  let apps = useMemo(() => sort(Object.keys(deploysPerApp)), [deploysPerApp])
 
   return apps.map(app =>
       <DeployRow

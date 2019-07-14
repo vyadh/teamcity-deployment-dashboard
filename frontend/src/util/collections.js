@@ -11,3 +11,9 @@ export const groupBy = (array, byKey) => {
 
   return array.reduce(reducer, { })
 }
+
+export const sort = (array) => {
+  return array.sort(caseInsensitiveCompare)
+}
+
+const caseInsensitiveCompare = new Intl.Collator('default').compare

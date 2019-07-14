@@ -1,4 +1,4 @@
-import {groupBy} from "./collections"
+import {groupBy, sort} from "./collections"
 
 it('groupByWhenEmptyTest', () => {
   expect(groupBy([], item => item.type))
@@ -31,7 +31,7 @@ it('groupByWithTwoDifferentItemsTest', () => {
       { id: 1, type: "rocky" },
       { id: 2, type: "rocky" }]
     }
-  );
+  )
 })
 
 it('groupByWithSameKeyTest', () => {
@@ -49,7 +49,7 @@ it('groupByWithSameKeyTest', () => {
     'gaseous': [
       { id: 3, type: "gaseous" }
     ]
-  });
+  })
 })
 
 it('groupByWithMixedItemsTest', () => {
@@ -69,5 +69,14 @@ it('groupByWithMixedItemsTest', () => {
     'gaseous': [
       { id: 3, type: "gaseous" }
     ]
-  });
+  })
+})
+
+
+it('sort is case-insensitive', () => {
+  let planets = ["c", "A", "C", "a", "b", "B"]
+
+  let results = sort(planets)
+
+  expect(results).toEqual(["a", "A", "b", "B", "c", "C"])
 })

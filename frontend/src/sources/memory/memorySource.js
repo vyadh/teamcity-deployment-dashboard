@@ -182,6 +182,7 @@ const deploys = () => {
     ...randomDeployment("Saturn"),
     ...randomDeployment("Neptune"),
     ...randomDeployment("Pluto"),
+    ...randomDeployment("plutino"),
     ...randomDeployment("Makemake"),
     ...randomDeployment("Eris"),
     ...randomDeployment("Quaoar"),

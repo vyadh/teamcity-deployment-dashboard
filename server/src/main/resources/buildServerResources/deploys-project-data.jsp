@@ -15,6 +15,8 @@
       "environment": "<c:out value="${deploy.environment}"/>",
       "time": "<c:out value="${deploy.time}" escapeXml="false"/>",
       "status": "<c:out value="${deploy.status}" escapeXml="false"/>",
+      "running": <c:out value="${deploy.running}"/>,
+      "hanging": <c:out value="${deploy.hanging}"/>,
       "link": "<c:out value="${deploy.link}" escapeXml="false"/>"
     }<c:if test="${!loop.last}">,</c:if>
     </c:forEach>

@@ -11,21 +11,4 @@ data class Deploy(
       val running: Boolean,
       val hanging: Boolean,
       val link: String
-) {
-
-  fun toJson(): String {
-    return """
-      {
-        name: "$project",
-        version: "$version",
-        environment: "$environment",
-        time: "$time",
-        status: "$status",
-        running: $running,
-        hanging: $hanging,
-        link: "$link"
-      }
-    """.trimIndent()
-  }
-
-}
+)

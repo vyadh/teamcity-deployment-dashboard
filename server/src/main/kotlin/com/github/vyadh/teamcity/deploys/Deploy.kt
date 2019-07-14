@@ -7,8 +7,9 @@ data class Deploy(
       val version: String,
       val environment: String,
       val time: ZonedDateTime,
-      var status: String,
-      var link: String
+      val status: String,
+      val running: Boolean,
+      val link: String
 ) {
 
   fun toJson(): String {
@@ -19,6 +20,7 @@ data class Deploy(
         environment: "$environment",
         time: "$time",
         status: "$status",
+        running: $running,
         link: "$link"
       }
     """.trimIndent()

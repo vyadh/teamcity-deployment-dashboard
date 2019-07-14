@@ -41,9 +41,7 @@
     color: #1c66bf; /* status unknown = blue */
 }
 #deploys .status-SUCCESS { color: var(--success-colour); }
-#deploys .status-RUNNING { color: var(--success-colour); }
 #deploys .status-FAILURE { color: var(--failure-colour); }
-#deploys .status-FAILING { color: var(--failure-colour); }
 
 #deploys .status-latest {
     opacity: 1.0;

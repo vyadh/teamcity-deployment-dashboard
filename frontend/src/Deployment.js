@@ -18,7 +18,7 @@ const Build = ({deploy}) => (
     <a href={deploy.link}>
         <div className="build">
             <div className={`build-status ${statusClass(deploy.status)}`}>
-                <StatusIcon status={deploy.status} latest={deploy.latest}/>
+                <StatusIcon status={deploy.status} running={deploy.running} latest={deploy.latest}/>
             </div>
             <div className="build-info">
                 <span className="build-version">{deploy.version}</span>
@@ -28,9 +28,9 @@ const Build = ({deploy}) => (
     </a>
 )
 
-const StatusIcon = ({status, latest}) => {
-    let iconType = statusIconClass(status)
-    let rotateClass = status === "RUNNING" || status === "FAILING" ? "fa-spin" : ""
+const StatusIcon = ({status, running, latest}) => {
+    let iconType = statusIconClass(status, running)
+    let rotateClass = running ? "fa-spin" : ""
     let ageClass = latest ? "status-latest" : "status-older"
     let classes = `status-icon ${statusClass(status)} ${rotateClass} ${ageClass}`
 
@@ -41,13 +41,13 @@ const statusClass = (status) => {
     return `status-${status}`
 }
 
-const statusIconClass = status => {
-    if (status === "SUCCESS") {
+const statusIconClass = (status, running) => {
+    if (running) {
+        return faCircleNotch
+    } else if (status === "SUCCESS") {
         return faCheckCircle
     } else if (status === "FAILURE") {
         return faExclamationCircle
-    } else if (status === "RUNNING" || status === "FAILING") {
-        return faCircleNotch // fa-spin";
     } else {
         return faQuestionCircle
     }

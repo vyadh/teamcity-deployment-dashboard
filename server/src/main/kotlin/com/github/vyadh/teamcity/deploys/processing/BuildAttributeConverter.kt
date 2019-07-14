@@ -34,25 +34,22 @@ class BuildAttributeConverter(
     return ZonedDateTime.ofInstant(dateTime.toInstant(), ZoneOffset.UTC)
   }
 
-  //todo indicate hanging or personal build
   /**
    * Values: SUCCESS, WARNING, FAILURE, ERROR, UNKNOWN
    * @see jetbrains.buildServer.messages.Status
    */
   internal fun toStatus(build: SBuild): String {
-    val running = build is RunningBuild
     val status = build.buildStatus
 
     return when {
-      running && isFailing(status) -> "FAILING"
-      running && isSuccess(status) -> "RUNNING"
-      isFailing(status) -> "FAILURE"
+      isFailure(status) -> "FAILURE"
       isSuccess(status) -> "SUCCESS"
       else -> "UNKNOWN"
     }
   }
 
-  private fun isFailing(status: Status): Boolean {
+  /** Failure, or failing when running. */
+  private fun isFailure(status: Status): Boolean {
     return when (status) {
       Status.ERROR -> true
       Status.FAILURE -> true
@@ -60,7 +57,8 @@ class BuildAttributeConverter(
     }
   }
 
-  private fun isSuccess(status: Status): Boolean =
-        status == Status.NORMAL
+  private fun isSuccess(status: Status): Boolean = status == Status.NORMAL
+
+  fun isRunning(build: SBuild): Boolean = build is RunningBuild
 
 }

@@ -11,7 +11,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.*
 
-internal class DeployFinderStatusTest {
+internal class DeployStatusTest {
 
   private val links = links("http://link")
   private val projectKey = "PROJECT"
@@ -56,21 +56,12 @@ internal class DeployFinderStatusTest {
   }
 
   @Test
-  internal fun statusOfBuildWhenRunningAndNormal() {
-    val buildType = buildTypeWith(runningBuildWithStatus(Status.NORMAL))
+  internal fun statusOfBuildWhenRunning() {
+    val buildType = buildTypeWith(runningBuild())
 
-    val result = finder.toDeploys(buildType).findAny().get().status
+    val result = finder.toDeploys(buildType).findAny().get().running
 
-    assertThat(result).isEqualTo("RUNNING")
-  }
-
-  @Test
-  internal fun statusOfBuildWhenRunningAndFailing() {
-    val buildType = buildTypeWith(runningBuildWithStatus(Status.FAILURE))
-
-    val result = finder.toDeploys(buildType).findAny().get().status
-
-    assertThat(result).isEqualTo("FAILING")
+    assertThat(result).isEqualTo(true)
   }
 
 
@@ -84,9 +75,9 @@ internal class DeployFinderStatusTest {
     on { runningBuilds } doReturn listOf(build)
   }
 
-  private fun runningBuildWithStatus(status: Status): SRunningBuild {
+  private fun runningBuild(): SRunningBuild {
     return mock {
-      on { buildStatus } doReturn status
+      on { buildStatus } doReturn Status.NORMAL
       on { buildOwnParameters } doReturn params()
       on { startDate } doReturn Date()
     }

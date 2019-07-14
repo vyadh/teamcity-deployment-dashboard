@@ -44,6 +44,7 @@ class DeployFinder(
           environment.name(build),
           converter.timeOf(build),
           converter.toStatus(build),
+          converter.isRunning(build),
           links.getViewResultsUrl(build)
     )
 

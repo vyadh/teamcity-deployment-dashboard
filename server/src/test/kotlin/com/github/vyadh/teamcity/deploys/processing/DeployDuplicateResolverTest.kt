@@ -143,7 +143,7 @@ class DeployDuplicateResolverTest {
         time: String = "21:33:00"): Deploy {
 
     val datetime = ZonedDateTime.parse("2019-07-02T${time}Z")
-    return Deploy(project, "", env, datetime, "", "")
+    return Deploy(project, "", env, datetime, "", false,"")
   }
 
 }

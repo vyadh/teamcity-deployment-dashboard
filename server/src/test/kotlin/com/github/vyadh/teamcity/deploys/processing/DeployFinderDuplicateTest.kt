@@ -46,7 +46,7 @@ internal class DeployFinderDuplicateTest {
 
     val results = finder.search(project)
 
-    assertThat(results.map { it.status }).containsOnly("RUNNING")
+    assertThat(results.map { it.running }).containsOnly(true)
   }
 
   private fun finder(

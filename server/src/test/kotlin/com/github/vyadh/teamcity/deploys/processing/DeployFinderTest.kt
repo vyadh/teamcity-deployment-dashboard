@@ -123,6 +123,7 @@ internal class DeployFinderTest {
     assertThat(result.version).isEqualTo("1.1.0")
     assertThat(result.time).isEqualTo(finished)
     assertThat(result.status).isEqualTo("SUCCESS")
+    assertThat(result.running).isEqualTo(false)
     assertThat(result.link).isEqualTo("http://host/build/1")
   }
 
@@ -143,7 +144,8 @@ internal class DeployFinderTest {
     assertThat(result.version).isEqualTo("1.1.0")
     assertThat(result.environment).isEqualTo("DEV")
     assertThat(result.time).isEqualTo(started)
-    assertThat(result.status).isEqualTo("RUNNING")
+    assertThat(result.status).isEqualTo("SUCCESS")
+    assertThat(result.running).isEqualTo(true)
     assertThat(result.link).isEqualTo("http://host/build/2")
   }
 

@@ -28,154 +28,176 @@ const deploys = () => {
       version: "1.3.3",
       environment: "Development",
       time: "2019-06-09T21:58:12",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Mercury",
       version: "1.3.3",
       environment: "Test",
       time: "2019-06-09T21:58:12",
-      status: "FAILING"
+      status: "FAILURE",
+      running: true
     },
     {
       name: "Mercury",
       version: "1.3.3",
       environment: "UAT",
       time: "2019-06-09T21:58:12",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Mercury",
       version: "1.3.3",
       environment: "Production",
       time: "2019-06-09T21:58:12",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Haumea",
       version: "2.1.3",
       environment: "Development",
       time: "2019-06-03T20:12:03",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Haumea",
       version: "2.1.3",
       environment: "Test",
       time: "2019-06-05T18:33:12",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Haumea",
       version: "2.1.3",
       environment: "UAT",
       time: "2019-06-10T08:48:02",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Haumea",
       version: "2.1.3",
       environment: "Production",
       time: "2019-06-14T09:57:04",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Venus",
       version: "17.0.1",
       environment: "Production",
       time: "2019-06-04T22:20:33",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Venus",
       version: "17.0.2",
       environment: "Test",
       time: new Date().toISOString(),
-      status: "RUNNING"
+      status: "SUCCESS",
+      running: true
     },
     {
       name: "Venus",
       version: "17.0.1",
       environment: "UAT",
       time: "2019-06-01T22:20:33",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Venus",
       version: "17.0.2",
       environment: "Development",
       time: "2019-06-01T22:20:33",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Earth",
       version: "5.3.0",
       environment: "Development",
       time: "2019-06-04T21:59:51",
-      status: "FAILURE"
+      status: "FAILURE",
+      running: false
     },
     {
       name: "Earth",
       version: "5.2.1",
       environment: "Test",
       time: "2019-06-04T21:59:51",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Earth",
       version: "5.2.1",
       environment: "UAT",
       time: "2019-06-04T21:59:51",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Earth",
       version: "5.2.1",
       environment: "Production",
       time: "2019-06-04T21:59:51",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "The Winter-Morning Star",
       version: "1.0.0",
       environment: "Test",
       time: "2019-07-13T12:00:00",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Uranus",
       version: "11.2.113",
       environment: "Development",
       time: "2019-06-04T22:20:33",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Uranus",
       version: "11.2.113",
       environment: "Test",
       time: "2019-06-04T22:20:33",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Uranus",
       version: "11.2.112",
       environment: "Production",
       time: "2019-06-04T22:20:33",
-      status: "OTHER"
+      status: "OTHER",
+      running: false
     },
     {
       name: "Ceres",
       version: "1.0.0",
       environment: "Development",
       time: "2019-06-16T09:54:00",
-      status: "SUCCESS"
+      status: "SUCCESS",
+      running: false
     },
     {
       name: "Ceres",
       version: "1.0.0",
       environment: "Test",
       time: new Date().toISOString(),
-      status: "RUNNING"
+      status: "SUCCESS",
+      running: true
     },
     ...randomDeployment("Mars"),
     ...randomDeployment("Jupiter"),
@@ -208,6 +230,7 @@ const randomDeployment = name => {
       environment: envs[i],
       time: "2019-06-16T09:54:00",
       status: failure() ? "FAILURE" : "SUCCESS",
+      running: false,
       link: `http://localhost/${name}/${version}/${envs[i]}`
     }
   })

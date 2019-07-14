@@ -49,8 +49,8 @@
 
 #deploys table {
   display: grid;
-  /* Project name + number of environments set in App.js */
-  grid-template-columns: minmax(10em, auto) repeat(var(--environment-count), minmax(10em, 13rem));
+  /* Project name + spacer column + number of environments set in App.js */
+  grid-template-columns: minmax(6rem, auto) minmax(0.5rem, 4rem) repeat(var(--environment-count), minmax(8rem, 13rem));
 }
 
 /* Do not include these table elements as part of grid layout */
@@ -81,7 +81,7 @@
   text-align: left;
 
   font-weight: bold;
-  padding: 0 1rem;
+  padding-left: 1rem;
 }
 
 #deploys th, #deploys td {

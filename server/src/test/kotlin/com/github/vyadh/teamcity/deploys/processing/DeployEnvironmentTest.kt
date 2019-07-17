@@ -2,8 +2,7 @@ package com.github.vyadh.teamcity.deploys.processing
 
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.buildTypeWith
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.buildWith
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.finished
 import jetbrains.buildServer.serverSide.SBuild
 import jetbrains.buildServer.serverSide.SFinishedBuild
 import org.assertj.core.api.Assertions.assertThat
@@ -76,9 +75,8 @@ class DeployEnvironmentTest {
     return buildWith(buildTypeWith(env, "Project"), "1.0", emptyMap())
   }
 
-  private fun build(env: String): SFinishedBuild = mock {
-    on { buildOwnParameters } doReturn mapOf(
-          Pair("PROJECT", "Project"), Pair(envKey, env))
+  private fun build(env: String): SFinishedBuild {
+    return finished(properties = mapOf(Pair("PROJECT", "Project"), Pair(envKey, env)))
   }
 
 }

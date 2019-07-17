@@ -1,7 +1,7 @@
 package com.github.vyadh.teamcity.deploys
 
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.finished
 import com.nhaarman.mockitokotlin2.*
-import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.*
 import jetbrains.buildServer.serverSide.parameters.types.PasswordsSearcher
 import jetbrains.buildServer.util.ItemProcessor
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.invocation.InvocationOnMock
 import org.springframework.web.servlet.ModelAndView
-import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -200,14 +199,14 @@ internal class DeployDataControllerTest {
   }
 
   @Suppress("SameParameterValue")
-  private fun build(name: String, env: String, version: String = ""): SFinishedBuild = mock {
-    on { buildOwnParameters } doReturn mapOf(
-          Pair("PROJECT", name),
-          Pair("VERSION", version),
-          Pair("ENVIRONMENT", env))
-    on { buildNumber } doReturn "1.0"
-    on { buildStatus } doReturn Status.NORMAL
-    on { finishDate } doReturn Date()
+  private fun build(name: String, env: String, version: String = ""): SFinishedBuild {
+    return finished(
+          properties = mapOf(
+                Pair("PROJECT", name),
+                Pair("VERSION", version),
+                Pair("ENVIRONMENT", env)
+          )
+    )
   }
 
   @Suppress("UNCHECKED_CAST")

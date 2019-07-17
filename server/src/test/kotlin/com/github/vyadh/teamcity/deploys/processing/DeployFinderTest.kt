@@ -6,9 +6,12 @@ import com.github.vyadh.teamcity.deploys.buildfinder.SimulatedBuildHistory
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.buildTypeWith
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.buildWith
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.deploymentBuildType
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.finished
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.lastBuild
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.parametersProvider
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.project
 import com.github.vyadh.teamcity.deploys.processing.BuildMocks.regularBuildType
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.running
 import com.nhaarman.mockitokotlin2.*
 import jetbrains.buildServer.messages.Status
 import jetbrains.buildServer.serverSide.*
@@ -46,12 +49,7 @@ internal class DeployFinderTest {
 
   @Test
   fun searchWithRunningBuild() {
-    val build = mock<SRunningBuild> {
-      on { buildOwnParameters } doReturn mapOf(Pair(projectKey, "Ruminous"), Pair(envKey, "UAT"))
-      on { buildNumber } doReturn "1.0"
-      on { buildStatus } doReturn Status.NORMAL
-      on { startDate } doReturn Date()
-    }
+    val build = running(properties = mapOf(Pair(projectKey, "Ruminous"), Pair(envKey, "UAT")))
     val project = project(listOf(buildTypeWith(build)))
 
     val result = finder().search(project).first()
@@ -62,13 +60,10 @@ internal class DeployFinderTest {
 
   @Test
   fun searchWithPersonalBuild() {
-    val build = mock<SRunningBuild> {
-      on { buildOwnParameters } doReturn mapOf(Pair(projectKey, "Superious"), Pair(envKey, "UAT"))
-      on { buildNumber } doReturn "1.0"
-      on { buildStatus } doReturn Status.NORMAL
-      on { startDate } doReturn Date()
-      on { isProbablyHanging } doReturn true
-    }
+    val build = running(
+          properties = mapOf(Pair(projectKey, "Superious"), Pair(envKey, "UAT")),
+          probablyHanging = true
+    )
     val project = project(listOf(buildTypeWith(build)))
 
     val result = finder().search(project).first()
@@ -80,12 +75,7 @@ internal class DeployFinderTest {
   @Test
   fun searchWithFinishedBuild() {
     val project = project(listOf(deploymentBuildType()))
-    val build = mock<SFinishedBuild> {
-      on { buildOwnParameters } doReturn mapOf(Pair(projectKey, "Frustrum"), Pair(envKey, "PRD"))
-      on { buildNumber } doReturn "1.0"
-      on { buildStatus } doReturn Status.NORMAL
-      on { finishDate } doReturn Date()
-    }
+    val build = finished(properties = mapOf(Pair(projectKey, "Frustrum"), Pair(envKey, "PRD")))
     val buildFinder = lastBuild(build)
     val finder = finder(buildFinder = buildFinder)
 
@@ -97,16 +87,8 @@ internal class DeployFinderTest {
 
   @Test
   fun searchWithMultipleBuildsOfDifferentCase() {
-    val buildFinished = mock<SFinishedBuild> {
-      on { buildOwnParameters } doReturn properties("Ruminous", "1.0", "prd")
-      on { buildStatus } doReturn Status.NORMAL
-      on { finishDate } doReturn Date()
-    }
-    val buildRunning = mock<SRunningBuild> {
-      on { buildOwnParameters } doReturn properties("Frustrum", "1.0", "Dev")
-      on { buildStatus } doReturn Status.NORMAL
-      on { startDate } doReturn Date()
-    }
+    val buildFinished = finished(properties = properties("Ruminous", "1.0", "prd"))
+    val buildRunning = running(properties = properties("Frustrum", "1.0", "Dev"))
     val finder = finder(buildFinder = lastBuild(buildFinished))
     val project = project(listOf(
           buildTypeWith(buildRunning),
@@ -124,8 +106,10 @@ internal class DeployFinderTest {
   internal fun toDeployWhenFinished() {
     val started = ZonedDateTime.parse("2019-05-19T16:54:30+01:00")
     val finished = started.plusMinutes(2)
+    val mockValueResolver = BuildMocks.valueResolver()
     val build = mock<SBuild> {
-      on { buildOwnParameters } doReturn properties("Dash", "1.1.0", "DEV")
+      on { parametersProvider } doReturn parametersProvider(properties("Dash", "1.1.0", "DEV"))
+      on { valueResolver } doReturn mockValueResolver
       on { buildStatus } doReturn Status.NORMAL
       on { startDate } doReturn Date.from(started.toInstant())
       on { finishDate } doReturn Date.from(finished.toInstant())
@@ -148,11 +132,10 @@ internal class DeployFinderTest {
   @Test
   internal fun toDeployWhenRunning() {
     val started = ZonedDateTime.parse("2019-05-19T16:54:30+01:00")
-    val build = mock<SRunningBuild> { // Signifies running
-      on { buildOwnParameters } doReturn properties("Dash", "1.1.0", "DEV")
-      on { buildStatus } doReturn Status.NORMAL
-      on { startDate } doReturn Date.from(started.toInstant())
-    }
+    val build = running(
+          properties = properties("Dash", "1.1.0", "DEV"),
+          start = Date.from(started.toInstant())
+    )
     val deployLinks = BuildMocks.links("http://host/build/2")
     val deployFinder = finder(links = deployLinks)
 

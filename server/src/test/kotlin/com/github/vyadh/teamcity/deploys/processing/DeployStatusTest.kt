@@ -2,6 +2,8 @@ package com.github.vyadh.teamcity.deploys.processing
 
 import com.github.vyadh.teamcity.deploys.buildfinder.LastBuildFinder
 import com.github.vyadh.teamcity.deploys.buildfinder.SimulatedBuildHistory
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.parametersProvider
+import com.github.vyadh.teamcity.deploys.processing.BuildMocks.valueResolver
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
@@ -76,14 +78,17 @@ internal class DeployStatusTest {
   }
 
   private fun runningBuild(): SRunningBuild {
+    val mockValueResolver = valueResolver()
+
     return mock {
       on { buildStatus } doReturn Status.NORMAL
-      on { buildOwnParameters } doReturn params()
       on { startDate } doReturn Date()
+      on { parametersProvider } doReturn parametersProvider(params())
+      on { valueResolver } doReturn mockValueResolver
     }
   }
 
-  private fun params() = mapOf<String?, String>(
+  private fun params() = mapOf(
         Pair(projectKey, "Project"),
         Pair(versionKey, "1.0"),
         Pair(envKey, "ENV"))

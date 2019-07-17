@@ -163,9 +163,9 @@ internal class MultiBuildFinderTest {
     return Pair(project(build), env(build))
   }
 
-  private fun project(build: SBuild) = build.buildOwnParameters[projectKey]!!
-  private fun env(build: SBuild) = build.buildOwnParameters[envKey]!!
-  private fun version(build: SBuild) = build.buildOwnParameters[versionKey]!!
+  private fun project(build: SBuild) = build.parametersProvider[projectKey]!!
+  private fun env(build: SBuild) = build.parametersProvider[envKey]!!
+  private fun version(build: SBuild) = build.parametersProvider[versionKey]!!
 
   private fun toArray(stream: Stream<SFinishedBuild>): Array<SFinishedBuild> {
     return stream.toArray { size -> arrayOfNulls<SFinishedBuild>(size) }

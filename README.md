@@ -7,22 +7,22 @@ environments across multiple projects.
 Features
 --------
 
-* Single pane of glass showing all deployments into different environments.
 * Shows deployments for the current project and all sub-projects, and can be configured at any
 level to show different environments.
-* Visualises deployment result, showing success, error, or in progress.
+* Visualises deployment result, showing success, error, in progress, or a delayed build.
 * Shows deployment time or the date if not today.
-* Dashboard deployments link to the original deployment build.
-* Project and environment names can be taken from the project/build name, and versions can be
-taken from the build number. Alternatively these can be configured to use values of a
-configuration parameter, environment variable or system property.
-* Optional deep build history search to find different environments deployed to from the same
+* Links deployments visualisation to the original build.
+* Project, version and environment values can be taken from a related concept in TeamCity
+(project name, build name, build number) or by using a value of a property<sup>[1](#f1)</sup>.
+* Resolves properties used in project/version/environment. For example, using a build number
+from a build stage (via snapshot-dependency) to show appropriate version at deployment.
+* Optional deep build history search to find different environments deployed by a single
 build configuration.
-* Highlights the latest version to emphasise build journey to production (assuming
+* Highlights the latest version to emphasise build journey to production (assumes
 semver-formatted version string).
 * Real-time search to quickly narrow large numbers of projects.
 * Auto-refresh capability with configurable polling period.
-* Pretty.
+* Pretty. :)
 
 
 Example
@@ -66,12 +66,12 @@ Enabling the plugin in the configuration will show three settings.
 <img src="screenshot-config.png" width="928"/>
 
 1. Project key: This is used to customise the project name shown in the dashboard and can be used
-in the case where the name of the immediate project is not appropriate. If it is appropriate, leave 
-this blank, otherwise the dashboard will be picked up from the build property<sup>[1](#f1)</sup>
+in the case where the name of the immediate project is not appropriate. If the project name works,
+leave  this blank, otherwise the dashboard will be picked up from the build property<sup>[1](#f1)</sup>
 named by this key.
 2. Version key: This signifies the build property<sup>[1](#f1)</sup> that indicates the
 semver-formatted version string, e.g. 1.2.3 or 1.2.3+45 with a build number. See Versioning of
-Builds below.
+Builds section below.
 3. Environment key: This signifies the build property<sup>[1](#f1)</sup> that indicates the
 environment name, e.g. Dev, UAT.
 4. Environments: This lists all the possible environments, and will determine the columns shown on
@@ -79,6 +79,8 @@ the dashboard. If the environment of the build is not in this list, it will not 
 dashboard.
 5. Refresh Interval: Enables a background-poll of deployments to allow showing on unattended
 build screens.
+6. Build Scanning (Multi-Environment Build Configurations): This option activates a deeper search
+of the build history. Enable if deploying to multiple environments from the same build configuration.
 
 Projects inherit parent configuration unless overridden at a lower level. If all projects in a 
 TeamCity instance are the same, the configuration only needs to be set in the root project.
@@ -92,20 +94,18 @@ Here are some ideas to help support different build configurations.
 **Scenario 1**
 
 A natural way to setup TeamCity is to split deployments into environments by using separate
-build configuration and link them using snapshot dependencies so that they can be represented
-on a pipeline (or 'build chain' in TeamCity parlance). Then set a build variable<sup>[1](#f1)</sup>
-on each deployment stage to indicate the environment to the dashboard.
+build configurations and link them using snapshot dependencies so that they can be represented
+on a pipeline (or 'build chain' in TeamCity parlance). Build variables<sup>[1](#f1)</sup>
+can be set on each deployment stage to indicate the environment to the dashboard.
 
 **Scenario 2**
 
-When using dedicated TeamCity agents for each environment, an environment variable or system
-property could be defined in the agent configuration rather than specifically as part of the
-build. This allows leveraging agent requirements to dictate the environment.
+The environment to deploy to is determined by more than just the build configuration.
+Perhaps the environment is determined by the agent, or the user is prompted at deploy time.
 
-In order for this to work when using a single build configuration, the `Multi-Environment Build
-Configurations` option should be enabled in order to more deeply search the build history as by
-default the plugin only fetches the last deployment for a build configuration for efficiency
-reasons.
+When using a single build configuration, the `Multi-Environment Build Configurations` option
+should be enabled in order to more deeply search the build history as by default the plugin
+only fetches the last deployment for a build configuration for efficiency reasons.
 
 **Scenario 3**
 
@@ -141,11 +141,13 @@ Versioning of Builds
 
 By default, the dashboard will show the TeamCity build number as the version. This can be
 customised using [TeamCity Service Messages](https://www.jetbrains.com/help/teamcity/build-script-interaction-with-teamcity.html#BuildScriptInteractionwithTeamCity-ReportingBuildNumber).
+Alternatively a property can be used that references the original build in a TeamCity build
+chain, for example a `VERSION` property set to `%dep.Project_Build.version%+%dep.Project_Build.build.counter%`.
 
-This can be any formatted version string, but in order to visualise the journey of the build
-through environments it interprets the version number to work out which is the latest build
-and de-emphasises any deployments that are not. This is why in the screenshot above the older
-builds are slightly faded, to keep emphasis on a new build moving towards production.
+This actual value be any formatted version string, but in order to visualise the journey of the build
+through environments the dashboard interprets the version number to work out which is the latest
+build and de-emphasises any deployments that are not. This is why in the screenshot above the
+older builds are slightly faded, to keep emphasis on a new build moving towards production.
 
 The format supported is standard [SemVer 2](https://semver.org). For example `1.2.3` or `1.2.3+45`
 if a build number is required.
@@ -160,13 +162,13 @@ Deployment Visibility
 Builds in TeamCity will be performed for many reasons and not all of them will be relevant to 
 show on the dashboard. This plugin will only show builds if the following are true:
 
-1. Has a build configuration type set to `Deployment` and therefore has a 'Deploy' button rather 
+1. The build configuration type set to `Deployment` and therefore has a 'Deploy' button rather 
 than 'Run'
    * See: TeamCity / Project Configuration / Build configuration type
 2. Has a property<sup>[1](#f1)</sup> matching the project key when not blank.
 3. Has a property<sup>[1](#f1)</sup> that matches the environment key when not blank.
 4. The environment deployed to is contained in the list of configured environments.
-5. It is the most recent non-cancelled build for that build configuration.
+5. It is the most recent non-cancelled build for that build configuration, or...
 6. When `Multi-Environment Build Configuration` is set, the plugin gives up trying to find
 a deployment for a configured environment after 1000 entries in the history.
 
@@ -174,15 +176,9 @@ a deployment for a configured environment after 1000 entries in the history.
 Implementation
 --------------
 
-This project is written in JavaScript and React for the frontend, and Kotlin for the backend.
+This project is written in JavaScript with React for the frontend, and Kotlin for the backend.
 The backend manages configuration, queries the build data, and provides a REST endpoint to
 provide the React frontend with the required deployment and configuration data.
-
-
-Possible Future Features
-------------------------
-
-* Show real-time progress by having the frontend subscribe to build changes via server-sent events.
 
 
 Notes

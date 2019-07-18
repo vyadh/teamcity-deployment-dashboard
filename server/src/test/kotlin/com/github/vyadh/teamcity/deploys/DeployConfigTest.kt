@@ -120,6 +120,15 @@ internal class DeployConfigTest {
   }
 
   @Test
+  internal fun environmentsAsListWhenWhitespace() {
+    fun config(envs: String) = DeployConfig(environments = envs)
+
+    assertThat(config(" DEV ").environmentsAsList()).containsOnly("DEV")
+    assertThat(config("  DEV , UAT , PRD  ").environmentsAsList()).containsExactly("DEV", "UAT", "PRD")
+    assertThat(config(" ").environmentsAsList()).isEmpty()
+  }
+
+  @Test
   internal fun environmentsAsListWhenEmptyString() {
     val config = DeployConfig(environments = "")
 

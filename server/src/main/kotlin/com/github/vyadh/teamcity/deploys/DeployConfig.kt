@@ -71,7 +71,10 @@ data class DeployConfig(
   }
 
   fun environmentsAsList(): List<String> {
-    val items = environments.split(',')
+    val items = environments
+          .split(',')
+          .map { it.trim() }
+
     return if (items.size == 1 && items[0].isEmpty()) emptyList()
            else items
   }

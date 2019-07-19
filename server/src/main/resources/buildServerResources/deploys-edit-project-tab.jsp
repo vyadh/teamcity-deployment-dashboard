@@ -24,7 +24,11 @@
       deployment dashboard.
     </div>
 
-    <br/>
+    <p>
+      Note that only <i>Deployment</i> builds will be shown on the dashboard, not regular builds.
+      For more information, see the <a href="https://github.com/vyadh/teamcity-deployment-dashboard/tree/master#deployment-visibility">Deployment Visibility</a>
+      part of the README.
+    </p>
 
     <p>
       <forms:checkbox

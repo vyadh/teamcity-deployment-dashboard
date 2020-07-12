@@ -18,13 +18,13 @@ dependencies {
   implementation(kotlin("stdlib-jdk8"))
 
   compileOnly("org.jetbrains.teamcity.internal:server:${rootProject.extra["teamcityVersion"]}")
-  testCompile("org.jetbrains.teamcity.internal:server:${rootProject.extra["teamcityVersion"]}")
+  testImplementation("org.jetbrains.teamcity.internal:server:${rootProject.extra["teamcityVersion"]}")
 
-  testCompile("org.assertj:assertj-core:3.12.2")
-  testCompile("org.junit.jupiter:junit-jupiter-api:5.4.2")
-  testCompile("org.junit.jupiter:junit-jupiter-params:5.4.2")
-  testRuntime("org.junit.jupiter:junit-jupiter-engine:5.4.2")
-  testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
+  testImplementation("org.assertj:assertj-core:3.16.1")
+  testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.2")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:5.4.2")
+  testImplementation("org.junit.jupiter:junit-jupiter-engine:5.4.2")
+  testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
 }
 
 teamcity {

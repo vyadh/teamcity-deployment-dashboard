@@ -10,15 +10,16 @@ export const Search = ({filter}) => {
           <input type="search" placeholder="Search..." required="required" className="search-input"
                  onChange={event => filter(event.target.value)}/>
           <span className="search-submit">
-          <svg role="img" aria-label="Search">
-            <use xlinkHref="#search-icon-magnifier"/>
-          </svg>
-        </span>
+            <svg role="img" aria-label="Search">
+              <use xlinkHref="#search-icon-magnifier"/>
+            </svg>
+          </span>
           <button type="reset" className="search-reset" onClick={() => filter("")}>
             <svg role="img" aria-label="Reset">
               <use xlinkHref="#search-icon-cross"/>
             </svg>
           </button>
+          <input type="submit" disabled={true} hidden={true}/>
         </form>
       </div>
   )

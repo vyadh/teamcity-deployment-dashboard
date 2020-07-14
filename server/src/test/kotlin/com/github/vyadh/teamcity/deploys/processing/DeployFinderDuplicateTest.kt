@@ -55,7 +55,7 @@ internal class DeployFinderDuplicateTest {
         buildFinder: BuildFinder = LastBuildFinder(SimulatedBuildHistory.empty())
   ): DeployFinder {
 
-    return DeployFinder(links, projectKey, versionKey, environment, buildFinder, converter)
+    return DeployFinder(links, projectKey, versionKey, "", environment, buildFinder, converter)
   }
 
   @Suppress("SameParameterValue")

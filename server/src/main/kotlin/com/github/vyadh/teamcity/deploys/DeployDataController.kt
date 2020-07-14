@@ -82,12 +82,17 @@ class DeployDataController(
   }
 
   private fun createDeployFinder(config: DeployConfig): DeployFinder {
-    val environment = DeployEnvironment(config.environmentKey, config.environmentsAsList(), converter)
+    val environment = DeployEnvironment(
+        config.environmentKey,
+        config.environmentsAsList(),
+        converter
+    )
 
     return DeployFinder(
           links,
           config.projectKey,
           config.versionKey,
+          config.customKey,
           environment,
           createBuildFinder(config, environment),
           converter

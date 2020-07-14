@@ -209,15 +209,38 @@ internal class DeployFinderTest {
     assertThat(result.environment).isEqualTo("[missing]")
   }
 
+  @Test
+  internal fun toDeployWithCustomValueWhenMissing() {
+    val build = buildWith(params = defaultParams())
+
+    val result = finder(customKey = "custom").toDeploy(build).findFirst().get()
+
+    assertThat(result.custom).isEqualTo("")
+  }
+
+  @Test
+  internal fun toDeployWithCustomValueWhenExists() {
+    val build = buildWith(params = mapOf(
+        Pair(projectKey, "DefaultProject"),
+        Pair("custom", "custom-value")
+    ))
+
+    val result = finder(customKey = "custom").toDeploy(build).findFirst().get()
+
+    assertThat(result.custom).isEqualTo("custom-value")
+  }
+
+
   private fun finder(
         links: WebLinks = this.links,
         projectKey: String = this.projectKey,
         versionKey: String = this.versionKey,
         environment: DeployEnvironment = this.environment,
+        customKey: String = "",
         buildFinder: BuildFinder = LastBuildFinder(SimulatedBuildHistory.empty())
   ): DeployFinder {
 
-    return DeployFinder(links, projectKey, versionKey, environment, buildFinder, converter)
+    return DeployFinder(links, projectKey, versionKey, customKey, environment, buildFinder, converter)
   }
 
   private fun buildWith(

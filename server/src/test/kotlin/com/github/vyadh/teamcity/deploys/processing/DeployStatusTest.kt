@@ -21,7 +21,7 @@ internal class DeployStatusTest {
   private val envKey = "ENV"
   private val converter = BuildAttributeConverter()
   private val finder = DeployFinder(
-        links, projectKey, versionKey, DeployEnvironment(envKey, listOf("ENV"), converter),
+        links, projectKey, versionKey, "", DeployEnvironment(envKey, listOf("ENV"), converter),
         LastBuildFinder(SimulatedBuildHistory.empty()), converter)
 
   @Test

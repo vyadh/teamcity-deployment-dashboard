@@ -13,6 +13,7 @@ class DeployFinder(
       private val links: WebLinks,
       private val projectKey: String,
       private val versionKey: String,
+      private val customKey: String,
       private val environment: DeployEnvironment,
       private val buildFinder: BuildFinder,
       private val converter: BuildAttributeConverter) {
@@ -46,7 +47,8 @@ class DeployFinder(
           converter.toStatus(build),
           converter.isRunning(build),
           converter.isHanging(build),
-          links.getViewResultsUrl(build)
+          links.getViewResultsUrl(build),
+          converter.customValue(build, customKey)
     )
 
     return Stream.of(deploy)

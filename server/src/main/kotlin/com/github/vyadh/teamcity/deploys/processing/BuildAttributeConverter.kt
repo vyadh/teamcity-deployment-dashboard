@@ -27,6 +27,10 @@ class BuildAttributeConverter(
   fun environmentName(build: SBuild, environmentKey: String) =
         params.extract(build, environmentKey) { build.buildType?.name } ?: missing
 
+  fun customValue(build: SBuild, customKey: String) =
+        params.extract(build, customKey) { "" } ?: ""
+
+
   fun timeOf(build: SBuild): ZonedDateTime {
     return toUTC(build.finishDate ?: build.startDate)
   }

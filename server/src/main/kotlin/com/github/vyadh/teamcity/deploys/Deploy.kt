@@ -10,5 +10,6 @@ data class Deploy(
       val status: String,
       val running: Boolean,
       val hanging: Boolean,
-      val link: String
+      val link: String,
+      val custom: String
 )

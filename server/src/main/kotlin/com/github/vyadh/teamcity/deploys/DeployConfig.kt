@@ -11,6 +11,7 @@ package com.github.vyadh.teamcity.deploys
  * @param environmentKey configuration property name to lookup the environment name
  * or blank if the build type name should be used.
  * @param environments comma-delimited string of environments to show in the dashboard.
+ * @param customKey extra information taken from properties, e.g. branch name.
  * @param refreshSecs interval between refreshes, or blank for no referesh.
  * @param multiEnvConfig false to use [com.github.vyadh.teamcity.deploys.buildfinder.LastBuildFinder]
  *   when only one environment per configuration, or [com.github.vyadh.teamcity.deploys.buildfinder.MultiBuildFinder]
@@ -22,6 +23,7 @@ data class DeployConfig(
       val versionKey: String = "",
       val environmentKey: String = "",
       val environments: String = "",
+      val customKey: String = "",
       val refreshSecs: String = "",
       val multiEnvConfig: String = "false"
 ) {
@@ -33,6 +35,7 @@ data class DeployConfig(
           versionKey = "",
           environmentKey = "",
           environments = "",
+          customKey = "",
           refreshSecs = "",
           multiEnvConfig = "false"
     )
@@ -44,6 +47,7 @@ data class DeployConfig(
             versionKey = map.getOrDefault(DeployConfigKeys.versionKey,""),
             environmentKey = map.getOrDefault(DeployConfigKeys.environmentKey,""),
             environments = map.getOrDefault(DeployConfigKeys.environments,""),
+            customKey = map.getOrDefault(DeployConfigKeys.customKey, ""),
             refreshSecs = map.getOrDefault(DeployConfigKeys.refreshSecs, ""),
             multiEnvConfig = map.getOrDefault(DeployConfigKeys.multiEnvConfig, "false")
       )
@@ -65,6 +69,7 @@ data class DeployConfig(
           Pair(DeployConfigKeys.versionKey, versionKey),
           Pair(DeployConfigKeys.environmentKey, environmentKey),
           Pair(DeployConfigKeys.environments, environments),
+          Pair(DeployConfigKeys.customKey, customKey),
           Pair(DeployConfigKeys.refreshSecs, refreshSecs),
           Pair(DeployConfigKeys.multiEnvConfig, multiEnvConfig)
     )

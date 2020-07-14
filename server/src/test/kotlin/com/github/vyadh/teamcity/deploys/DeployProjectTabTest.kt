@@ -34,7 +34,8 @@ class DeployProjectTabTest {
   internal fun isAvailableWhenProjectHasEnabledConfiguration() {
     val tab = createTab()
     val project = projectWithConfig(
-          DeployConfig("true", "project", "1.0", "env", "dev", "10", "true"))
+          DeployConfig(
+                "true", "project", "1.0", "env", "dev", "custom", "10", "true"))
 
     val available = tab.isTabShowing(project)
 

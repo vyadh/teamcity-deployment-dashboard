@@ -28,16 +28,16 @@ class DeployEditProjectController(
         request: HttpServletRequest,
         response: HttpServletResponse): ModelAndView? {
 
-    val dashboardEnabled = request.getParameter(DeployConfigKeys.dashboardEnabled)
-    val projectKey = request.getParameter(DeployConfigKeys.projectKey)
-    val versionKey = request.getParameter(DeployConfigKeys.versionKey)
-    val environmentKey = request.getParameter(DeployConfigKeys.environmentKey)
-    val environments = request.getParameter(DeployConfigKeys.environments)
-    val refreshSecs = request.getParameter(DeployConfigKeys.refreshSecs) ?: ""
-    val multiEnvConfig = request.getParameter(DeployConfigKeys.multiEnvConfig)
-
     val config = DeployConfig(
-          dashboardEnabled, projectKey, versionKey, environmentKey, environments, refreshSecs, multiEnvConfig)
+          dashboardEnabled = request.getParameter(DeployConfigKeys.dashboardEnabled),
+          projectKey = request.getParameter(DeployConfigKeys.projectKey),
+          versionKey = request.getParameter(DeployConfigKeys.versionKey),
+          environmentKey = request.getParameter(DeployConfigKeys.environmentKey),
+          environments = request.getParameter(DeployConfigKeys.environments),
+          customKey = request.getParameter(DeployConfigKeys.customKey),
+          refreshSecs = request.getParameter(DeployConfigKeys.refreshSecs) ?: "",
+          multiEnvConfig = request.getParameter(DeployConfigKeys.multiEnvConfig)
+    )
 
     val projectExternalId = request.getParameter(DeployConfigKeys.projectExternalId)
     val project = projectManager.findProjectByExternalId(projectExternalId)

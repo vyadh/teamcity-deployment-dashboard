@@ -160,7 +160,9 @@ internal class DeployDataControllerTest {
             "VERSION",
             "ENVIRONMENT",
             environments,
-            refreshSecs).toMap()
+            "CUSTOM",
+            refreshSecs
+      ).toMap()
     }
     return mock {
       on { buildTypes } doReturn listOf(type)

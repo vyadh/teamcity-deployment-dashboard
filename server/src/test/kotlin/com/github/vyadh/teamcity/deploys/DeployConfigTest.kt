@@ -13,6 +13,7 @@ internal class DeployConfigTest {
           versionKey = "version",
           environmentKey = "environment",
           environments = "development,production",
+          customKey = "branch",
           refreshSecs = "10",
           multiEnvConfig = "true"
     )
@@ -25,6 +26,7 @@ internal class DeployConfigTest {
           Pair(DeployConfigKeys.versionKey, "version"),
           Pair(DeployConfigKeys.environmentKey, "environment"),
           Pair(DeployConfigKeys.environments, "development,production"),
+          Pair(DeployConfigKeys.customKey, "branch"),
           Pair(DeployConfigKeys.refreshSecs, "10"),
           Pair(DeployConfigKeys.multiEnvConfig, "true")
     ))
@@ -38,6 +40,7 @@ internal class DeployConfigTest {
           Pair(DeployConfigKeys.versionKey, "1.0"),
           Pair(DeployConfigKeys.environmentKey, "environment"),
           Pair(DeployConfigKeys.environments, "development,production"),
+          Pair(DeployConfigKeys.customKey, "branch"),
           Pair(DeployConfigKeys.refreshSecs, "30"),
           Pair(DeployConfigKeys.multiEnvConfig, "true")
     )
@@ -50,6 +53,7 @@ internal class DeployConfigTest {
           versionKey = "1.0",
           environmentKey = "environment",
           environments = "development,production",
+          customKey = "branch",
           refreshSecs = "30",
           multiEnvConfig = "true"
     ))
@@ -76,6 +80,7 @@ internal class DeployConfigTest {
           versionKey = "",
           environmentKey = "",
           environments = "",
+          customKey = "",
           refreshSecs = "",
           multiEnvConfig = "false"
     ))
@@ -105,6 +110,7 @@ internal class DeployConfigTest {
           versionKey = "",
           environmentKey = "",
           environments = "",
+          customKey = "",
           refreshSecs = "",
           multiEnvConfig = "false"
     ))

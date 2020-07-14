@@ -14,6 +14,7 @@ internal class DeployConfigStoreStoreTest {
         versionKey = "1.0.0",
         environmentKey = "env",
         environments = "dev,prod",
+        customKey = "branch",
         refreshSecs = "30"
   )
 

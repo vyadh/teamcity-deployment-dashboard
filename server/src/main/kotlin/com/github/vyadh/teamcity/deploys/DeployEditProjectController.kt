@@ -34,7 +34,7 @@ class DeployEditProjectController(
           versionKey = request.getParameter(DeployConfigKeys.versionKey),
           environmentKey = request.getParameter(DeployConfigKeys.environmentKey),
           environments = request.getParameter(DeployConfigKeys.environments),
-          customKey = request.getParameter(DeployConfigKeys.customKey),
+          customKey = request.getParameter(DeployConfigKeys.customKey) ?: "",
           refreshSecs = request.getParameter(DeployConfigKeys.refreshSecs) ?: "",
           multiEnvConfig = request.getParameter(DeployConfigKeys.multiEnvConfig)
     )

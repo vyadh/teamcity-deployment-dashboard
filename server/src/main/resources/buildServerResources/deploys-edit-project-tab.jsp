@@ -88,6 +88,19 @@
       </tr>
 
       <tr>
+        <td><label for="customKey">Custom Property:</label></td>
+        <td>
+          <forms:textField maxlength="100" name="customKey" value="${customKey}"/>
+          <span class="smallNote">
+            Property name to show bespoke information with each deployment, such as the branch name
+            (teamcity.build.branch). Leave blank if no information is required.
+            Use no prefix for configuration parameters, 'env.' for environment variables and 'system.'
+            for system properties.
+          </span>
+        </td>
+      </tr>
+
+      <tr>
         <td><label for="refreshSecs">Refresh Interval:</label></td>
         <td>
           <forms:select name="refreshSecs" enableFilter="true" className="smallField">

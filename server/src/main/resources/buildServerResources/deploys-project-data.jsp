@@ -17,7 +17,8 @@
       "status": "<c:out value="${deploy.status}" escapeXml="false"/>",
       "running": <c:out value="${deploy.running}"/>,
       "hanging": <c:out value="${deploy.hanging}"/>,
-      "link": "<c:out value="${deploy.link}" escapeXml="false"/>"
+      "link": "<c:out value="${deploy.link}" escapeXml="false"/>",
+      "custom": "<c:out value="${deploy.custom}"/>"
     }<c:if test="${!loop.last}">,</c:if>
     </c:forEach>
   ]

@@ -16,6 +16,7 @@ level to show different environments.
 (project name, build name, build number) or by using a value of a property<sup>[1](#f1)</sup>.
 * Resolves properties used in project/version/environment. For example, using a build number
 from a build stage (via snapshot-dependency) to show appropriate version at deployment.
+* Optional property display to show custom information on the deployment such as the branch used.
 * Optional deep build history search to find different environments deployed by a single
 build configuration.
 * Highlights the latest version to emphasise build journey to production (assumes
@@ -65,11 +66,11 @@ Enabling the plugin in the configuration will show three settings.
 
 <img src="screenshot-config.png" width="928"/>
 
-1. Project key: This is used to customise the project name shown in the dashboard and can be used
+1. Project Property: This is used to customise the project name shown in the dashboard and can be used
 in the case where the name of the immediate project is not appropriate. If the project name works,
 leave  this blank, otherwise the dashboard will be picked up from the build property<sup>[1](#f1)</sup>
 named by this key.
-2. Version key: This signifies the build property<sup>[1](#f1)</sup> that indicates the
+2. Version Property: This signifies the build property<sup>[1](#f1)</sup> that indicates the
 semver-formatted version string, e.g. 1.2.3 or 1.2.3+45 with a build number. See Versioning of
 Builds section below.
 3. Environment key: This signifies the build property<sup>[1](#f1)</sup> that indicates the
@@ -77,9 +78,11 @@ environment name, e.g. Dev, UAT.
 4. Environments: This lists all the possible environments, and will determine the columns shown on
 the dashboard. If the environment of the build is not in this list, it will not appear on the
 dashboard.
-5. Refresh Interval: Enables a background-poll of deployments to allow showing on unattended
+5. Custom Property: This allows showing custom information with each deployment such as the branch
+that was used to build. This can be left blank if not required.
+6. Refresh Interval: Enables a background-poll of deployments to allow showing on unattended
 build screens.
-6. Build Scanning (Multi-Environment Build Configurations): This option activates a deeper search
+7. Build Scanning (Multi-Environment Build Configurations): This option activates a deeper search
 of the build history. Enable if deploying to multiple environments from the same build configuration.
 
 Projects inherit parent configuration unless overridden at a lower level. If all projects in a 
@@ -91,14 +94,14 @@ TeamCity Project Configuration Scenarios
 
 Here are some ideas to help support different build configurations.
 
-**Scenario 1**
+**Environments Separated by the TeamCity Build Chain**
 
-A natural way to setup TeamCity is to split deployments into environments by using separate
+A natural way to set up TeamCity is to split deployments into environments by using separate
 build configurations and link them using snapshot dependencies so that they can be represented
 on a pipeline (or 'build chain' in TeamCity parlance). Build variables<sup>[1](#f1)</sup>
 can be set on each deployment stage to indicate the environment to the dashboard.
 
-**Scenario 2**
+**Single Build Configuration that can be Deployed to Multiple Environments**
 
 The environment to deploy to is determined by more than just the build configuration.
 Perhaps the environment is determined by the agent, or the user is prompted at deploy time.
@@ -107,7 +110,7 @@ When using a single build configuration, the `Multi-Environment Build Configurat
 should be enabled in order to more deeply search the build history as by default the plugin
 only fetches the last deployment for a build configuration for efficiency reasons.
 
-**Scenario 3**
+**Composite Environment Information**
 
 Some environments consist of multiple deployment locations, such as deploying to different cloud
 regions. One way of visualising such multi-region deployments is to define a new composite
@@ -115,6 +118,20 @@ parameter that combines environment and region. For example, DEV and PRD in regi
 could be done by defining a parameter with a value like `%environment%-%region%`. Once the plugin
 has been configured to use this new parameter as the environment key, the environment list of
 deploys to show would then be `DEV-EUR,DEV-USA,DEV-EUR,PRD-USA`.
+
+**Custom Deployment Information**
+
+Sometimes it is useful to display other information with each deployment, such as the branch
+used to build. The Custom Property feature can be used to for this, e.g. setting it to
+`teamcity.build.branch`.
+
+Multiple pieces of information can be displayed as the custom information by creating a new
+property that concatenates different pieces of information and referencing that property.
+Dynamic information constructed programmatically in the build steps can also be provided by
+using TeamCity service messages.
+
+If the information is too long for the field it will be truncated, but the full information can
+be displayed by hovering over it.
 
 
 Scaling to Multiple Teams with the Project Hierarchy

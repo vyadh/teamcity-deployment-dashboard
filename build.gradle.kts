@@ -22,7 +22,7 @@ repositories {
 }
 
 group = "com.github.vyadh.teamcity"
-version = "1.9.0${buildNumber()}"
+version = "1.10.0${buildNumber()}"
 project.logger.lifecycle("Building version: $version")
 
 extra["teamcityVersion"] = findProperty("teamcity.version") ?: "2018.2"

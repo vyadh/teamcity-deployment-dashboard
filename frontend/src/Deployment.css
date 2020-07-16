@@ -13,6 +13,8 @@
     justify-content: left;
     /* Always position elements center, important for hover anim when text wraps */
     align-items: center;
+    /* Ensures icons are aligned vertically where some deploys have a custom value and some don't */
+    height: 100%;
 }
 
 #deploys .build-status {

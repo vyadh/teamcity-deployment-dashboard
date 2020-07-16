@@ -45,12 +45,6 @@
     text-overflow: ellipsis;
 }
 
-/* Show full custom value when hovering over it */
-#deploys .build-custom:hover {
-    white-space: normal;
-    word-break: break-all;
-}
-
 #deploys .status-icon {
     display: inline-block;
     font-size: 2.5rem;

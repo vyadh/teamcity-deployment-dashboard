@@ -25,6 +25,8 @@
     justify-content: center;
     /* Minor correction for vertical centering given smaller date-time font. */
     padding-top: 0.2rem;
+    /* Ensure custom value doesn't overflow into next deploy */
+    overflow: hidden;
 }
 
 #deploys .build-version {
@@ -39,6 +41,14 @@
 #deploys .build-custom {
     font-size: 0.6rem;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Show full custom value when hovering over it */
+#deploys .build-custom:hover {
+    white-space: normal;
+    word-break: break-all;
 }
 
 #deploys .status-icon {

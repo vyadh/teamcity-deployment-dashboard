@@ -36,6 +36,11 @@
     font-size: 0.7rem;
 }
 
+#deploys .build-custom {
+    font-size: 0.6rem;
+    white-space: nowrap;
+}
+
 #deploys .status-icon {
     display: inline-block;
     font-size: 2.5rem;

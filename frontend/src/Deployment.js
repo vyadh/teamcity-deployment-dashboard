@@ -27,6 +27,7 @@ const Build = ({deploy}) => (
       <div className="build-info">
         <span className="build-version">{deploy.version}</span>
         <span className="build-time">{dateTimes.format(deploy.time)}</span>
+        {deploy.custom && <div className="build-custom">{deploy.custom}</div>}
       </div>
     </div>
   </a>

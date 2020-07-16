@@ -138,7 +138,8 @@ const deploys = () => {
       time: "2019-06-04T21:59:51",
       status: "FAILURE",
       running: false,
-      hanging: false
+      hanging: false,
+      custom: "feature/pollution-reduction"
     },
     {
       name: "Earth",
@@ -147,7 +148,8 @@ const deploys = () => {
       time: "2019-06-04T21:59:51",
       status: "SUCCESS",
       running: true,
-      hanging: true
+      hanging: true,
+      custom: "feature/lots-of-water-all-over-the-planet-so-we-can-swim"
     },
     {
       name: "Earth",
@@ -156,7 +158,8 @@ const deploys = () => {
       time: "2019-06-04T21:59:51",
       status: "SUCCESS",
       running: false,
-      hanging: false
+      hanging: false,
+      custom: "feature/climate-fix"
     },
     {
       name: "Earth",

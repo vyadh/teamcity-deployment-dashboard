@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 
-DOCKER_BUILDKIT=1 docker build -t deployment-dashboard .
+if [ "$RELEASE" = true ]; then
+  type="release"
+else
+  type="snapshot"
+fi
+echo "Building plugin (type '$type')..."
+
+DOCKER_BUILDKIT=1 docker build --build-arg RELEASE=$RELEASE -t deployment-dashboard .
 id=$(docker create deployment-dashboard)
+rm deployment-dashboard.zip
 docker cp $id:/home/gradle/deployment-dashboard.zip deployment-dashboard.zip
 docker rm -v $id
 

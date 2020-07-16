@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.resolve.constants.evaluate.parseBoolean
 import java.time.format.DateTimeFormatter
 import java.time.LocalDateTime
 
@@ -24,6 +23,7 @@ repositories {
 
 group = "com.github.vyadh.teamcity"
 version = "1.9.0${buildNumber()}"
+project.logger.lifecycle("Building version: $version")
 
 extra["teamcityVersion"] = findProperty("teamcity.version") ?: "2018.2"
 
@@ -43,8 +43,8 @@ subprojects {
 }
 
 fun buildNumber(): String {
-  val snapshot = parseBoolean(System.getenv("SNAPSHOT") ?: "true")
-  return if (snapshot) "-SNAPSHOT-${timestamp()}" else ""
+  val release = (System.getenv("RELEASE") ?: "false").toBoolean()
+  return if (release) "" else "-SNAPSHOT-${timestamp()}"
 }
 
 fun timestamp(): String {

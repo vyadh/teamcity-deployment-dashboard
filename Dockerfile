@@ -31,6 +31,8 @@ RUN npm run build
 
 FROM gradle:6.5-jdk8 AS server
 
+ARG RELEASE=false
+
 COPY ./ ./
 COPY --from=ui build/build/* ./server/src/main/resources/buildServerResources/
 

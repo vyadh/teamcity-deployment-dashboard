@@ -198,6 +198,23 @@ The backend manages configuration, queries the build data, and provides a REST e
 provide the React frontend with the required deployment and configuration data.
 
 
+Building
+--------
+
+The easiest way to build the project is to:
+  1. Run `build.sh` from the root directory (only Docker required)
+  2. Copy the resulting `deployment-dashboard.zip` file to `<TeamCityData>/plugins/`
+  3. Reload the plugin from TeamCity the Plugin List or restart it
+
+While this method is simple, it's quite slow even after the first run because Gradle
+has a very cold start when run from a Docker image, particularly downloading
+dependencies. PRs to make Gradle better use the Docker cache very welcome.
+
+A much quicker build cycle is to install NPM and Gradle locally, and do the
+equivalent of the Dockerfile instructions on the host. This makes builds run in
+seconds rather than minutes.
+
+
 Notes
 -----
 

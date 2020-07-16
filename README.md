@@ -206,9 +206,13 @@ The easiest way to build the project is to:
   2. Copy the resulting `deployment-dashboard.zip` file to `<TeamCityData>/plugins/`
   3. Reload the plugin from TeamCity the Plugin List or restart it
 
-While this method is simple, it's quite slow even after the first run because Gradle
-has a very cold start when run from a Docker image, particularly downloading
-dependencies. PRs to make Gradle better use the Docker cache very welcome.
+If there is an error running `build.sh` such as `Cannot autolaunch D-Bus without X11 $DISPLAY`
+remove `DOCKER_BUILDKIT=1` from this script the first time it's run.
+
+While this method is fairly simple, it's quite slow even after the first run because
+Gradle has a very cold start when run from a Docker image, and has to download
+dependencies on every build. PRs to force Gradle to make better use the Docker cache
+very welcome!
 
 A much quicker build cycle is to install NPM and Gradle locally, and do the
 equivalent of the Dockerfile instructions on the host. This makes builds run in

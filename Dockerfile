@@ -1,4 +1,4 @@
-FROM node:12.18-stretch AS ui
+FROM node:12.18-stretch-slim AS ui
 
 WORKDIR build
 

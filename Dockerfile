@@ -33,8 +33,9 @@ FROM gradle:6.5-jdk8 AS server
 
 ARG RELEASE=false
 
-COPY ./ ./
-COPY --from=ui build/build/* ./server/src/main/resources/buildServerResources/
+COPY *.kts ./
+COPY server ./server
+COPY --from=ui build/build/. ./server/src/main/resources/buildServerResources/
 
 RUN gradle --no-daemon test serverPlugin
 RUN mv server/build/distributions/server.zip ./deployment-dashboard.zip

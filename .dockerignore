@@ -5,3 +5,4 @@ build
 frontend/build
 frontend/node_modules
 server/build
+server/out
